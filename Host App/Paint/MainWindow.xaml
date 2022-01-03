@@ -12,7 +12,6 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        
         Title="Paint" Height="450" Width="800">
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
@@ -30,19 +29,19 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
-        <Grid Background="#d3dceb" Margin="0,5,0,0">
+        <Grid Background="#d3dceb">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
-
             </Grid.RowDefinitions>
-            <Canvas Grid.Row="0" x:Name="Canvas" Background="White" Width="500" Height="200" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Canvas Grid.Row="0" x:Name="Canvas" Background="White"  Margin="4,2,0,0">
 
             </Canvas>
             <Border Grid.Row="0" Background="Transparent">
 
             </Border>
-            <Grid Grid.Row="1" Background="DarkGray" >
+            <Grid Grid.Row="1" Background="#f0f0f0
+" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -50,10 +49,10 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0">1</Label>
-                <Border Grid.Column="1" Grid.RowSpan="4" BorderBrush="LightGray" 
+                <Border Grid.Column="1" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
                 <Label Grid.Column="1">2</Label>
-                <Border Grid.Column="2" Grid.RowSpan="4" BorderBrush="LightGray" 
+                <Border Grid.Column="2" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
                 <Label Grid.Column="2">3</Label>
             </Grid>
