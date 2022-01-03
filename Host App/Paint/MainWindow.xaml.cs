@@ -26,28 +26,6 @@ namespace Paint
         {
             InitializeComponent();
         }
-        void onDragDelta(object sender, DragDeltaEventArgs e)
-        {
-            //Move the Thumb to the mouse position during the drag operation
-            double yadjust = myCanvasStretch.Height + e.VerticalChange;
-            double xadjust = myCanvasStretch.Width + e.HorizontalChange;
-            if ((xadjust >= 0) && (yadjust >= 0))
-            {
-                myCanvasStretch.Width = xadjust;
-                myCanvasStretch.Height = yadjust;
-                Canvas.SetLeft(myThumb, Canvas.GetLeft(myThumb) +
-                                        e.HorizontalChange);
-                Canvas.SetTop(myThumb, Canvas.GetTop(myThumb) +
-                                       e.VerticalChange);
-            }
-        }
-        void onDragStarted(object sender, DragStartedEventArgs e)
-        {
-            myThumb.Background = Brushes.Orange;
-        }
-        void onDragCompleted(object sender, DragCompletedEventArgs e)
-        {
-            myThumb.Background = Brushes.Blue;
-        }
+        
     }
 }

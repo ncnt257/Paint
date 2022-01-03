@@ -6,9 +6,16 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:local="clr-namespace:Paint"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <Fluent:Ribbon >
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        
+        Title="Paint" Height="450" Width="800">
+    <DockPanel>
+        <Fluent:Ribbon DockPanel.Dock="Top">
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage Header="File"></Fluent:Backstage>
             </Fluent:Ribbon.Menu>
@@ -23,6 +30,33 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
-       
-    </StackPanel>
+        <Grid Background="#d3dceb" Margin="0,5,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="25"/>
+
+            </Grid.RowDefinitions>
+            <Canvas Grid.Row="0" x:Name="Canvas" Background="White" Width="500" Height="200" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+            </Canvas>
+            <Border Grid.Row="0" Background="Transparent">
+
+            </Border>
+            <Grid Grid.Row="1" Background="DarkGray" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0">1</Label>
+                <Border Grid.Column="1" Grid.RowSpan="4" BorderBrush="LightGray" 
+                        BorderThickness="1,0,0,0" Background="{x:Null}" />
+                <Label Grid.Column="1">2</Label>
+                <Border Grid.Column="2" Grid.RowSpan="4" BorderBrush="LightGray" 
+                        BorderThickness="1,0,0,0" Background="{x:Null}" />
+                <Label Grid.Column="2">3</Label>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </Fluent:RibbonWindow>
