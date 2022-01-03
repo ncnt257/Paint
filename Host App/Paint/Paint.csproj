@@ -6,4 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="fluent.ribbon" Version="9.0.1" />
+  </ItemGroup>
+
 </Project>

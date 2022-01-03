@@ -1,12 +1,28 @@
-﻿<Window x:Class="Paint.MainWindow"
+﻿<Fluent:RibbonWindow x:Class="Paint.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:local="clr-namespace:Paint"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <StackPanel>
+        <Fluent:Ribbon >
+            <Fluent:Ribbon.Menu>
+                <Fluent:Backstage Header="File"></Fluent:Backstage>
+            </Fluent:Ribbon.Menu>
 
-    </Grid>
-</Window>
+            <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Edit">
+                    <Fluent:Button Header="Edit" Name="HomeEditButton" >
+
+                    </Fluent:Button>
+                    <Fluent:Button Header="Add" Name="HomeAddButton">
+                    </Fluent:Button>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+        </Fluent:Ribbon>
+       
+    </StackPanel>
+</Fluent:RibbonWindow>
