@@ -26,6 +26,13 @@ namespace Paint
         {
             InitializeComponent();
         }
-        
+
+        private void TestAddShapeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = new Fluent.ToggleButton();
+            button.Icon = "Resource/IMAGE/60340.PNG";
+            button.SizeDefinition = "Small";
+            Shape.Items.Add(button);
+        }
     }
 }
