@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Paint", "Paint\Paint.csproj", "{28807829-28D9-441F-B49E-7EEEDFF573F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract", "Contract\Contract.csproj", "{41217A37-61AD-40E9-8D0F-21357F6C3D12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contract", "Contract\Contract.csproj", "{41217A37-61AD-40E9-8D0F-21357F6C3D12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Line2D", "Line2D\Line2D.csproj", "{9B3C9D06-575A-46E5-85B7-44C6DAA16FA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{41217A37-61AD-40E9-8D0F-21357F6C3D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41217A37-61AD-40E9-8D0F-21357F6C3D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41217A37-61AD-40E9-8D0F-21357F6C3D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3C9D06-575A-46E5-85B7-44C6DAA16FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3C9D06-575A-46E5-85B7-44C6DAA16FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3C9D06-575A-46E5-85B7-44C6DAA16FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3C9D06-575A-46E5-85B7-44C6DAA16FA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
