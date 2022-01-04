@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\IMAGE\60340.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\IMAGE\60340.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="fluent.ribbon" Version="9.0.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
   </ItemGroup>

@@ -16,18 +16,52 @@
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
             <Fluent:Ribbon.Menu>
-                <Fluent:Backstage Header="File"></Fluent:Backstage>
+                <Fluent:Backstage>
+                    <Fluent:BackstageTabControl>
+                        <Fluent:BackstageTabItem Header="New">
+                            <StackPanel>
+                                <Fluent:Button>backstage</Fluent:Button>
+                            </StackPanel>
+                        </Fluent:BackstageTabItem>
+                    </Fluent:BackstageTabControl>
+                </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
 
             <Fluent:RibbonTabItem Header="Home">
-                <Fluent:RibbonGroupBox Header="Edit">
-                    <Fluent:Button Header="Edit" Name="HomeEditButton" >
-
-                    </Fluent:Button>
-                    <Fluent:Button Header="Add" Name="HomeAddButton">
-                    </Fluent:Button>
+                <Fluent:RibbonGroupBox Header="Clipboard">
+                    <Fluent:SplitButton  Header="Paste"   LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Large">
+                        <Fluent:MenuItem Header="1"></Fluent:MenuItem>
+                        <Fluent:MenuItem Header="2"></Fluent:MenuItem>
+                        
+                    </Fluent:SplitButton>
+                    <Fluent:Button  Header="Cut" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Copy" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Tool" >
+                    <Fluent:Button  Header="Undo" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Delete" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Text" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Redo" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Move" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Brush" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox x:Name="Shape" Header="Shape" >
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" Click="TestAddShapeButton_Click"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                </Fluent:RibbonGroupBox>
+
             </Fluent:RibbonTabItem>
+            
         </Fluent:Ribbon>
         <Grid Background="#d3dceb">
             <Grid.RowDefinitions>
