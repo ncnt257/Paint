@@ -1,0 +1,1 @@
+release shape nào r thì bỏ vào đây cho người khác đỡ build lại
