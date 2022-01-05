@@ -150,14 +150,29 @@ namespace Paint
                 _preview = _prototypes[_selectedShapeName].Clone();
             }
         }
-            
 
         private void TestAddShapeButton_Click(object sender, RoutedEventArgs e)
         {
             var button = new Fluent.ToggleButton();
             button.Icon = "Resource/IMAGE/60340.PNG";
             button.SizeDefinition = "Small";
+            button.GroupName = "Shape";
             Shape.Items.Add(button);
+
+        }
+
+        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonOpen_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }
