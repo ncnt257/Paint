@@ -168,14 +168,23 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <Canvas Grid.Row="0" x:Name="Canvas" Background="White"  Margin="4,2,0,0">
+            <Canvas Grid.Row="0" x:Name="DrawCanvas" Background="White"  Margin="0,2,0,0" 
+                    Effect="{StaticResource MaterialDesignShadowDepth2}"
+            >
+
+
 
             </Canvas>
-            <Border Background="Transparent" MouseDown="Canvas_MouseDown" 
-                MouseMove="Canvas_MouseMove" 
-                MouseUp="Canvas_MouseUp">
+            <Border Name="CanvasBorder"  Grid.Row="0" Background="Transparent" MouseDown="Canvas_MouseDown" 
+                    MouseMove="Canvas_MouseMove" 
+                    MouseUp="Canvas_MouseUp"
+                    Margin="0,2,0,0" 
+                    
+                    Cursor="Cross"
+            >
 
             </Border>
+
             <Grid Grid.Row="1" Background="#f0f0f0
 " >
                 <Grid.ColumnDefinitions>
