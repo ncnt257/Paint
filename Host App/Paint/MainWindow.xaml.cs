@@ -71,7 +71,13 @@ namespace Paint
                 Title = $"{pos.X} {pos.Y}";
             }
         }
+        //xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        //TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        /*<Border Background = "Transparent" MouseDown="Canvas_MouseDown" 
+                MouseMove="Canvas_MouseMove" 
+                MouseUp="Canvas_MouseUp">
 
+            </Border>*/
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             _isDrawing = false;
@@ -127,7 +133,7 @@ namespace Paint
             }
 
             // Tạo ra các nút bấm hàng mẫu
-            /*foreach (var item in _prototypes)
+            foreach (var item in _prototypes)
             {
                 var shape = item.Value as IShape;
                 var button = new Button()
@@ -143,7 +149,7 @@ namespace Paint
             }
 
             _selectedShapeName = _prototypes.First().Value.Name;
-            _preview = _prototypes[_selectedShapeName].Clone();*/
+            _preview = _prototypes[_selectedShapeName].Clone();
         }
     }
 }

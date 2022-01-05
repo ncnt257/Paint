@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ControlzEx" Version="5.0.1" />
     <PackageReference Include="fluent.ribbon" Version="9.0.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
   </ItemGroup>
