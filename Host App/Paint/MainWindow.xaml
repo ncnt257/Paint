@@ -12,7 +12,8 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Title="Paint" Height="450" Width="800">
+        Title="Paint" Height="450" Width="800"
+                     Loaded="RibbonWindow_Loaded">
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
             <Fluent:Ribbon.Menu>
@@ -25,7 +26,11 @@
 
                     </Fluent:Button>
                     <Fluent:Button Header="Add" Name="HomeAddButton">
+                    
                     </Fluent:Button>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Shapes" Name="ShapeArea">
+                    
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
@@ -37,8 +42,7 @@
             <Canvas Grid.Row="0" x:Name="Canvas" Background="White"  Margin="4,2,0,0">
 
             </Canvas>
-            <Border Grid.Row="0" Background="Transparent">
-
+            <Border Grid.Row="0" Background="Transparent" >
             </Border>
             <Grid Grid.Row="1" Background="#f0f0f0
 " >
