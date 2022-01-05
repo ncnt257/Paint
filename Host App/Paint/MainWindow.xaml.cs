@@ -116,7 +116,9 @@ namespace Paint
 
             foreach (var dll in dlls)
             {
+                if (dll.Name == "ControlzEx.dll") continue;
                 var assembly = Assembly.LoadFile(dll.FullName);
+                
                 var types = assembly.GetTypes();
 
                 foreach (var type in types)
@@ -148,8 +150,12 @@ namespace Paint
                 ShapeArea.Items.Add(button);
             }
 
-            _selectedShapeName = _prototypes.First().Value.Name;
-            _preview = _prototypes[_selectedShapeName].Clone();
+            if (_prototypes.Count > 0)
+            {
+                _selectedShapeName = _prototypes.First().Value.Name;
+                _preview = _prototypes[_selectedShapeName].Clone();
+            }
+            
         }
     }
 }
