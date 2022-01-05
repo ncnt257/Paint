@@ -71,13 +71,7 @@ namespace Paint
                 Title = $"{pos.X} {pos.Y}";
             }
         }
-        //xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        //TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        /*<Border Background = "Transparent" MouseDown="Canvas_MouseDown" 
-                MouseMove="Canvas_MouseMove" 
-                MouseUp="Canvas_MouseUp">
 
-            </Border>*/
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
             _isDrawing = false;
@@ -155,7 +149,16 @@ namespace Paint
                 _selectedShapeName = _prototypes.First().Value.Name;
                 _preview = _prototypes[_selectedShapeName].Clone();
             }
+        }
             
+
+        private void TestAddShapeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = new Fluent.ToggleButton();
+            button.Icon = "Resource/IMAGE/60340.PNG";
+            button.SizeDefinition = "Small";
+            Shape.Items.Add(button);
+
         }
     }
 }
