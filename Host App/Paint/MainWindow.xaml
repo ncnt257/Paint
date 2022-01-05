@@ -6,13 +6,13 @@
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:local="clr-namespace:Paint"
         mc:Ignorable="d"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Title="Paint" Height="450" Width="800">
+        Title="Paint" Height="450" Width="800"
+                     Loaded="RibbonWindow_Loaded">
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
             <Fluent:Ribbon.Menu>
@@ -26,6 +26,7 @@
             </Fluent:Ribbon.Menu>
 
             <Fluent:RibbonTabItem Header="Home">
+
                 <Fluent:RibbonGroupBox Header="Clipboard">
                     <Fluent:SplitButton  Header="Paste"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
                         <Fluent:MenuItem Header="1"></Fluent:MenuItem>
@@ -170,7 +171,9 @@
             <Canvas Grid.Row="0" x:Name="Canvas" Background="White"  Margin="4,2,0,0">
 
             </Canvas>
-            <Border Grid.Row="0" Background="Transparent">
+            <Border Background="Transparent" MouseDown="Canvas_MouseDown" 
+                MouseMove="Canvas_MouseMove" 
+                MouseUp="Canvas_MouseUp">
 
             </Border>
             <Grid Grid.Row="1" Background="#f0f0f0
