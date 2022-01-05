@@ -18,48 +18,147 @@
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
                     <Fluent:BackstageTabControl>
-                        <Fluent:BackstageTabItem Header="New">
-                            <StackPanel>
-                                <Fluent:Button>backstage</Fluent:Button>
-                            </StackPanel>
-                        </Fluent:BackstageTabItem>
+                        <Fluent:Button x:Name="buttonSave"      Header="Save"       Click="buttonSave_Click"></Fluent:Button>
+                        <Fluent:Button x:Name="buttonSaveAs"    Header="Save as"    Click="buttonSaveAs_Click"></Fluent:Button>
+                        <Fluent:Button x:Name="buttonOpen"      Header="Open"       Click="buttonOpen_Click"></Fluent:Button>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
 
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Clipboard">
-                    <Fluent:SplitButton  Header="Paste"   LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Large">
+                    <Fluent:SplitButton  Header="Paste"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
                         <Fluent:MenuItem Header="1"></Fluent:MenuItem>
                         <Fluent:MenuItem Header="2"></Fluent:MenuItem>
                         
                     </Fluent:SplitButton>
-                    <Fluent:Button  Header="Cut" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Copy" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Cut" Icon="Resource/Icon/60337.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Tool" >
-                    <Fluent:Button  Header="Undo" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Delete" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Text" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Redo" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Move" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Brush" LargeIcon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Undo" Icon="Resource/Icon/38001.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top"></Fluent:Button>
+                    <Fluent:Button  Header="Delete" Icon="Resource/Icon/60565.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Text" Icon="Resource/Icon/60421.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Redo" Icon="Resource/Icon/38005.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Move" Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Brush" Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox x:Name="Shape" Header="Shape" >
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" Click="TestAddShapeButton_Click"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape" Click="TestAddShapeButton_Click"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape"></Fluent:ToggleButton>
+                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape"></Fluent:ToggleButton>
                 </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Color">
+                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Icon="Resource/IMAGE/60340.PNG" Header="Outline">
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                    </Fluent:DropDownButton>
+                    <Fluent:DropDownButton x:Name="buttonFill" SizeDefinition="Medium" Header="Fill">
+                        <Fluent:DropDownButton.Icon>
+                            <Grid>
+                                <Image Source="Resource/Icon/60420.PNG"></Image>
+                                <Rectangle Width="24" Height="6" VerticalAlignment="Bottom">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Yellow"></SolidColorBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Grid>
+                        </Fluent:DropDownButton.Icon>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="alo"></Fluent:MenuItem>
+                    </Fluent:DropDownButton>
+                    <Fluent:Spinner x:Name="buttonStrokeSize" Format="0 px" Header="Size" Value="69" InputWidth="75"></Fluent:Spinner>
+                    <Fluent:ComboBox x:Name="buttonStrokeType" Header="Stroke" SelectedIndex="0" InputWidth="75">
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="1"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="2"></Fluent:MenuItem>
+                        <Fluent:MenuItem Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small" Header="3"></Fluent:MenuItem>
+                    </Fluent:ComboBox>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox x:Name="Font" Header="Font">
+                    <Fluent:RibbonToolBar>
+                        <Fluent:RibbonToolBar.LayoutDefinitions>
+                            <Fluent:RibbonToolBarLayoutDefinition>
+                                <Fluent:RibbonToolBarRow>
+                                    <Fluent:RibbonToolBarControlDefinition Target="comboBoxFontName"></Fluent:RibbonToolBarControlDefinition>
+                                    <Fluent:RibbonToolBarControlDefinition Target="comboBoxFontSize"></Fluent:RibbonToolBarControlDefinition>
+                                </Fluent:RibbonToolBarRow>
+                                <Fluent:RibbonToolBarRow>
+                                    <Fluent:RibbonToolBarControlGroupDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonBold"></Fluent:RibbonToolBarControlDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonItalic"></Fluent:RibbonToolBarControlDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonUnderline"></Fluent:RibbonToolBarControlDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonStrikeThrough"></Fluent:RibbonToolBarControlDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonSubscript"></Fluent:RibbonToolBarControlDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonSuperscript"></Fluent:RibbonToolBarControlDefinition>
+                                    </Fluent:RibbonToolBarControlGroupDefinition>
+                                    <Fluent:RibbonToolBarControlGroupDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonTextHightlightColor"></Fluent:RibbonToolBarControlDefinition>
+                                        <Fluent:RibbonToolBarControlDefinition Target="buttonFontColor"></Fluent:RibbonToolBarControlDefinition>
+                                    </Fluent:RibbonToolBarControlGroupDefinition>
+                                </Fluent:RibbonToolBarRow>
 
+                            </Fluent:RibbonToolBarLayoutDefinition>
+                        </Fluent:RibbonToolBar.LayoutDefinitions>
+                        <Fluent:ComboBox x:Name="comboBoxFontName" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0" InputWidth="75">
+                            <TextBlock Text="Arial"></TextBlock>
+                            <TextBlock Text="Tahoma"></TextBlock>
+                            <TextBlock Text="Arial1"></TextBlock>
+                            <TextBlock Text="Arial2"></TextBlock>
+                            <TextBlock Text="Arial3"></TextBlock>
+                        </Fluent:ComboBox>
+                        <Fluent:ComboBox x:Name="comboBoxFontSize" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0">
+                            <TextBlock Text="6"></TextBlock>
+                            <TextBlock Text="8"></TextBlock>
+                            <TextBlock Text="10"></TextBlock>
+                            <TextBlock Text="12"></TextBlock>
+                            <TextBlock Text="14"></TextBlock>
+                            <TextBlock Text="16"></TextBlock>
+                        </Fluent:ComboBox>
+                        <Fluent:ToggleButton x:Name="buttonBold" Icon="Resource/Icon/Bold.png" SizeDefinition="small"></Fluent:ToggleButton>
+                        <Fluent:ToggleButton x:Name="buttonItalic" Icon="Resource/Icon/Italic.png" SizeDefinition="small"></Fluent:ToggleButton>
+                        <Fluent:ToggleButton x:Name="buttonUnderline" Icon="Resource/Icon/Underline.png" SizeDefinition="small"></Fluent:ToggleButton>
+                        <Fluent:ToggleButton x:Name="buttonStrikeThrough" Icon="Resource/Icon/Strikethrough.png" SizeDefinition="small"></Fluent:ToggleButton>
+                        <Fluent:ToggleButton x:Name="buttonSubscript" Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small"></Fluent:ToggleButton>
+                        <Fluent:ToggleButton x:Name="buttonSuperscript" Icon="Resource/IMAGE/60340.PNG" SizeDefinition="small"></Fluent:ToggleButton>
+                        <Fluent:DropDownButton x:Name="buttonTextHightlightColor" SizeDefinition="small" >
+                            <Fluent:DropDownButton.Icon>
+                                <Grid>
+                                    <Image Width="16" Height="16" Source="Resource/IMAGE/60340.PNG"></Image>
+                                    <Rectangle Width="16" Height="4" VerticalAlignment="Bottom">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="Yellow"></SolidColorBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
+                            </Fluent:DropDownButton.Icon>
+                            <Fluent:ColorGallery>
+
+                            </Fluent:ColorGallery>
+                        </Fluent:DropDownButton>
+                        <Fluent:DropDownButton x:Name="buttonFontColor" SizeDefinition="small" >
+                            <Fluent:DropDownButton.Icon>
+                                <Grid>
+                                    <Image Width="16" Height="16" Source="Resource/IMAGE/60340.PNG"></Image>
+                                    <Rectangle Width="16" Height="4" VerticalAlignment="Bottom">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="Yellow"></SolidColorBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
+                            </Fluent:DropDownButton.Icon>
+                            <Fluent:ColorGallery>
+                                
+                            </Fluent:ColorGallery>
+                        </Fluent:DropDownButton>
+
+                    </Fluent:RibbonToolBar>
+                </Fluent:RibbonGroupBox>
+                
             </Fluent:RibbonTabItem>
             
         </Fluent:Ribbon>
