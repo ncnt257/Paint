@@ -43,33 +43,40 @@ namespace Paint
         {
             _isDrawing = true;
 
-            Point pos = e.GetPosition(Canvas);
+            Point pos = e.GetPosition(DrawCanvas);
 
             _preview.HandleStart(pos.X, pos.Y);
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            Point pos = e.GetPosition(DrawCanvas);
+            CoordinateLabel.Content = $"{Math.Ceiling(pos.X)}, {Math.Ceiling(pos.Y)}px";
             if (_isDrawing)
             {
-                Point pos = e.GetPosition(Canvas);
+                
                 _preview.HandleEnd(pos.X, pos.Y);
-
                 // Xoá hết các hình vẽ cũ
-                Canvas.Children.Clear();
+                for (int i = DrawCanvas.Children.Count - 1; i >= 0; i += -1)
+                {
+                    UIElement Child = DrawCanvas.Children[i];
+                    if (Child is not Thumb)
+                        DrawCanvas.Children.Remove(Child);
+                }
 
                 // Vẽ lại các hình trước đó
                 foreach (var shape in _shapes)
                 {
                     UIElement element = shape.Draw(1, "Red");//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
-                    Canvas.Children.Add(element);
+                    DrawCanvas.Children.Add(element);
                 }
 
                 // Vẽ hình preview đè lên
-                Canvas.Children.Add(_preview.Draw(1, "Red"));
+                DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
+               
 
-                Title = $"{pos.X} {pos.Y}";
             }
+            
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -77,7 +84,7 @@ namespace Paint
             _isDrawing = false;
 
             // Thêm đối tượng cuối cùng vào mảng quản lí
-            Point pos = e.GetPosition(Canvas);
+            Point pos = e.GetPosition(DrawCanvas);
             _preview.HandleEnd(pos.X, pos.Y);
             _shapes.Add(_preview);
 
@@ -85,20 +92,25 @@ namespace Paint
             _preview = _prototypes[_selectedShapeName].Clone();
 
             // Ve lai Xoa toan bo
-            Canvas.Children.Clear();
+            for (int i = DrawCanvas.Children.Count - 1; i >= 0; i += -1)
+            {
+                UIElement Child = DrawCanvas.Children[i];
+                if (Child is not Thumb)
+                    DrawCanvas.Children.Remove(Child);
+            }
 
             // Ve lai tat ca cac hinh
             foreach (var shape in _shapes)
             {
                 var element = shape.Draw(1, "Red");
-                Canvas.Children.Add(element);
+                DrawCanvas.Children.Add(element);
             }
 
         }
 
         private void prototypeButton_Click(object sender, RoutedEventArgs e)
         {
-            _selectedShapeName = (sender as Button).Tag as string;
+            _selectedShapeName = (sender as Fluent.ToggleButton).Tag as string;
 
             _preview = _prototypes[_selectedShapeName];
         }
@@ -132,12 +144,12 @@ namespace Paint
             foreach (var item in _prototypes)
             {
                 var shape = item.Value as IShape;
-                var button = new Button()
+                var button = new Fluent.ToggleButton()
                 {
+                    Icon = "Resource/IMAGE/60340.PNG",
                     Header = shape.Name,
-                    Width = 80,
-                    Height = 35,
-                    Margin = new Thickness(5, 0, 5, 0),
+                    SizeDefinition = "Small",
+                    GroupName = "Shape",
                     Tag = shape.Name
                 };
                 button.Click += prototypeButton_Click;
@@ -173,7 +185,36 @@ namespace Paint
 
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
         {
-
+            //for test
+            
         }
+
+
+        //<Thumb Name = "CanvasThumb" Canvas.Right="-5" Canvas.Bottom="-5" Background="Black" 
+        //Width="5" Height="5" DragDelta="OnDragDelta" 
+        //Cursor="SizeNWSE"
+        //Style="{StaticResource ScrollBarThumb}"
+        ///>
+
+        //void OnDragDelta(object sender, DragDeltaEventArgs e)
+        //{
+        //    //Move the Thumb to the mouse position during the drag operation
+        //    double yadjust = DrawCanvas.Height + e.VerticalChange;
+        //    double xadjust = DrawCanvas.Width + e.HorizontalChange;
+        //    if ((xadjust >= 0) && (yadjust >= 0))
+        //    {
+        //        DrawCanvas.Width = xadjust;
+        //        CanvasBorder.Width = xadjust;
+        //        DrawCanvas.Height = yadjust;
+        //        CanvasBorder.Height = yadjust;
+
+        //        Canvas.SetLeft(CanvasThumb, Canvas.GetLeft(CanvasThumb) +
+        //                                    e.HorizontalChange);
+        //        Canvas.SetTop(CanvasThumb, Canvas.GetTop(CanvasThumb) +
+        //                                   e.VerticalChange);
+                
+        //    }
+        //}
+
     }
 }

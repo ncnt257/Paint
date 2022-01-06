@@ -45,10 +45,7 @@
                     <Fluent:Button  Header="Brush" Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox x:Name="Shape" Header="Shape" >
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape" Click="TestAddShapeButton_Click"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape"></Fluent:ToggleButton>
-                    <Fluent:ToggleButton Icon="Resource/IMAGE/60340.PNG" SizeDefinition="Small" GroupName = "Shape"></Fluent:ToggleButton>
+                   
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Color">
                     <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Icon="Resource/IMAGE/60340.PNG" Header="Outline">
@@ -168,14 +165,22 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <Canvas Grid.Row="0" x:Name="Canvas" Background="White"  Margin="4,2,0,0">
+            <Canvas Grid.Row="0" x:Name="DrawCanvas" Background="White"  Margin="0,2,0,0" 
+                    Effect="{StaticResource MaterialDesignShadowDepth2}"
+            >
+
+
 
             </Canvas>
-            <Border Background="Transparent" MouseDown="Canvas_MouseDown" 
-                MouseMove="Canvas_MouseMove" 
-                MouseUp="Canvas_MouseUp">
+            <Border Name="CanvasBorder"  Grid.Row="0" Background="Transparent" MouseDown="Canvas_MouseDown" 
+                    MouseMove="Canvas_MouseMove" 
+                    MouseUp="Canvas_MouseUp"
+                    Margin="0,2,0,0" 
+                    Cursor="Cross"
+            >
 
             </Border>
+
             <Grid Grid.Row="1" Background="#f0f0f0
 " >
                 <Grid.ColumnDefinitions>
@@ -184,10 +189,13 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0">1</Label>
+                <StackPanel  Grid.Column="0">
+                    
+                    <Label Name="CoordinateLabel"></Label>
+                </StackPanel>
                 <Border Grid.Column="1" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
-                <Label Grid.Column="1">2</Label>
+                <Label Grid.Column="1" Name="ShapeSize"></Label>
                 <Border Grid.Column="2" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
                 <Label Grid.Column="2">3</Label>
