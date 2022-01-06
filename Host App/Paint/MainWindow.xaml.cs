@@ -50,11 +50,12 @@ namespace Paint
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            Point pos = e.GetPosition(DrawCanvas);
+            CoordinateLabel.Content = $"{Math.Ceiling(pos.X)}, {Math.Ceiling(pos.Y)}px";
             if (_isDrawing)
             {
-                Point pos = e.GetPosition(DrawCanvas);
+                
                 _preview.HandleEnd(pos.X, pos.Y);
-
                 // Xoá hết các hình vẽ cũ
                 for (int i = DrawCanvas.Children.Count - 1; i >= 0; i += -1)
                 {
@@ -72,9 +73,10 @@ namespace Paint
 
                 // Vẽ hình preview đè lên
                 DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
+               
 
-                Title = $"{pos.X} {pos.Y}";
             }
+            
         }
 
         private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -108,7 +110,7 @@ namespace Paint
 
         private void prototypeButton_Click(object sender, RoutedEventArgs e)
         {
-            _selectedShapeName = (sender as Button).Tag as string;
+            _selectedShapeName = (sender as Fluent.ToggleButton).Tag as string;
 
             _preview = _prototypes[_selectedShapeName];
         }
@@ -142,12 +144,12 @@ namespace Paint
             foreach (var item in _prototypes)
             {
                 var shape = item.Value as IShape;
-                var button = new Button()
+                var button = new Fluent.ToggleButton()
                 {
+                    Icon = "Resource/IMAGE/60340.PNG",
                     Header = shape.Name,
-                    Width = 80,
-                    Height = 35,
-                    Margin = new Thickness(5, 0, 5, 0),
+                    SizeDefinition = "Small",
+                    GroupName = "Shape",
                     Tag = shape.Name
                 };
                 button.Click += prototypeButton_Click;
@@ -183,7 +185,8 @@ namespace Paint
 
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
         {
-
+            //for test
+            
         }
 
 
