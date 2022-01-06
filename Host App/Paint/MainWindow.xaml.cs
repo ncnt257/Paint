@@ -45,7 +45,7 @@ namespace Paint
 
             Point pos = e.GetPosition(DrawCanvas);
 
-            _preview.HandleStart(pos.X, pos.Y);
+            _preview.HandleStart(pos.X, pos.Y); 
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
@@ -150,7 +150,8 @@ namespace Paint
                     Header = shape.Name,
                     SizeDefinition = "Small",
                     GroupName = "Shape",
-                    Tag = shape.Name
+                    Tag = shape.Name,
+                    
                 };
                 button.Click += prototypeButton_Click;
                 Shape.Items.Add(button);
