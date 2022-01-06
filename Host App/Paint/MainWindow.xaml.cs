@@ -141,7 +141,7 @@ namespace Paint
                     Tag = shape.Name
                 };
                 button.Click += prototypeButton_Click;
-                ShapeArea.Items.Add(button);
+                Shape.Items.Add(button);
             }
 
             if (_prototypes.Count > 0)
