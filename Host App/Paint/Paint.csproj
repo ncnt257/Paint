@@ -10,6 +10,7 @@
     <None Remove="Resource\Icon\cross.png" />
     <None Remove="Resource\Icon\Move.png" />
     <None Remove="Resource\Icon\Outline.png" />
+    <None Remove="Resource\Icon\paint.ico" />
     <None Remove="Resource\Icon\Redo.png" />
     <None Remove="Resource\Icon\Size.png" />
     <None Remove="Resource\Icon\Size1.png" />
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resource\Icon\Paint.ico" />
     <Resource Include="Resource\Icon\Size1.png" />
     <Resource Include="Resource\Icon\Size2.png" />
     <Resource Include="Resource\Icon\Size3.png" />

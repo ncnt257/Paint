@@ -11,7 +11,7 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Title="Paint" Height="450" Width="800"
+        Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                      Loaded="RibbonWindow_Loaded">
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
