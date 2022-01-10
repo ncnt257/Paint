@@ -6,7 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="IMAGE\Line2D.png" />
+    <None Remove="Line.png" />
+    <None Remove="Line2D.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Contract\Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="IMAGE\Line2D.png" />
+    <Resource Include="Line.png" />
   </ItemGroup>
 
 </Project>

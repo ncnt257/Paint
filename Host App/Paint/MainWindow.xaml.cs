@@ -146,7 +146,7 @@ namespace Paint
                 var shape = item.Value as IShape;
                 var button = new Fluent.ToggleButton()
                 {
-                    Icon = "Resource/IMAGE/60340.PNG",
+                    Icon = $"pack://application:,,,/{shape.Name}2D;Component/{shape.Name}.png",
                     Header = shape.Name,
                     SizeDefinition = "Small",
                     GroupName = "Shape",
