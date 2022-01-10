@@ -6,9 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Rectangle.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Contract">
       <HintPath>..\..\..\Host App\Contract\bin\Debug\net5.0-windows\Contract.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Rectangle.png" />
   </ItemGroup>
 
 </Project>
