@@ -5,50 +5,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-
-namespace Rectangle2D
+namespace Ellipse2D
 {
-    class Square2D : IShape
+    public class Ellipse2D : IShape
     {
         private Point2D _leftTop = new Point2D();
         private Point2D _rightBottom = new Point2D();
-        public string Name => "Rectangle";
-
-        public UIElement Draw(int thickness, string color)
-        {
-            var width = _rightBottom.X - _leftTop.X;
-            var height = _rightBottom.Y - _leftTop.Y;
-            var rectangle = new Rectangle()
-            {
-                Width = (int)Math.Abs(width),
-                Height = (int)Math.Abs(height),
-                Stroke = new SolidColorBrush(Colors.Red),
-                StrokeThickness = thickness
-            };
-            if (width > 0 && height > 0)
-            {
-                Canvas.SetLeft(rectangle, _leftTop.X);
-                Canvas.SetTop(rectangle, _leftTop.Y);
-            }
-            if (width > 0 && height < 0)
-            {
-                Canvas.SetLeft(rectangle, _leftTop.X);
-                Canvas.SetTop(rectangle, _rightBottom.Y);
-            }
-            if (width < 0 && height > 0)
-            {
-                Canvas.SetLeft(rectangle, _rightBottom.X);
-                Canvas.SetTop(rectangle, _leftTop.Y);
-            }
-            if (width < 0 && height < 0)
-            {
-                Canvas.SetLeft(rectangle, _rightBottom.X);
-                Canvas.SetTop(rectangle, _rightBottom.Y);
-            }
-
-            return rectangle;
-        }
-
         public void HandleStart(double x, double y)
         {
             _leftTop.X = x;
@@ -61,9 +23,46 @@ namespace Rectangle2D
             _rightBottom.Y = y;
         }
 
+        public UIElement Draw(int thickness, string color)
+        {
+            var width = _rightBottom.X - _leftTop.X;
+            var height = _rightBottom.Y - _leftTop.Y;
+            var ellipse = new Ellipse()
+            {
+                Width = (int)Math.Abs(width),
+                Height = (int)Math.Abs(height),
+                Stroke = new SolidColorBrush(Colors.Red),
+                StrokeThickness = thickness
+            };
+            if (width > 0 && height > 0)
+            {
+                Canvas.SetLeft(ellipse, _leftTop.X);
+                Canvas.SetTop(ellipse, _leftTop.Y);
+            }
+            if (width > 0 && height < 0)
+            {
+                Canvas.SetLeft(ellipse, _leftTop.X);
+                Canvas.SetTop(ellipse, _rightBottom.Y);
+            }
+            if (width < 0 && height > 0)
+            {
+                Canvas.SetLeft(ellipse, _rightBottom.X);
+                Canvas.SetTop(ellipse, _leftTop.Y);
+            }
+            if (width < 0 && height < 0)
+            {
+                Canvas.SetLeft(ellipse, _rightBottom.X);
+                Canvas.SetTop(ellipse, _rightBottom.Y);
+            }
+
+            return ellipse;
+        }
+
         public IShape Clone()
         {
-            return new Square2D();
+            return new Ellipse2D();
         }
+
+        public string Name => "Ellipse";
     }
 }
