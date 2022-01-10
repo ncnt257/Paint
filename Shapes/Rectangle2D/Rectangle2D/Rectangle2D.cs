@@ -12,31 +12,41 @@ namespace Rectangle2D
     {
         private Point2D _leftTop = new Point2D();
         private Point2D _rightBottom = new Point2D();
-        public string Name => "Square";
+        public string Name => "Rectangle";
 
         public UIElement Draw(int thickness, string color)
         {
             var width = _rightBottom.X - _leftTop.X;
             var height = _rightBottom.Y - _leftTop.Y;
-            var square = new Rectangle()
+            var rectangle = new Rectangle()
             {
                 Width = (int)Math.Abs(width),
                 Height = (int)Math.Abs(height),
                 Stroke = new SolidColorBrush(Colors.Red),
                 StrokeThickness = thickness
             };
-            if (width > 0)
+            if (width > 0 && height>0)
             {
-                Canvas.SetLeft(square, _leftTop.X);
-                Canvas.SetTop(square, _leftTop.Y);
+                Canvas.SetLeft(rectangle, _leftTop.X);
+                Canvas.SetTop(rectangle, _leftTop.Y);
             }
-            else
+            if(width>0 && height < 0)
             {
-                Canvas.SetLeft(square, _rightBottom.X);
-                Canvas.SetTop(square, _rightBottom.Y);
+                Canvas.SetLeft(rectangle, _leftTop.X);
+                Canvas.SetTop(rectangle, _rightBottom.Y);
+            }
+            if(width<0 && height > 0)
+            {
+                Canvas.SetLeft(rectangle, _rightBottom.X);
+                Canvas.SetTop(rectangle, _leftTop.Y);
+            }
+            if(width<0 && height < 0)
+            {
+                Canvas.SetLeft(rectangle, _rightBottom.X);
+                Canvas.SetTop(rectangle, _rightBottom.Y);
             }
 
-            return square;
+            return rectangle;
         }
 
         public void HandleStart(double x, double y)
