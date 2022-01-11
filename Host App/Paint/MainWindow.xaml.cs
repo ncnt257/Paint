@@ -63,8 +63,8 @@ namespace Paint
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             var temp = e.Location;
-            Point hope = new Point(temp.X, temp.Y);
-            Point pos = DrawCanvas.PointFromScreen(hope);
+            Point screenPos = new Point(temp.X, temp.Y);
+            Point pos = DrawCanvas.PointFromScreen(screenPos);
             
             
             
@@ -100,8 +100,8 @@ namespace Paint
                 _isDrawing = false;
 
                 var temp = e.Location;
-                Point hope = new Point(temp.X, temp.Y);
-                Point pos = DrawCanvas.PointFromScreen(hope);
+                Point screenPos = new Point(temp.X, temp.Y);
+                Point pos = DrawCanvas.PointFromScreen(screenPos);
                 // Thêm đối tượng cuối cùng vào mảng quản lí
 
                 _preview.HandleEnd(pos.X, pos.Y);
