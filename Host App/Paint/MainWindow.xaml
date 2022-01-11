@@ -168,17 +168,15 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <ScrollViewer Grid.Row="0" >
-                <Canvas x:Name="DrawCanvas" Background="White"  Margin="0,2,0,0" 
-                        ClipToBounds="True"   MouseDown="Canvas_MouseDown"  Cursor="Cross"
-                >
-                    <ScrollViewer></ScrollViewer>
-                </Canvas>
-            </ScrollViewer>
-            
+            <Canvas x:Name="DrawCanvas" Background="White"  Margin="0,2,0,0" 
+                    ClipToBounds="True"   MouseDown="Canvas_MouseDown"  Cursor="Cross" Loaded="DrawCanvas_OnLoaded">
             
 
-            
+            </Canvas>
+
+
+
+
 
             <Grid Grid.Row="1" Background="#f0f0f0
 " >
