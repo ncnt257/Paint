@@ -12,7 +12,9 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
-                     Loaded="RibbonWindow_Loaded">
+                        Loaded="RibbonWindow_Loaded"
+                        
+        Closing="MainWindow_OnClosing">
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
             <Fluent:Ribbon.Menu>
@@ -166,21 +168,17 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <Canvas Grid.Row="0" x:Name="DrawCanvas" Background="White"  Margin="0,2,0,0" 
-                    
-            >
+            <ScrollViewer Grid.Row="0" >
+                <Canvas x:Name="DrawCanvas" Background="White"  Margin="0,2,0,0" 
+                        ClipToBounds="True"   MouseDown="Canvas_MouseDown"  Cursor="Cross"
+                >
+                    <ScrollViewer></ScrollViewer>
+                </Canvas>
+            </ScrollViewer>
+            
+            
 
-
-
-            </Canvas>
-            <Border Name="CanvasBorder"  Grid.Row="0" Background="Transparent" MouseDown="Canvas_MouseDown" 
-                    MouseMove="Canvas_MouseMove" 
-                    MouseUp="Canvas_MouseUp"
-                    Margin="0,2,0,0" 
-                    Cursor="Cross"
-            >
-
-            </Border>
+            
 
             <Grid Grid.Row="1" Background="#f0f0f0
 " >
