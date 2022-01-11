@@ -28,21 +28,27 @@ namespace Paint
     /// </summary>
     public partial class MainWindow : RibbonWindow
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-            _hook = Hook.GlobalEvents();
-            _hook.MouseMove += temp;
-            _hook.MouseUp += temp2;
-        }
-
-        private IMouseEvents _hook;
+        private IMouseEvents _hook = Hook.GlobalEvents();
         bool _isDrawing = false;
         List<IShape> _shapes = new List<IShape>();
         IShape _preview;
         string _selectedShapeName = "";
         Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            
+            
+            
+        }
+        private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _hook.MouseMove += Hook_MouseMove;
+            _hook.MouseUp += Hook_MouseUp;
+        }
+        
 
         private void Canvas_MouseDown(object sender,
             MouseButtonEventArgs e)
@@ -54,25 +60,26 @@ namespace Paint
             _preview.HandleStart(pos.X, pos.Y); 
         }
 
-        private void temp(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             var temp = e.Location;
             Point hope = new Point(temp.X, temp.Y);
             Point pos = DrawCanvas.PointFromScreen(hope);
             
+            
+            
             CoordinateLabel.Content = $"{Math.Ceiling(pos.X)}, {Math.Ceiling(pos.Y)}px";
+            if (pos.X < 0 || pos.X > DrawCanvas.ActualWidth || pos.Y < 0 || pos.Y >= DrawCanvas.ActualHeight)
+            {
+                CoordinateLabel.Content = "";
+            }
 
             if (_isDrawing)
             {
 
                 _preview.HandleEnd(pos.X, pos.Y);
                 // Xoá hết các hình vẽ cũ
-                for (int i = DrawCanvas.Children.Count - 1; i >= 0; i += -1)
-                {
-                    UIElement Child = DrawCanvas.Children[i];
-                    if (Child is not Thumb)
-                        DrawCanvas.Children.Remove(Child);
-                }
+                DrawCanvas.Children.Clear();
 
                 // Vẽ lại các hình trước đó
                 foreach (var shape in _shapes)
@@ -86,101 +93,36 @@ namespace Paint
 
 
             }
-            
-            
-
         }
-        private void temp2(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void Hook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            _isDrawing = false;
+            if(_isDrawing){
+                _isDrawing = false;
 
-            var temp = e.Location;
-            Point hope = new Point(temp.X, temp.Y);
-            Point pos = DrawCanvas.PointFromScreen(hope);
-            // Thêm đối tượng cuối cùng vào mảng quản lí
+                var temp = e.Location;
+                Point hope = new Point(temp.X, temp.Y);
+                Point pos = DrawCanvas.PointFromScreen(hope);
+                // Thêm đối tượng cuối cùng vào mảng quản lí
 
-            _preview.HandleEnd(pos.X, pos.Y);
-            _shapes.Add(_preview);
-
-            // Sinh ra đối tượng mẫu kế
-            _preview = _prototypes[_selectedShapeName].Clone();
-
-            // Ve lai Xoa toan bo
-            for (int i = DrawCanvas.Children.Count - 1; i >= 0; i += -1)
-            {
-                UIElement Child = DrawCanvas.Children[i];
-                if (Child is not Thumb)
-                    DrawCanvas.Children.Remove(Child);
-            }
-
-            // Ve lai tat ca cac hinh
-            foreach (var shape in _shapes)
-            {
-                var element = shape.Draw(1, "Red");
-                DrawCanvas.Children.Add(element);
-            }
-
-        }
-
-        private void Canvas_MouseMove(object sender, MouseEventArgs e)
-        {
-            Point pos = e.GetPosition(DrawCanvas);
-            CoordinateLabel.Content = $"{Math.Ceiling(pos.X)}, {Math.Ceiling(pos.Y)}px";
-            if (_isDrawing)
-            {
-                
                 _preview.HandleEnd(pos.X, pos.Y);
-                // Xoá hết các hình vẽ cũ
-                for (int i = DrawCanvas.Children.Count - 1; i >= 0; i += -1)
-                {
-                    UIElement Child = DrawCanvas.Children[i];
-                    if (Child is not Thumb)
-                        DrawCanvas.Children.Remove(Child);
-                }
+                _shapes.Add(_preview);
 
-                // Vẽ lại các hình trước đó
+                // Sinh ra đối tượng mẫu kế
+                _preview = _prototypes[_selectedShapeName].Clone();
+
+                // Ve lai Xoa toan bo
+                DrawCanvas.Children.Clear();
+
+                // Ve lai tat ca cac hinh
                 foreach (var shape in _shapes)
                 {
-                    UIElement element = shape.Draw(1, "Red");//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
+                    var element = shape.Draw(1, "Red");
                     DrawCanvas.Children.Add(element);
                 }
-
-                // Vẽ hình preview đè lên
-                DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
-               
-
-            }
-            
-        }
-
-        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            _isDrawing = false;
-
-            // Thêm đối tượng cuối cùng vào mảng quản lí
-            Point pos = e.GetPosition(DrawCanvas);
-            _preview.HandleEnd(pos.X, pos.Y);
-            _shapes.Add(_preview);
-
-            // Sinh ra đối tượng mẫu kế
-            _preview = _prototypes[_selectedShapeName].Clone();
-
-            // Ve lai Xoa toan bo
-            for (int i = DrawCanvas.Children.Count - 1; i >= 0; i += -1)
-            {
-                UIElement Child = DrawCanvas.Children[i];
-                if (Child is not Thumb)
-                    DrawCanvas.Children.Remove(Child);
-            }
-
-            // Ve lai tat ca cac hinh
-            foreach (var shape in _shapes)
-            {
-                var element = shape.Draw(1, "Red");
-                DrawCanvas.Children.Add(element);
             }
 
         }
+
 
         private void prototypeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -260,9 +202,60 @@ namespace Paint
 
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
         {
-            //for test
+            
             
         }
+        //private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    Point pos = e.GetPosition(DrawCanvas);
+        //    CoordinateLabel.Content = $"{Math.Ceiling(pos.X)}, {Math.Ceiling(pos.Y)}px";
+        //    if (_isDrawing)
+        //    {
+
+        //        _preview.HandleEnd(pos.X, pos.Y);
+        //        // Xoá hết các hình vẽ cũ
+        //        DrawCanvas.Children.Clear();
+
+        //        // Vẽ lại các hình trước đó
+        //        foreach (var shape in _shapes)
+        //        {
+        //            UIElement element = shape.Draw(1, "Red");//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
+        //            DrawCanvas.Children.Add(element);
+        //        }
+
+        //        // Vẽ hình preview đè lên
+        //        DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
+
+
+        //    }
+
+        //}
+
+        //private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    _isDrawing = false;
+
+        //    // Thêm đối tượng cuối cùng vào mảng quản lí
+        //    Point pos = e.GetPosition(DrawCanvas);
+        //    _preview.HandleEnd(pos.X, pos.Y);
+        //    _shapes.Add(_preview);
+
+        //    // Sinh ra đối tượng mẫu kế
+        //    _preview = _prototypes[_selectedShapeName].Clone();
+
+        //    // Ve lai Xoa toan bo
+        //    DrawCanvas.Children.Clear();
+
+        //    // Ve lai tat ca cac hinh
+        //    foreach (var shape in _shapes)
+        //    {
+        //        var element = shape.Draw(1, "Red");
+        //        DrawCanvas.Children.Add(element);
+        //    }
+
+        //}
+
+
 
 
         //<Thumb Name = "CanvasThumb" Canvas.Right="-5" Canvas.Bottom="-5" Background="Black" 
@@ -287,7 +280,7 @@ namespace Paint
         //                                    e.HorizontalChange);
         //        Canvas.SetTop(CanvasThumb, Canvas.GetTop(CanvasThumb) +
         //                                   e.VerticalChange);
-                
+
         //    }
         //}
 
@@ -295,9 +288,11 @@ namespace Paint
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            _hook.MouseMove -= temp;
-
-            _hook.MouseDown -= temp2;
+            _hook.MouseMove -= Hook_MouseMove;
+            _hook.MouseUp -= Hook_MouseUp;
+            
         }
+
+        
     }
 }
