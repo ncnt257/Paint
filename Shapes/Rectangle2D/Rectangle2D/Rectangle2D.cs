@@ -63,7 +63,7 @@ namespace Rectangle2D
 
         public IShape Clone()
         {
-            return new Square2D();
+            return new Rectangle2D();
         }
     }
 }
