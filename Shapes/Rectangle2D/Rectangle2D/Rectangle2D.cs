@@ -8,7 +8,7 @@ using System.Windows.Shapes;
 
 namespace Rectangle2D
 {
-    class Square2D : IShape
+    class Rectangle2D : IShape
     {
         private Point2D _leftTop = new Point2D();
         private Point2D _rightBottom = new Point2D();
