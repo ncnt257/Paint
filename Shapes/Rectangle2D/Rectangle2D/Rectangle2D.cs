@@ -2,13 +2,14 @@ using Contract;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 
 namespace Rectangle2D
 {
-    class Square2D : IShape
+    class Rectangle2D : IShape
     {
         private Point2D _leftTop = new Point2D();
         private Point2D _rightBottom = new Point2D();
@@ -23,7 +24,8 @@ namespace Rectangle2D
                 Width = (int)Math.Abs(width),
                 Height = (int)Math.Abs(height),
                 Stroke = new SolidColorBrush(Colors.Red),
-                StrokeThickness = thickness
+                StrokeThickness = thickness,
+
             };
             if (width > 0 && height > 0)
             {
@@ -46,9 +48,18 @@ namespace Rectangle2D
                 Canvas.SetTop(rectangle, _rightBottom.Y);
             }
 
+
+            rectangle.PreviewMouseLeftButtonDown += ShapeSelected;
+            //rectangle.MouseLeftButtonDown += ShapeSelected;
             return rectangle;
         }
+        private void ShapeSelected(object sender,
+            MouseButtonEventArgs e)
+        {
+            Selected = true;
+        }
 
+        public bool Selected { get; set; }
         public void HandleStart(double x, double y)
         {
             _leftTop.X = x;
@@ -63,7 +74,7 @@ namespace Rectangle2D
 
         public IShape Clone()
         {
-            return new Square2D();
+            return new Rectangle2D();
         }
     }
 }
