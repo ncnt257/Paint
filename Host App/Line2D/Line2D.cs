@@ -67,18 +67,18 @@ namespace Line2D
 
         public IShape Clone()
         {
-            return new Line2D();
-        }
-
-        public IShape Copy()
-        {
-            var line = (Line2D) MemberwiseClone();
+            var line = (Line2D)MemberwiseClone();
             line.IsSelected = false;
-            line.Start = new Point2D(this.Start);
-            line.End = new Point2D(this.End);
-            line.StrokeType = new DoubleCollection(this.StrokeType);
+            if(Start is not null)
+                line.Start = new Point2D(this.Start);
+            if (End is not null)
+                line.End = new Point2D(this.End);
+            if (StrokeType is not null)
+                line.StrokeType = new DoubleCollection(this.StrokeType);
             return line;
         }
+
+
 
 
     }

@@ -19,8 +19,8 @@ namespace Contract
         void HandleEnd(double x, double y);
         
         UIElement Draw();
-        IShape Clone();//clone dùng đc ngay cả khi Shape có thuộc tính null
-        IShape Copy();//copy một shape đã hoàn chỉnh
+        IShape Clone();
+
 
 
     }

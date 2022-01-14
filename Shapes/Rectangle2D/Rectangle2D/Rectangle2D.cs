@@ -58,7 +58,7 @@ namespace Rectangle2D
             }
 
 
-            rectangle.PreviewMouseLeftButtonDown += ShapeSelected;
+            rectangle.MouseLeftButtonDown += ShapeSelected;
             //rectangle.MouseLeftButtonDown += ShapeSelected;
             return rectangle;
         }
@@ -82,21 +82,20 @@ namespace Rectangle2D
         }
         public Rectangle2D()
         {
-          Start = new Point2D();
-          End = new Point2D();
-        Fill = Colors.Transparent;
+            Start = new Point2D();
+            End = new Point2D();
+            Fill = Colors.Transparent;
         }
         public IShape Clone()
         {
-            return new Rectangle2D();
-        }
-        public IShape Copy()
-        {
             var rec = (Rectangle2D)MemberwiseClone();
             rec.IsSelected = false;
-            rec.Start = new Point2D(this.Start);
-            rec.End = new Point2D(this.End);
-            rec.StrokeType = new DoubleCollection(this.StrokeType);
+            if(Start is not null)
+                rec.Start = new Point2D(this.Start);
+            if (End is not null)
+                rec.End = new Point2D(this.End);
+            if (StrokeType is not null)
+                rec.StrokeType = new DoubleCollection(this.StrokeType);
             return rec;
         }
     }

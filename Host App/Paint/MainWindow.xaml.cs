@@ -323,7 +323,7 @@ namespace Paint
         {
             if (_selectedShapeIndex != null)
             {
-                CopiedShape = _shapes[_selectedShapeIndex.Value].Copy();
+                CopiedShape = _shapes[_selectedShapeIndex.Value].Clone();
 
             }
         }
@@ -332,7 +332,7 @@ namespace Paint
         {
             if (CopiedShape != null)
             {
-                var cs = CopiedShape.Copy();
+                var cs = CopiedShape.Clone();
                 cs.Start.X += 10;
                 cs.Start.Y += 10;
                 cs.End.X += 10;
