@@ -62,7 +62,7 @@ namespace Paint
             _preview.Color = (Color)(buttonOutlineGallery.SelectedColor);
             _preview.Thickness = (int)buttonStrokeSize.Value;
             _preview.StrokeType = StrokeTypes[buttonStrokeType.SelectedIndex];
-            _preview.Fill = (Color)(buttonOutlineGallery.SelectedColor);
+            //_preview.Fill = (Color)(buttonOutlineGallery.SelectedColor);
         }
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
