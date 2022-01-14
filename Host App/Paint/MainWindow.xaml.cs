@@ -28,18 +28,22 @@ namespace Paint
     /// </summary>
     public partial class MainWindow : RibbonWindow
     {
-        private IMouseEvents _hook = Hook.GlobalEvents();
-        bool _isDrawing = false;
-        List<IShape> _shapes = new List<IShape>();
+        private readonly IMouseEvents _hook = Hook.GlobalEvents();
+        private bool _isDrawing = false;
+        readonly List<IShape> _shapes = new List<IShape>();
+        private int? _selectedShapeIndex;
+        private IShape CopiedShape;
         IShape _preview;
         string _selectedShapeName = "";
-        Dictionary<string, IShape> _prototypes =
+
+        private readonly Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
 
         //Properties menu
         new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() {1,0}, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
         public MainWindow()
         {
+
             InitializeComponent();
         }
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
@@ -298,6 +302,38 @@ namespace Paint
             
         }
 
-        
+        private void SelectShape(object sender,
+            MouseButtonEventArgs e)
+        {
+            if (_selectedShapeIndex != null) _shapes[_selectedShapeIndex.Value].Selected = false;
+            for (int i = _shapes.Count - 1; i >= 0; i--)
+            {
+                if (_shapes[i].Selected) _selectedShapeIndex = i;
+            }
+            PaintMainWindow.Title = _selectedShapeIndex.ToString();
+        }
+
+        private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            _isDrawing = false;
+            DrawCanvas.MouseDown -= Canvas_MouseDown;
+            DrawCanvas.MouseLeftButtonDown += SelectShape;
+            DrawCanvas.Cursor= Cursors.Arrow;
+        }
+
+        private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            DrawCanvas.MouseLeftButtonDown -= SelectShape;
+            DrawCanvas.MouseDown += Canvas_MouseDown;
+            DrawCanvas.Cursor = Cursors.Cross;
+        }
+
+        private void ClickButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedShapeIndex != null)
+            {
+                CopiedShape = _shapes[_selectedShapeIndex.Value];
+            }
+        }
     }
 }

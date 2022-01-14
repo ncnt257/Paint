@@ -2,6 +2,7 @@ using Contract;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -26,10 +27,12 @@ namespace Rectangle2D
             {
                 Width = (int)Math.Abs(width),
                 Height = (int)Math.Abs(height),
+
                 StrokeThickness = Thickness,
                 Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
                 Fill = new SolidColorBrush(Fill)
+
             };
             if (width > 0 && height > 0)
             {
@@ -52,9 +55,18 @@ namespace Rectangle2D
                 Canvas.SetTop(rectangle, _rightBottom.Y);
             }
 
+
+            rectangle.PreviewMouseLeftButtonDown += ShapeSelected;
+            //rectangle.MouseLeftButtonDown += ShapeSelected;
             return rectangle;
         }
+        private void ShapeSelected(object sender,
+            MouseButtonEventArgs e)
+        {
+            Selected = true;
+        }
 
+        public bool Selected { get; set; }
         public void HandleStart(double x, double y)
         {
             _leftTop.X = x;

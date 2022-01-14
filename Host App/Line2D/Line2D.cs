@@ -1,6 +1,7 @@
 using Contract;
 using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -40,17 +41,29 @@ namespace Line2D
                 StrokeDashArray = StrokeType,
                 Fill = new SolidColorBrush(Color)
             };
-
+            l.MouseLeftButtonDown += ShapeSelected;
             return l;
         }
+
         public Line2D()
         {
             Color = Colors.Transparent;
         }
+
+        private void ShapeSelected(object sender,
+            MouseButtonEventArgs e)
+        {
+
+            Selected = true;
+        }
+
+        public bool Selected { get; set; }
+
         public IShape Clone()
         {
             return new Line2D();
         }
+        
     }
 
 }
