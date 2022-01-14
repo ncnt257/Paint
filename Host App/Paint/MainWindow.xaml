@@ -32,7 +32,7 @@
                     <Fluent:SplitButton  Header="Paste"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
                         <Fluent:MenuItem Header="1"></Fluent:MenuItem>
                         <Fluent:MenuItem Header="2"></Fluent:MenuItem>
-                        
+
                     </Fluent:SplitButton>
                     <Fluent:Button  Header="Cut" Icon="Resource/Icon/60337.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                     <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small" Name="ClickButton" Click="ClickButton_OnClick"></Fluent:Button>
@@ -42,16 +42,18 @@
                     <Fluent:Button  Header="Delete" Icon="Resource/Icon/60565.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                     <Fluent:Button  Header="Text" Icon="Resource/Icon/Text.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                     <Fluent:Button  Header="Redo" Icon="Resource/Icon/Redo.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+
                     <Fluent:ToggleButton  Header="Select" Icon="Resource/Icon/Move.PNG" SizeDefinition="Middle,Small" Name="SelectButton" Checked="SelectButton_OnChecked" Unchecked="SelectButton_OnUnchecked"></Fluent:ToggleButton>
                   
+
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox x:Name="Shape" Header="Shape" MinWidth="50" HorizontalContentAlignment="Left">
 
 
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Color">
-                    
-                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline">
+
+                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1">
                         <Fluent:DropDownButton.Icon>
                             <Grid>
                                 <Image Source="Resource/Icon/Outline.PNG"></Image>
@@ -62,8 +64,7 @@
                                 </Rectangle>
                             </Grid>
                         </Fluent:DropDownButton.Icon>
-                        <Fluent:ColorGallery>
-
+                        <Fluent:ColorGallery x:Name="buttonOutlineGallery" SelectedColor="Black">
                         </Fluent:ColorGallery>
                     </Fluent:DropDownButton>
                     <Fluent:DropDownButton x:Name="buttonFill" SizeDefinition="Medium" Header="Fill">
@@ -81,17 +82,19 @@
 
                         </Fluent:ColorGallery>
                     </Fluent:DropDownButton>
-                    <Fluent:DropDownButton x:Name="buttonSize" SizeDefinition="Medium" Icon="Resource/Icon/Size.PNG" Header="Size">
+                    <Fluent:DropDownButton x:Name="buttonSize" SizeDefinition="Medium" Icon="Resource/Icon/Size.PNG" Header="Size11">
                         <Fluent:MenuItem Icon="Resource/Icon/Size1.PNG" ></Fluent:MenuItem>
                         <Fluent:MenuItem Icon="Resource/Icon/Size2.PNG" ></Fluent:MenuItem>
                         <Fluent:MenuItem Icon="Resource/Icon/Size3.PNG"></Fluent:MenuItem>
                         <Fluent:MenuItem Icon="Resource/Icon/Size4.PNG"  ></Fluent:MenuItem>
                     </Fluent:DropDownButton>
-                    <Fluent:Spinner x:Name="buttonStrokeSize" Format="0 px" Header="Size" Value="69" InputWidth="75"></Fluent:Spinner>
+                    <Fluent:Spinner x:Name="buttonStrokeSize" Format="0 px" Header="Size" Value="1" InputWidth="75"></Fluent:Spinner>
                     <Fluent:ComboBox x:Name="buttonStrokeType" Header="Stroke" SelectedIndex="0" InputWidth="75">
+                        <ComboBoxItem Content="Solid"></ComboBoxItem>
                         <ComboBoxItem Content="Dash"></ComboBoxItem>
                         <ComboBoxItem Content="Dot"></ComboBoxItem>
                         <ComboBoxItem Content="Dash Dot"></ComboBoxItem>
+
                     </Fluent:ComboBox>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox x:Name="Font" Header="Font">
@@ -138,8 +141,8 @@
                         <Fluent:ToggleButton x:Name="buttonItalic" Icon="Resource/Icon/Italic.png" SizeDefinition="small"></Fluent:ToggleButton>
                         <Fluent:ToggleButton x:Name="buttonUnderline" Icon="Resource/Icon/Underline.png" SizeDefinition="small"></Fluent:ToggleButton>
                         <Fluent:ToggleButton x:Name="buttonStrikeThrough" Icon="Resource/Icon/Strikethrough.png" SizeDefinition="small"></Fluent:ToggleButton>
-                        
-                        
+
+
                         <Fluent:DropDownButton x:Name="buttonFontColor" SizeDefinition="small" >
                             <Fluent:DropDownButton.Icon>
                                 <Grid>
@@ -152,15 +155,15 @@
                                 </Grid>
                             </Fluent:DropDownButton.Icon>
                             <Fluent:ColorGallery>
-                                
+
                             </Fluent:ColorGallery>
                         </Fluent:DropDownButton>
 
                     </Fluent:RibbonToolBar>
                 </Fluent:RibbonGroupBox>
-                
+
             </Fluent:RibbonTabItem>
-            
+
         </Fluent:Ribbon>
         <Grid Background="#d3dceb">
             <Grid.RowDefinitions>
@@ -169,7 +172,6 @@
             </Grid.RowDefinitions>
             <Canvas x:Name="DrawCanvas" Background="White"  Margin="4,2,0,0" 
                     ClipToBounds="True"   MouseDown="Canvas_MouseDown"  Cursor="Cross" Loaded="DrawCanvas_OnLoaded">
-            
 
             </Canvas>
 

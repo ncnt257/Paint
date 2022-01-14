@@ -9,7 +9,7 @@ using System.Windows.Shapes;
 
 namespace Contract
 {
-    public class Point2D : IShape
+    public class Point2D
     {
         public double X { get; set; }
         public double Y { get; set; }
@@ -44,7 +44,7 @@ namespace Contract
             return l;
         }
 
-        public IShape Clone()
+        public Point2D Clone()
         {
             return new Point2D();
         }

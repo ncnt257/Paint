@@ -39,9 +39,11 @@ namespace Paint
         private readonly Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
 
+        //Properties menu
+        new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() {1,0}, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
         public MainWindow()
         {
-            
+
             InitializeComponent();
         }
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
@@ -58,7 +60,13 @@ namespace Paint
 
             Point pos = e.GetPosition(DrawCanvas);
 
-            _preview.HandleStart(pos.X, pos.Y); 
+            _preview.HandleStart(pos.X, pos.Y);
+
+            //Set stroke properties
+            _preview.Color = (Color)(buttonOutlineGallery.SelectedColor);
+            _preview.Thickness = (int)buttonStrokeSize.Value;
+            _preview.StrokeType = StrokeTypes[buttonStrokeType.SelectedIndex];
+            //_preview.Fill = (Color)(buttonOutlineGallery.SelectedColor);
         }
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -85,12 +93,12 @@ namespace Paint
                 // Vẽ lại các hình trước đó
                 foreach (var shape in _shapes)
                 {
-                    UIElement element = shape.Draw(1, "Red");//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
+                    UIElement element = shape.Draw();//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
                     DrawCanvas.Children.Add(element);
                 }
 
                 // Vẽ hình preview đè lên
-                DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
+                DrawCanvas.Children.Add(_preview.Draw());
 
 
             }
@@ -117,7 +125,7 @@ namespace Paint
                 // Ve lai tat ca cac hinh
                 foreach (var shape in _shapes)
                 {
-                    var element = shape.Draw(1, "Red");
+                    var element = shape.Draw();
                     DrawCanvas.Children.Add(element);
                 }
             }

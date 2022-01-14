@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Contract
 {
@@ -10,8 +11,12 @@ namespace Contract
 
         void HandleStart(double x, double y);
         void HandleEnd(double x, double y);
-
-        UIElement Draw(int thickness, string color);
+        public int Thickness { get; set; }
+        public Color Color { get; set; }
+        public Color Fill { get; set; }
+        public DoubleCollection StrokeType { get; set; }
+        UIElement Draw();
         IShape Clone();
+
     }
 }

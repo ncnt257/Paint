@@ -11,6 +11,11 @@ namespace Ellipse2D
     {
         private Point2D _leftTop = new Point2D();
         private Point2D _rightBottom = new Point2D();
+        public int Thickness { get; set; }
+        public Color Color { get; set; }
+        public Color Fill { get; set; }
+
+        public DoubleCollection StrokeType { get; set; }
         public void HandleStart(double x, double y)
         {
             _leftTop.X = x;
@@ -23,7 +28,7 @@ namespace Ellipse2D
             _rightBottom.Y = y;
         }
 
-        public UIElement Draw(int thickness, string color)
+        public UIElement Draw()
         {
             var width = _rightBottom.X - _leftTop.X;
             var height = _rightBottom.Y - _leftTop.Y;
@@ -31,8 +36,10 @@ namespace Ellipse2D
             {
                 Width = (int)Math.Abs(width),
                 Height = (int)Math.Abs(height),
-                Stroke = new SolidColorBrush(Colors.Red),
-                StrokeThickness = thickness
+                StrokeThickness = Thickness,
+                Stroke = new SolidColorBrush(Color),
+                StrokeDashArray = StrokeType,
+                Fill = new SolidColorBrush(Fill)
             };
             if (width > 0 && height > 0)
             {
@@ -57,7 +64,10 @@ namespace Ellipse2D
 
             return ellipse;
         }
-
+        public Ellipse2D()
+        {
+            Fill = Colors.Transparent;
+        }
         public IShape Clone()
         {
             return new Ellipse2D();
