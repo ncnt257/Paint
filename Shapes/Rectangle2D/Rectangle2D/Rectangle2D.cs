@@ -15,6 +15,8 @@ namespace Rectangle2D
         public string Name => "Rectangle";
         public int Thickness { get; set; }
         public Color Color { get; set; }
+        public Color Fill { get; set; }
+
         public DoubleCollection StrokeType { get; set; }
         public UIElement Draw()
         {
@@ -26,7 +28,8 @@ namespace Rectangle2D
                 Height = (int)Math.Abs(height),
                 StrokeThickness = Thickness,
                 Stroke = new SolidColorBrush(Color),
-                StrokeDashArray = StrokeType
+                StrokeDashArray = StrokeType,
+                Fill = new SolidColorBrush(Fill)
             };
             if (width > 0 && height > 0)
             {
@@ -63,7 +66,10 @@ namespace Rectangle2D
             _rightBottom.X = x;
             _rightBottom.Y = y;
         }
-
+        public Rectangle2D()
+        {
+            Fill = Colors.Transparent;
+        }
         public IShape Clone()
         {
             return new Rectangle2D();
