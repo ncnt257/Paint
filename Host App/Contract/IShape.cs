@@ -11,8 +11,10 @@ namespace Contract
         void HandleEnd(double x, double y);
         public int Thickness { get; set; }
         public Color Color { get; set; }
+        public Color Fill { get; set; }
         public DoubleCollection StrokeType { get; set; }
         UIElement Draw();
         IShape Clone();
+
     }
 }

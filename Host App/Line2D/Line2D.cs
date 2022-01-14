@@ -15,6 +15,7 @@ namespace Line2D
         public string Name => "Line";
         public int Thickness { get; set; }
         public Color Color { get; set; }
+        public Color Fill { get; set; }
         public DoubleCollection StrokeType { get; set; }
         public void HandleStart(double x, double y)
         {
@@ -36,12 +37,16 @@ namespace Line2D
                 Y2 = _end.Y,
                 StrokeThickness = Thickness,
                 Stroke = new SolidColorBrush(Color),
-                StrokeDashArray = StrokeType
+                StrokeDashArray = StrokeType,
+                Fill = new SolidColorBrush(Color)
             };
 
             return l;
         }
-
+        public Line2D()
+        {
+            Color = Colors.Transparent;
+        }
         public IShape Clone()
         {
             return new Line2D();
