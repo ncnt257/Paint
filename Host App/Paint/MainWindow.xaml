@@ -11,6 +11,7 @@
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
+        Name="PaintMainWindow"
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                         Loaded="RibbonWindow_Loaded" Closing="MainWindow_OnClosing">
     <DockPanel>
@@ -28,20 +29,22 @@
             <Fluent:RibbonTabItem Header="Home">
 
                 <Fluent:RibbonGroupBox Header="Clipboard">
-                    <Fluent:SplitButton  Header="Paste"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
+                    <Fluent:SplitButton  Header="Paste" Name="PasteSplitButton" Click="PasteSplitButton_OnClick"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
                         <Fluent:MenuItem Header="1"></Fluent:MenuItem>
                         <Fluent:MenuItem Header="2"></Fluent:MenuItem>
 
                     </Fluent:SplitButton>
-                    <Fluent:Button  Header="Cut" Icon="Resource/Icon/60337.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Cut" Icon="Resource/Icon/60337.PNG" SizeDefinition="Middle,Small" Name="CutButton" Click="CutButton_OnClick"></Fluent:Button>
+                    <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small" Name="CopyButton" Click="CopyButton_OnClick"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Tool" >
                     <Fluent:Button  Header="Undo" Icon="Resource/Icon/Undo.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top"></Fluent:Button>
                     <Fluent:Button  Header="Delete" Icon="Resource/Icon/60565.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                     <Fluent:Button  Header="Text" Icon="Resource/Icon/Text.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                     <Fluent:Button  Header="Redo" Icon="Resource/Icon/Redo.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Move" Icon="Resource/Icon/Move.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+
+                    <Fluent:ToggleButton  Header="Select" Icon="Resource/Icon/Move.PNG" SizeDefinition="Middle,Small" Name="SelectButton" Checked="SelectButton_OnChecked" Unchecked="SelectButton_OnUnchecked"></Fluent:ToggleButton>
+                  
 
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox x:Name="Shape" Header="Shape" MinWidth="50" HorizontalContentAlignment="Left">

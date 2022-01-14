@@ -28,19 +28,35 @@ namespace Paint
     /// </summary>
     public partial class MainWindow : RibbonWindow
     {
-        private IMouseEvents _hook = Hook.GlobalEvents();
-        bool _isDrawing = false;
-        List<IShape> _shapes = new List<IShape>();
+        private readonly IMouseEvents _hook = Hook.GlobalEvents();
+        private bool _isDrawing = false;
+        readonly List<IShape> _shapes = new List<IShape>();
+        private int? _selectedShapeIndex;
+        private int? _cutSelectedShapeIndex;
+        private IShape _copiedShape;
         IShape _preview;
         string _selectedShapeName = "";
-        Dictionary<string, IShape> _prototypes =
+
+        private readonly Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
 
         //Properties menu
         new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() {1,0}, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
         public MainWindow()
         {
+
             InitializeComponent();
+        }
+
+        
+        private void ReDraw()//xóa và vẽ lại
+        {
+            DrawCanvas.Children.Clear();
+            foreach (var shape in _shapes)
+            {
+                UIElement element = shape.Draw();
+                DrawCanvas.Children.Add(element);
+            }
         }
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -84,14 +100,7 @@ namespace Paint
 
                 _preview.HandleEnd(pos.X, pos.Y);
                 // Xoá hết các hình vẽ cũ
-                DrawCanvas.Children.Clear();
-
-                // Vẽ lại các hình trước đó
-                foreach (var shape in _shapes)
-                {
-                    UIElement element = shape.Draw();//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
-                    DrawCanvas.Children.Add(element);
-                }
+                ReDraw();
 
                 // Vẽ hình preview đè lên
                 DrawCanvas.Children.Add(_preview.Draw());
@@ -115,15 +124,7 @@ namespace Paint
                 // Sinh ra đối tượng mẫu kế
                 _preview = _prototypes[_selectedShapeName].Clone();
 
-                // Ve lai Xoa toan bo
-                DrawCanvas.Children.Clear();
-
-                // Ve lai tat ca cac hinh
-                foreach (var shape in _shapes)
-                {
-                    var element = shape.Draw();
-                    DrawCanvas.Children.Add(element);
-                }
+                ReDraw();
             }
 
         }
@@ -219,14 +220,7 @@ namespace Paint
 
         //        _preview.HandleEnd(pos.X, pos.Y);
         //        // Xoá hết các hình vẽ cũ
-        //        DrawCanvas.Children.Clear();
-
-        //        // Vẽ lại các hình trước đó
-        //        foreach (var shape in _shapes)
-        //        {
-        //            UIElement element = shape.Draw(1, "Red");//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
-        //            DrawCanvas.Children.Add(element);
-        //        }
+        //        ReDraw();
 
         //        // Vẽ hình preview đè lên
         //        DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
@@ -249,14 +243,7 @@ namespace Paint
         //    _preview = _prototypes[_selectedShapeName].Clone();
 
         //    // Ve lai Xoa toan bo
-        //    DrawCanvas.Children.Clear();
-
-        //    // Ve lai tat ca cac hinh
-        //    foreach (var shape in _shapes)
-        //    {
-        //        var element = shape.Draw(1, "Red");
-        //        DrawCanvas.Children.Add(element);
-        //    }
+        //    ReDraw();
 
         //}
 
@@ -298,6 +285,81 @@ namespace Paint
             
         }
 
-        
+        private void SelectShape(object sender,
+            MouseButtonEventArgs e)
+        {
+            if (_selectedShapeIndex != null) _shapes[_selectedShapeIndex.Value].IsSelected = false;
+            for (int i = _shapes.Count - 1; i >= 0; i--)
+            {
+                if (_shapes[i].IsSelected) 
+                {
+                    _selectedShapeIndex = i;
+                    PaintMainWindow.Title = _selectedShapeIndex.ToString();
+                    return;
+                }
+                
+            }
+
+            _selectedShapeIndex = null;
+            PaintMainWindow.Title = _selectedShapeIndex.ToString();
+
+        }
+
+        private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            _isDrawing = false;
+            DrawCanvas.MouseDown -= Canvas_MouseDown;
+            DrawCanvas.MouseLeftButtonDown += SelectShape;
+            DrawCanvas.Cursor= Cursors.Arrow;
+        }
+
+        private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            DrawCanvas.MouseLeftButtonDown -= SelectShape;
+            DrawCanvas.MouseDown += Canvas_MouseDown;
+            DrawCanvas.Cursor = Cursors.Cross;
+        }
+
+        private void CopyButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedShapeIndex != null)
+            {
+                _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
+
+            }
+        }
+
+        private void PasteSplitButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_copiedShape != null)
+            {
+                var cs = _copiedShape.Clone();
+                cs.Start.X += 10;
+                cs.Start.Y += 10;
+                cs.End.X += 10;
+                cs.End.Y += 10;
+                cs.IsSelected = true;
+                _shapes.Add(cs);
+                _shapes[_selectedShapeIndex.Value].IsSelected=false;
+                _copiedShape = cs;
+                if (_cutSelectedShapeIndex is not null)
+                {
+                    _shapes.RemoveAt(_cutSelectedShapeIndex.Value);
+                    _cutSelectedShapeIndex = null;
+                }
+                _selectedShapeIndex = _shapes.Count - 1;
+                PaintMainWindow.Title = _selectedShapeIndex.ToString();
+                ReDraw();
+            }
+        }
+
+        private void CutButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedShapeIndex != null)
+            {
+                _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
+                _cutSelectedShapeIndex = _selectedShapeIndex;
+            }
+        }
     }
 }
