@@ -32,7 +32,8 @@ namespace Paint
         private bool _isDrawing = false;
         readonly List<IShape> _shapes = new List<IShape>();
         private int? _selectedShapeIndex;
-        private IShape CopiedShape;
+        private int? _cutSelectedShapeIndex;
+        private IShape _copiedShape;
         IShape _preview;
         string _selectedShapeName = "";
 
@@ -323,23 +324,41 @@ namespace Paint
         {
             if (_selectedShapeIndex != null)
             {
-                CopiedShape = _shapes[_selectedShapeIndex.Value].Clone();
+                _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
 
             }
         }
 
         private void PasteSplitButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (CopiedShape != null)
+            if (_copiedShape != null)
             {
-                var cs = CopiedShape.Clone();
+                var cs = _copiedShape.Clone();
                 cs.Start.X += 10;
                 cs.Start.Y += 10;
                 cs.End.X += 10;
                 cs.End.Y += 10;
+                cs.IsSelected = true;
                 _shapes.Add(cs);
-                CopiedShape = cs;
+                _shapes[_selectedShapeIndex.Value].IsSelected=false;
+                _copiedShape = cs;
+                if (_cutSelectedShapeIndex is not null)
+                {
+                    _shapes.RemoveAt(_cutSelectedShapeIndex.Value);
+                    _cutSelectedShapeIndex = null;
+                }
+                _selectedShapeIndex = _shapes.Count - 1;
+                PaintMainWindow.Title = _selectedShapeIndex.ToString();
                 ReDraw();
+            }
+        }
+
+        private void CutButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedShapeIndex != null)
+            {
+                _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
+                _cutSelectedShapeIndex = _selectedShapeIndex;
             }
         }
     }

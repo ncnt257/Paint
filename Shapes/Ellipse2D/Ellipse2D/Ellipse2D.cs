@@ -28,7 +28,8 @@ namespace Ellipse2D
                 StrokeThickness = Thickness,
                 Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
-                Fill = new SolidColorBrush(Fill)
+                Fill = new SolidColorBrush(Fill),
+                Cursor = Cursors.Hand
             };
             if (width > 0 && height > 0)
             {
