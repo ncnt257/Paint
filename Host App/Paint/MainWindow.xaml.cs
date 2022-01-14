@@ -135,6 +135,8 @@ namespace Paint
             _selectedShapeName = (sender as Fluent.ToggleButton).Tag as string;
 
             _preview = _prototypes[_selectedShapeName];
+
+            SelectButton.IsChecked = false;
         }
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
@@ -360,6 +362,13 @@ namespace Paint
                 _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
                 _cutSelectedShapeIndex = _selectedShapeIndex;
             }
+        }
+
+        private void Ribbon_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _copiedShape = null;
+            _selectedShapeIndex = null;
+            PaintMainWindow.Title = _selectedShapeIndex.ToString();
         }
     }
 }

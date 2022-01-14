@@ -15,7 +15,7 @@
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                         Loaded="RibbonWindow_Loaded" Closing="MainWindow_OnClosing">
     <DockPanel>
-        <Fluent:Ribbon DockPanel.Dock="Top">
+        <Fluent:Ribbon DockPanel.Dock="Top" Name="Ribbon" MouseDown="Ribbon_OnMouseDown">
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
                     <Fluent:BackstageTabControl>
