@@ -13,8 +13,10 @@ namespace Rectangle2D
         private Point2D _leftTop = new Point2D();
         private Point2D _rightBottom = new Point2D();
         public string Name => "Rectangle";
-
-        public UIElement Draw(int thickness, string color)
+        public int Thickness { get; set; }
+        public Color Color { get; set; }
+        public DoubleCollection StrokeType { get; set; }
+        public UIElement Draw()
         {
             var width = _rightBottom.X - _leftTop.X;
             var height = _rightBottom.Y - _leftTop.Y;
@@ -22,8 +24,9 @@ namespace Rectangle2D
             {
                 Width = (int)Math.Abs(width),
                 Height = (int)Math.Abs(height),
-                Stroke = new SolidColorBrush(Colors.Red),
-                StrokeThickness = thickness
+                StrokeThickness = Thickness,
+                Stroke = new SolidColorBrush(Color),
+                StrokeDashArray = StrokeType
             };
             if (width > 0 && height > 0)
             {

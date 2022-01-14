@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
+
 namespace Line2D
 {
     public class Line2D : IShape
@@ -12,7 +13,9 @@ namespace Line2D
         private Point2D _end = new Point2D();
 
         public string Name => "Line";
-
+        public int Thickness { get; set; }
+        public Color Color { get; set; }
+        public DoubleCollection StrokeType { get; set; }
         public void HandleStart(double x, double y)
         {
             _start = new Point2D() { X = x, Y = y };
@@ -23,7 +26,7 @@ namespace Line2D
             _end = new Point2D() { X = x, Y = y };
         }
 
-        public UIElement Draw(int thickness, string color)
+        public UIElement Draw()
         {
             Line l = new Line()
             {
@@ -31,8 +34,9 @@ namespace Line2D
                 Y1 = _start.Y,
                 X2 = _end.X,
                 Y2 = _end.Y,
-                StrokeThickness = thickness,
-                Stroke = new SolidColorBrush(Colors.Red),
+                StrokeThickness = Thickness,
+                Stroke = new SolidColorBrush(Color),
+                StrokeDashArray = StrokeType
             };
 
             return l;
@@ -45,3 +49,4 @@ namespace Line2D
     }
 
 }
+
