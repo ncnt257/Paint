@@ -10,60 +10,77 @@ namespace Line2D
 {
     public class Line2D : IShape
     {
-        private Point2D _start = new Point2D();
-        private Point2D _end = new Point2D();
+        
 
         public string Name => "Line";
+        public Point2D Start { get; set; }
+        public Point2D End { get; set; }
         public int Thickness { get; set; }
+
         public Color Color { get; set; }
         public Color Fill { get; set; }
         public DoubleCollection StrokeType { get; set; }
+
         public void HandleStart(double x, double y)
         {
-            _start = new Point2D() { X = x, Y = y };
+            Start = new Point2D() { X = x, Y = y };
         }
 
         public void HandleEnd(double x, double y)
         {
-            _end = new Point2D() { X = x, Y = y };
+            End = new Point2D() { X = x, Y = y };
         }
 
         public UIElement Draw()
         {
             Line l = new Line()
             {
-                X1 = _start.X,
-                Y1 = _start.Y,
-                X2 = _end.X,
-                Y2 = _end.Y,
+                X1 = Start.X,
+                Y1 = Start.Y,
+                X2 = End.X,
+                Y2 = End.Y,
                 StrokeThickness = Thickness,
                 Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
-                Fill = new SolidColorBrush(Color)
-            };
+                Fill = new SolidColorBrush(Color),
+                Cursor = Cursors.Hand
+        };
             l.MouseLeftButtonDown += ShapeSelected;
+            
             return l;
         }
 
         public Line2D()
         {
+            Start = new Point2D();
+            End = new Point2D();
             Color = Colors.Transparent;
         }
 
         private void ShapeSelected(object sender,
             MouseButtonEventArgs e)
         {
-
-            Selected = true;
+            IsSelected = true;
         }
 
-        public bool Selected { get; set; }
+        public bool IsSelected { get; set; }
 
         public IShape Clone()
         {
             return new Line2D();
         }
-        
+
+        public IShape Copy()
+        {
+            var line = (Line2D) MemberwiseClone();
+            line.IsSelected = false;
+            line.Start = new Point2D(this.Start);
+            line.End = new Point2D(this.End);
+            line.StrokeType = new DoubleCollection(this.StrokeType);
+            return line;
+        }
+
+
     }
 
 }

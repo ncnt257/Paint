@@ -14,40 +14,18 @@ namespace Contract
         public double X { get; set; }
         public double Y { get; set; }
 
-        public string Name => "Point";
-        public bool Selected { get; set; }
-
-        public void HandleStart(double x, double y)
+        public Point2D()
         {
-            X = x;
-            Y = y;
         }
 
-        public void HandleEnd(double x, double y)
+        public Point2D(Point2D p)
         {
-            X = x;
-            Y = y;
+            X = p.X;
+            Y = p.Y;
         }
 
-        public UIElement Draw(int thickness, string color)
-        {
-            Line l = new Line()
-            {
-                X1 = X,
-                Y1 = Y,
-                X2 = X,
-                Y2 = Y,
-                StrokeThickness = thickness,
-                Stroke = new SolidColorBrush(Colors.Red),
-            };
 
-            return l;
-        }
 
-        public Point2D Clone()
-        {
-            return new Point2D();
-        }
     }
 
 }

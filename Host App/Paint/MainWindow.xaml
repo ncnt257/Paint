@@ -29,13 +29,13 @@
             <Fluent:RibbonTabItem Header="Home">
 
                 <Fluent:RibbonGroupBox Header="Clipboard">
-                    <Fluent:SplitButton  Header="Paste"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
+                    <Fluent:SplitButton  Header="Paste" Name="PasteSplitButton" Click="PasteSplitButton_OnClick"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
                         <Fluent:MenuItem Header="1"></Fluent:MenuItem>
                         <Fluent:MenuItem Header="2"></Fluent:MenuItem>
 
                     </Fluent:SplitButton>
                     <Fluent:Button  Header="Cut" Icon="Resource/Icon/60337.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
-                    <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small" Name="ClickButton" Click="ClickButton_OnClick"></Fluent:Button>
+                    <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small" Name="CopyButton" Click="CopyButton_OnClick"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Tool" >
                     <Fluent:Button  Header="Undo" Icon="Resource/Icon/Undo.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top"></Fluent:Button>
