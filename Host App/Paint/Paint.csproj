@@ -62,4 +62,10 @@
     <ProjectReference Include="..\Text2D\Text2D.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Rectangle2D">
+      <HintPath>..\..\Shapes\Rectangle2D\Rectangle2D\bin\Release\net5.0-windows\Rectangle2D.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

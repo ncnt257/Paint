@@ -1,19 +1,22 @@
-﻿using System;
+﻿using Contract;
+using Fluent;
+using Gma.System.MouseKeyHook;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
+using Color = System.Windows.Media.Color;
+using Point = System.Windows.Point;
+
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Contract;
@@ -31,29 +34,54 @@ namespace Paint
     
     public partial class MainWindow : RibbonWindow
     {
-        private IMouseEvents _hook = Hook.GlobalEvents();
-        bool _isDrawing = false;
-        bool _moved = false;
-        List<IShape> _shapes = new List<IShape>();
+
+        public static string FilePath = "";
+        public static string FileName = Path.GetFileName(FilePath);
+        private readonly IMouseEvents _hook = Hook.GlobalEvents();
+        private bool _isDrawing = false;
+        readonly List<IShape> _shapes = new List<IShape>();
+        private int? _selectedShapeIndex;
+        private int? _cutSelectedShapeIndex;
+        private IShape _copiedShape;
         IShape _preview;
         string _selectedShapeName = "";
+
+        private readonly Dictionary<string, IShape> _prototypes =
+
+
+   
+  
+  
+  
         Dictionary<int, string> textBoxContent = new Dictionary<int, string>();
-        Dictionary<string, IShape> _prototypes =
+
+
             new Dictionary<string, IShape>();
 
+        //Properties menu
+        new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
         public MainWindow()
         {
+
             InitializeComponent();
-            
-            
-            
+        }
+
+
+        private void ReDraw()//xóa và vẽ lại
+        {
+            DrawCanvas.Children.Clear();
+            foreach (var shape in _shapes)
+            {
+                UIElement element = shape.Draw();
+                DrawCanvas.Children.Add(element);
+            }
         }
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
         {
             _hook.MouseMove += Hook_MouseMove;
             _hook.MouseUp += Hook_MouseUp;
         }
-        
+
 
         private void Canvas_MouseDown(object sender,
             MouseButtonEventArgs e)
@@ -62,7 +90,13 @@ namespace Paint
 
             Point pos = e.GetPosition(DrawCanvas);
 
-            _preview.HandleStart(pos.X, pos.Y); 
+            _preview.HandleStart(pos.X, pos.Y);
+
+            //Set stroke properties
+            _preview.Color = (Color)(buttonOutlineGallery.SelectedColor);
+            _preview.Thickness = (int)buttonStrokeSize.Value;
+            _preview.StrokeType = StrokeTypes[buttonStrokeType.SelectedIndex];
+            //_preview.Fill = (Color)(buttonOutlineGallery.SelectedColor);
         }
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -71,9 +105,7 @@ namespace Paint
             Point screenPos = new Point(temp.X, temp.Y);
             Point pos = DrawCanvas.PointFromScreen(screenPos);
 
-            _moved = true;
-            
-            
+
             CoordinateLabel.Content = $"{Math.Ceiling(pos.X)}, {Math.Ceiling(pos.Y)}px";
             if (pos.X < 0 || pos.X > DrawCanvas.ActualWidth || pos.Y < 0 || pos.Y >= DrawCanvas.ActualHeight)
             {
@@ -84,6 +116,7 @@ namespace Paint
             {
                 _preview.HandleEnd(pos.X, pos.Y);
                 // Xoá hết các hình vẽ cũ
+
                 int count = textBoxContent.Count;
 
                 foreach (var child in DrawCanvas.Children)
@@ -115,24 +148,27 @@ namespace Paint
                         Canvas.SetLeft(textBlock, shape._start.X);
                         Canvas.SetTop(textBlock, shape._start.Y);
 
+
                         DrawCanvas.Children.Add(textBlock);
                         count++;
                     }
                     else
                     {
-                        var element = shape.Draw(1, "Red");
+                        var element = shape.Draw();
                         DrawCanvas.Children.Add(element);
 
                     }
 
                 }
                 // Vẽ hình preview đè lên
-                DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
+                DrawCanvas.Children.Add(_preview.Draw());
+
             }
         }
         private void Hook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if(_isDrawing){
+            if (_isDrawing)
+            {
                 _isDrawing = false;
 
                 var temp = e.Location;
@@ -181,7 +217,7 @@ namespace Paint
                     }
                     else
                     {
-                        var element = shape.Draw(1, "Red");
+                        UIElement element = shape.Draw();
                         DrawCanvas.Children.Add(element);
                     }
                 }
@@ -208,7 +244,7 @@ namespace Paint
                 }
                 else
                 {
-                    var element = clonePreview.Draw(1, "Red");
+                    var element = clonePreview.Draw();
                     DrawCanvas.Children.Add(element);
                 }
 
@@ -225,6 +261,8 @@ namespace Paint
             _selectedShapeName = (sender as Fluent.ToggleButton).Tag as string;
 
             _preview = _prototypes[_selectedShapeName];
+
+            SelectButton.IsChecked = false;
         }
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
@@ -236,7 +274,7 @@ namespace Paint
             {
                 if (dll.Name == "ControlzEx.dll") continue;
                 var assembly = Assembly.LoadFile(dll.FullName);
-                
+
                 var types = assembly.GetTypes();
 
                 foreach (var type in types)
@@ -263,7 +301,7 @@ namespace Paint
                     SizeDefinition = "Small",
                     GroupName = "Shape",
                     Tag = shape.Name,
-                    
+
                 };
                 button.Click += prototypeButton_Click;
                 Shape.Items.Add(button);
@@ -288,18 +326,127 @@ namespace Paint
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-
+            if (FilePath == "")
+            {
+                buttonSaveAs_Click(sender, e);
+                return;
+            }
+            string ext = Path.GetExtension(FilePath);
+            Debug.Write(ext);
+            DrawCanvas.UpdateLayout();
+            CreateBitmapFromVisual(DrawCanvas, FilePath, ext);
         }
 
         private void buttonSaveAs_Click(object sender, RoutedEventArgs e)
         {
-
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExt = "png";
+            saveFileDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                FilePath = saveFileDialog.FileName;
+                switch (saveFileDialog.FilterIndex)
+                {
+                    case 1:
+                        {
+                            CreateBitmapFromVisual(DrawCanvas, saveFileDialog.FileName, ".png");
+                            break;
+                        }
+                    case 2:
+                        {
+                            CreateBitmapFromVisual(DrawCanvas, saveFileDialog.FileName, ".bmp");
+                            break;
+                        }
+                    case 3:
+                        {
+                            CreateBitmapFromVisual(DrawCanvas, saveFileDialog.FileName, ".jpg");
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
         }
 
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
         {
-            
-            
+            OpenFileDialog browseDialog = new OpenFileDialog();
+            browseDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            browseDialog.FilterIndex = 1;
+            browseDialog.Multiselect = false;
+            if (browseDialog.ShowDialog() != true)
+            {
+                return;
+            }
+            FilePath = browseDialog.FileName;
+
+            //need to fix right here
+            // ImageBrush ib = new ImageBrush();
+            // BitmapImage inputFile = new BitmapImage(new Uri(FilePath, UriKind.RelativeOrAbsolute));
+            // ib.ImageSource = inputFile;
+            // DrawCanvas.Background = ib;
+
+            MemoryStream ms = new MemoryStream();
+            BitmapImage bi = new BitmapImage();
+            byte[] bytArray = File.ReadAllBytes(FilePath);
+            ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
+            bi.BeginInit();
+            bi.StreamSource = ms;
+            bi.EndInit();
+            ImageBrush ib = new ImageBrush();
+            ib.ImageSource = bi;
+            DrawCanvas.Background = ib;
+        }
+
+        void CreateBitmapFromVisual(Visual target, string filename, string filerType)
+        {
+            if (target == null)
+                return;
+
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+
+            RenderTargetBitmap rtb = new RenderTargetBitmap((Int32)bounds.Width, (Int32)bounds.Height, 96, 96, PixelFormats.Pbgra32);
+
+            DrawingVisual dv = new DrawingVisual();
+
+            using (DrawingContext dc = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush(target);
+                dc.DrawRectangle(vb, null, new Rect(new Point(), bounds.Size));
+            }
+
+            rtb.Render(dv);
+            switch (filerType)
+            {
+                case ".png":
+                    PngBitmapEncoder png = new PngBitmapEncoder();
+
+                    png.Frames.Add(BitmapFrame.Create(rtb));
+                    using (Stream stm = File.Create(filename))
+                    {
+                        png.Save(stm);
+                    }
+                    break;
+                case ".bmp":
+                    BitmapEncoder bmp = new BmpBitmapEncoder();
+                    bmp.Frames.Add(BitmapFrame.Create(rtb));
+                    using (Stream stm = File.OpenWrite(filename))
+                    {
+                        bmp.Save(stm);
+                    }
+
+                    break;
+                case ".jpg":
+                    JpegBitmapEncoder jpg = new JpegBitmapEncoder();
+                    jpg.Frames.Add(BitmapFrame.Create(rtb));
+                    using (Stream stm = File.OpenWrite(filename))
+                    {
+                        jpg.Save(stm);
+                    }
+                    break;
+                default: break;
+            }
+
         }
         //private void Canvas_MouseMove(object sender, MouseEventArgs e)
         //{
@@ -310,14 +457,7 @@ namespace Paint
 
         //        _preview.HandleEnd(pos.X, pos.Y);
         //        // Xoá hết các hình vẽ cũ
-        //        DrawCanvas.Children.Clear();
-
-        //        // Vẽ lại các hình trước đó
-        //        foreach (var shape in _shapes)
-        //        {
-        //            UIElement element = shape.Draw(1, "Red");//Draw(thickness, color) để làm improve, color hiện chưa cần xài tới
-        //            DrawCanvas.Children.Add(element);
-        //        }
+        //        ReDraw();
 
         //        // Vẽ hình preview đè lên
         //        DrawCanvas.Children.Add(_preview.Draw(1, "Red"));
@@ -340,14 +480,7 @@ namespace Paint
         //    _preview = _prototypes[_selectedShapeName].Clone();
 
         //    // Ve lai Xoa toan bo
-        //    DrawCanvas.Children.Clear();
-
-        //    // Ve lai tat ca cac hinh
-        //    foreach (var shape in _shapes)
-        //    {
-        //        var element = shape.Draw(1, "Red");
-        //        DrawCanvas.Children.Add(element);
-        //    }
+        //    ReDraw();
 
         //}
 
@@ -385,22 +518,94 @@ namespace Paint
         {
             _hook.MouseMove -= Hook_MouseMove;
             _hook.MouseUp -= Hook_MouseUp;
-            
+
         }
 
-        private void MoveBtn_Click(object sender, RoutedEventArgs e)
+
+        private void SelectShape(object sender,
+            MouseButtonEventArgs e)
         {
-            int count = 0;
-            foreach (var child in DrawCanvas.Children)
+            if (_selectedShapeIndex != null) _shapes[_selectedShapeIndex.Value].IsSelected = false;
+            for (int i = _shapes.Count - 1; i >= 0; i--)
             {
-                string t = child.ToString();
-                if (child.ToString().Contains("TextBox"))
+                if (_shapes[i].IsSelected)
                 {
-                    var idx = t.IndexOf(":");
-                    string content = t.Substring(idx+1);
+                    _selectedShapeIndex = i;
+                    PaintMainWindow.Title = _selectedShapeIndex.ToString();
+                    return;
                 }
-                count++;
+
+            }
+
+            _selectedShapeIndex = null;
+            PaintMainWindow.Title = _selectedShapeIndex.ToString();
+
+        }
+
+        private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            _isDrawing = false;
+            DrawCanvas.MouseDown -= Canvas_MouseDown;
+            DrawCanvas.MouseLeftButtonDown += SelectShape;
+            DrawCanvas.Cursor = Cursors.Arrow;
+        }
+
+        private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            DrawCanvas.MouseLeftButtonDown -= SelectShape;
+            DrawCanvas.MouseDown += Canvas_MouseDown;
+            DrawCanvas.Cursor = Cursors.Cross;
+        }
+
+
+        private void CopyButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedShapeIndex != null)
+            {
+                _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
+
             }
         }
+
+        private void PasteSplitButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_copiedShape != null)
+            {
+                var cs = _copiedShape.Clone();
+                cs.Start.X += 10;
+                cs.Start.Y += 10;
+                cs.End.X += 10;
+                cs.End.Y += 10;
+                cs.IsSelected = true;
+                _shapes.Add(cs);
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _copiedShape = cs;
+                if (_cutSelectedShapeIndex is not null)
+                {
+                    _shapes.RemoveAt(_cutSelectedShapeIndex.Value);
+                    _cutSelectedShapeIndex = null;
+                }
+                _selectedShapeIndex = _shapes.Count - 1;
+                PaintMainWindow.Title = _selectedShapeIndex.ToString();
+                ReDraw();
+            }
+        }
+
+        private void CutButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedShapeIndex != null)
+            {
+                _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
+                _cutSelectedShapeIndex = _selectedShapeIndex;
+            }
+        }
+
+        private void Ribbon_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _copiedShape = null;
+            _selectedShapeIndex = null;
+            PaintMainWindow.Title = _selectedShapeIndex.ToString();
+        }
+
     }
 }
