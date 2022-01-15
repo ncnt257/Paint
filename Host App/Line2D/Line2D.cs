@@ -1,6 +1,7 @@
 using Contract;
 using System;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -40,11 +41,17 @@ namespace Line2D
                 X2 = End.X,
                 Y2 = End.Y,
                 StrokeThickness = Thickness,
-                Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
+                Stroke = new SolidColorBrush(Color),
                 Fill = new SolidColorBrush(Color),
                 Cursor = Cursors.Hand
-        };
+            };
+            if (IsSelected)
+            {
+                
+                l.Stroke = new SolidColorBrush(Colors.Blue);
+                l.Fill = new SolidColorBrush(Colors.Blue);
+            }
             l.MouseLeftButtonDown += ShapeSelected;
             
             return l;

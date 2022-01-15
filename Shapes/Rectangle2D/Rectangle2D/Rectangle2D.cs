@@ -36,6 +36,10 @@ namespace Rectangle2D
                 Cursor = Cursors.Hand
 
             };
+            if (IsSelected)
+            {
+                rectangle.Stroke = new SolidColorBrush(Colors.Blue);
+            }
             if (width > 0 && height > 0)
             {
                 Canvas.SetLeft(rectangle, Start.X);

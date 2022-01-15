@@ -405,7 +405,9 @@ namespace Paint
                 if (_shapes[i].IsSelected)
                 {
                     _selectedShapeIndex = i;
+
                     PaintMainWindow.Title = _selectedShapeIndex.ToString();
+                    ReDraw();
                     return;
                 }
 

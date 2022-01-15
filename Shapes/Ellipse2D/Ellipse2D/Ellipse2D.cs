@@ -31,6 +31,12 @@ namespace Ellipse2D
                 Fill = new SolidColorBrush(Fill),
                 Cursor = Cursors.Hand
             };
+            if (IsSelected)
+            {
+
+                ellipse.Stroke = new SolidColorBrush(Colors.Blue);
+
+            }
             if (width > 0 && height > 0)
             {
                 Canvas.SetLeft(ellipse, Start.X);
