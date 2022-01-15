@@ -25,7 +25,7 @@ namespace Paint
     public partial class MainWindow : RibbonWindow
     {
         public static string FilePath = "";
-        public static string FileName = Path.GetFileName(FilePath);\
+        public static string FileName = Path.GetFileName(FilePath);
         private readonly IMouseEvents _hook = Hook.GlobalEvents();
         private bool _isDrawing = false;
         readonly List<IShape> _shapes = new List<IShape>();
@@ -46,7 +46,7 @@ namespace Paint
             InitializeComponent();
         }
 
-        
+
         private void ReDraw()//xóa và vẽ lại
         {
             DrawCanvas.Children.Clear();
@@ -402,13 +402,13 @@ namespace Paint
             if (_selectedShapeIndex != null) _shapes[_selectedShapeIndex.Value].IsSelected = false;
             for (int i = _shapes.Count - 1; i >= 0; i--)
             {
-                if (_shapes[i].IsSelected) 
+                if (_shapes[i].IsSelected)
                 {
                     _selectedShapeIndex = i;
                     PaintMainWindow.Title = _selectedShapeIndex.ToString();
                     return;
                 }
-                
+
             }
 
             _selectedShapeIndex = null;
@@ -421,7 +421,7 @@ namespace Paint
             _isDrawing = false;
             DrawCanvas.MouseDown -= Canvas_MouseDown;
             DrawCanvas.MouseLeftButtonDown += SelectShape;
-            DrawCanvas.Cursor= Cursors.Arrow;
+            DrawCanvas.Cursor = Cursors.Arrow;
         }
 
         private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
@@ -451,7 +451,7 @@ namespace Paint
                 cs.End.Y += 10;
                 cs.IsSelected = true;
                 _shapes.Add(cs);
-                _shapes[_selectedShapeIndex.Value].IsSelected=false;
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
                 _copiedShape = cs;
                 if (_cutSelectedShapeIndex is not null)
                 {
