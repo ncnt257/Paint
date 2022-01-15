@@ -11,7 +11,6 @@ namespace Rectangle2D
 {
     class Rectangle2D : IShape
     {
-        
         public string Name => "Rectangle";
         public Point2D Start { get; set; }
         public Point2D End { get; set; }
@@ -20,7 +19,7 @@ namespace Rectangle2D
         public Color Fill { get; set; }
 
         public DoubleCollection StrokeType { get; set; }
-        public UIElement Draw()
+        public UIElement Draw(bool isSelectMode)
         {
             var width = End.X - Start.X;
             var height = End.Y - Start.Y;
@@ -33,12 +32,18 @@ namespace Rectangle2D
                 Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
                 Fill = new SolidColorBrush(Fill),
-                Cursor = Cursors.Hand
+
 
             };
             if (IsSelected)
             {
                 rectangle.Stroke = new SolidColorBrush(Colors.Blue);
+            }
+
+            if (isSelectMode)
+            {
+                rectangle.Cursor = Cursors.Hand;
+                rectangle.MouseLeftButtonDown += ShapeSelected;
             }
             if (width > 0 && height > 0)
             {
@@ -61,9 +66,6 @@ namespace Rectangle2D
                 Canvas.SetTop(rectangle, End.Y);
             }
 
-
-            rectangle.MouseLeftButtonDown += ShapeSelected;
-            //rectangle.MouseLeftButtonDown += ShapeSelected;
             return rectangle;
         }
         private void ShapeSelected(object sender,

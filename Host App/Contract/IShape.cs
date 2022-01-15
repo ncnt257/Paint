@@ -18,9 +18,8 @@ namespace Contract
         void HandleStart(double x, double y);
         void HandleEnd(double x, double y);
         
-        UIElement Draw();
+        UIElement Draw(bool isSelectMode);
         IShape Clone();
-
 
 
     }

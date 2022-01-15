@@ -11,8 +11,6 @@ namespace Line2D
 {
     public class Line2D : IShape
     {
-        
-
         public string Name => "Line";
         public Point2D Start { get; set; }
         public Point2D End { get; set; }
@@ -32,7 +30,7 @@ namespace Line2D
             End = new Point2D() { X = x, Y = y };
         }
 
-        public UIElement Draw()
+        public UIElement Draw(bool isSelectMode)
         {
             Line l = new Line()
             {
@@ -44,7 +42,7 @@ namespace Line2D
                 StrokeDashArray = StrokeType,
                 Stroke = new SolidColorBrush(Color),
                 Fill = new SolidColorBrush(Color),
-                Cursor = Cursors.Hand
+                
             };
             if (IsSelected)
             {
@@ -52,7 +50,12 @@ namespace Line2D
                 l.Stroke = new SolidColorBrush(Colors.Blue);
                 l.Fill = new SolidColorBrush(Colors.Blue);
             }
-            l.MouseLeftButtonDown += ShapeSelected;
+
+            if (isSelectMode)
+            {
+                l.Cursor = Cursors.Hand;
+                l.MouseLeftButtonDown += ShapeSelected;
+            }
             
             return l;
         }

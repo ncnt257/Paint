@@ -17,7 +17,7 @@ namespace Ellipse2D
         public Color Color { get; set; }
         public Color Fill { get; set; }
         public DoubleCollection StrokeType { get; set; }
-        public UIElement Draw()
+        public UIElement Draw(bool isSelectMode)
         {
             var width = End.X - Start.X;
             var height = End.Y - Start.Y;
@@ -29,13 +29,18 @@ namespace Ellipse2D
                 Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
                 Fill = new SolidColorBrush(Fill),
-                Cursor = Cursors.Hand
+
             };
             if (IsSelected)
             {
 
                 ellipse.Stroke = new SolidColorBrush(Colors.Blue);
 
+            }
+            if (isSelectMode)
+            {
+                ellipse.Cursor = Cursors.Hand;
+                ellipse.MouseLeftButtonDown += ShapeSelected;
             }
             if (width > 0 && height > 0)
             {
@@ -57,7 +62,6 @@ namespace Ellipse2D
                 Canvas.SetLeft(ellipse, End.X);
                 Canvas.SetTop(ellipse, End.Y);
             }
-            ellipse.MouseLeftButtonDown += ShapeSelected;
             return ellipse;
         }
         private void ShapeSelected(object sender,

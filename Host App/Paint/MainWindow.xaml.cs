@@ -52,7 +52,7 @@ namespace Paint
             DrawCanvas.Children.Clear();
             foreach (var shape in _shapes)
             {
-                UIElement element = shape.Draw();
+                UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
                 DrawCanvas.Children.Add(element);
             }
         }
@@ -101,7 +101,7 @@ namespace Paint
                 ReDraw();
 
                 // Vẽ hình preview đè lên
-                DrawCanvas.Children.Add(_preview.Draw());
+                DrawCanvas.Children.Add(_preview.Draw(SelectButton.IsChecked ?? false));
 
 
             }
@@ -412,8 +412,9 @@ namespace Paint
                 }
 
             }
-
+            
             _selectedShapeIndex = null;
+            ReDraw();
             PaintMainWindow.Title = _selectedShapeIndex.ToString();
 
         }
@@ -424,6 +425,7 @@ namespace Paint
             DrawCanvas.MouseDown -= Canvas_MouseDown;
             DrawCanvas.MouseLeftButtonDown += SelectShape;
             DrawCanvas.Cursor = Cursors.Arrow;
+            ReDraw();
         }
 
         private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
@@ -431,6 +433,7 @@ namespace Paint
             DrawCanvas.MouseLeftButtonDown -= SelectShape;
             DrawCanvas.MouseDown += Canvas_MouseDown;
             DrawCanvas.Cursor = Cursors.Cross;
+            ReDraw();
         }
 
         private void CopyButton_OnClick(object sender, RoutedEventArgs e)
