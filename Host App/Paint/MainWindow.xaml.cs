@@ -13,8 +13,16 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
 using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
+
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Contract;
+using Fluent;
+using Gma.System.MouseKeyHook;
+using TextBox = System.Windows.Controls.TextBox;
 
 
 namespace Paint
@@ -22,8 +30,11 @@ namespace Paint
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    
     public partial class MainWindow : RibbonWindow
     {
+
         public static string FilePath = "";
         public static string FileName = Path.GetFileName(FilePath);
         private readonly IMouseEvents _hook = Hook.GlobalEvents();
@@ -36,6 +47,15 @@ namespace Paint
         string _selectedShapeName = "";
 
         private readonly Dictionary<string, IShape> _prototypes =
+
+
+   
+  
+  
+  
+        Dictionary<int, string> textBoxContent = new Dictionary<int, string>();
+
+
             new Dictionary<string, IShape>();
 
         //Properties menu
@@ -86,7 +106,6 @@ namespace Paint
             Point pos = DrawCanvas.PointFromScreen(screenPos);
 
 
-
             CoordinateLabel.Content = $"{Math.Ceiling(pos.X)}, {Math.Ceiling(pos.Y)}px";
             if (pos.X < 0 || pos.X > DrawCanvas.ActualWidth || pos.Y < 0 || pos.Y >= DrawCanvas.ActualHeight)
             {
@@ -95,14 +114,54 @@ namespace Paint
 
             if (_isDrawing)
             {
-
                 _preview.HandleEnd(pos.X, pos.Y);
                 // Xoá hết các hình vẽ cũ
-                ReDraw();
 
+                int count = textBoxContent.Count;
+
+                foreach (var child in DrawCanvas.Children)
+                {
+                    string t = child.ToString();
+                    if (child.ToString().Contains("TextBox"))
+                    {
+                        count++;
+                        var idx = t.IndexOf(":");
+                        string content = t.Substring(idx + 1);
+                        textBoxContent.Add(count, content);
+                    }
+                }
+
+                DrawCanvas.Children.Clear();
+
+                count = 1;
+                // Vẽ lại các hình trước đó
+                foreach (var shape in _shapes)
+                {
+                    if (shape.Name == "Text")
+                    {
+                        var textBlock = new TextBlock();
+
+                        textBlock.Text = textBoxContent[count];
+                        textBlock.Foreground = new SolidColorBrush(Colors.Black);
+                        textBlock.Background = new SolidColorBrush(Colors.Gray);
+
+                        Canvas.SetLeft(textBlock, shape._start.X);
+                        Canvas.SetTop(textBlock, shape._start.Y);
+
+
+                        DrawCanvas.Children.Add(textBlock);
+                        count++;
+                    }
+                    else
+                    {
+                        var element = shape.Draw();
+                        DrawCanvas.Children.Add(element);
+
+                    }
+
+                }
                 // Vẽ hình preview đè lên
                 DrawCanvas.Children.Add(_preview.Draw());
-
 
             }
         }
@@ -118,12 +177,80 @@ namespace Paint
                 // Thêm đối tượng cuối cùng vào mảng quản lí
 
                 _preview.HandleEnd(pos.X, pos.Y);
-                _shapes.Add(_preview);
+                
+                if (_shapes.Count > textBoxContent.Count)
+                {
+                    foreach (UIElement child in DrawCanvas.Children)
+                    {
+                        if (child.ToString().Contains("TextBox"))
+                        {
+                            DrawCanvas.Children.Remove(child);
+                            //var shape = child as IShape;
+                            _shapes.RemoveAt(_shapes.Count-1);
+                            break;
+                        }
+                    }
+                }
 
+                // Ve lai Xoa toan bo
+                DrawCanvas.Children.Clear();
+
+                // Ve lai tat ca cac hinh
+                var count = 1;
+                foreach (var shape in _shapes)
+                {
+                    if (shape.Name == "Text")
+                    {
+                        var textBlock = new TextBlock();
+
+                        textBlock.Text = textBoxContent[count];
+                        textBlock.Foreground = new SolidColorBrush(Colors.Black);
+                        textBlock.Background = new SolidColorBrush(Colors.Gray);
+
+                        Canvas.SetLeft(textBlock, shape._start.X);
+                        Canvas.SetTop(textBlock, shape._start.Y);
+
+                        DrawCanvas.Children.Add(textBlock);
+
+                        count++;
+
+                    }
+                    else
+                    {
+                        UIElement element = shape.Draw();
+                        DrawCanvas.Children.Add(element);
+                    }
+                }
+
+
+                var clonePreview = _preview;
+
+
+                if (clonePreview.Name == "Text")
+                {
+                    var textBox = new TextBox();
+
+                    textBox.Text = "     ";
+
+                    textBox.Foreground = new SolidColorBrush(Colors.Black);
+                    textBox.BorderThickness = new Thickness(0);
+                    textBox.BorderBrush = Brushes.White;
+                    textBox.Background = new SolidColorBrush(Colors.Gray);
+
+                    Canvas.SetLeft(textBox, clonePreview._start.X);
+                    Canvas.SetTop(textBox, clonePreview._start.Y);
+
+                    DrawCanvas.Children.Add(textBox);
+                }
+                else
+                {
+                    var element = clonePreview.Draw();
+                    DrawCanvas.Children.Add(element);
+                }
+
+                _shapes.Add(_preview);
                 // Sinh ra đối tượng mẫu kế
                 _preview = _prototypes[_selectedShapeName].Clone();
-
-                ReDraw();
             }
 
         }
@@ -387,7 +514,6 @@ namespace Paint
         //}
 
 
-
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             _hook.MouseMove -= Hook_MouseMove;
@@ -430,6 +556,7 @@ namespace Paint
             DrawCanvas.MouseDown += Canvas_MouseDown;
             DrawCanvas.Cursor = Cursors.Cross;
         }
+
 
         private void CopyButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -479,5 +606,6 @@ namespace Paint
             _selectedShapeIndex = null;
             PaintMainWindow.Title = _selectedShapeIndex.ToString();
         }
+
     }
 }

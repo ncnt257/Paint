@@ -10,7 +10,7 @@ namespace Line2D
 {
     public class Line2D : IShape
     {
-        
+
 
         public string Name => "Line";
         public Point2D Start { get; set; }

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Text.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Contract\Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Text.png" />
+  </ItemGroup>
+
+</Project>
