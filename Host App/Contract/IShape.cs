@@ -6,8 +6,7 @@ namespace Contract
 {
     public interface IShape
     {
-        public Point2D _start { get; set; }
-        public Point2D _end { get; set; }
+
         string Name { get; }
         bool IsSelected { get; set; }
         Point2D Start { get; set; }

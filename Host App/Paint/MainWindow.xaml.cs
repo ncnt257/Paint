@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -22,6 +23,7 @@ using System.Windows.Shapes;
 using Contract;
 using Fluent;
 using Gma.System.MouseKeyHook;
+using Path = System.IO.Path;
 using TextBox = System.Windows.Controls.TextBox;
 
 
@@ -36,7 +38,7 @@ namespace Paint
     {
 
         public static string FilePath = "";
-        public static string FileName = Path.GetFileName(FilePath);
+
         private readonly IMouseEvents _hook = Hook.GlobalEvents();
         private bool _isDrawing = false;
         readonly List<IShape> _shapes = new List<IShape>();
@@ -46,17 +48,17 @@ namespace Paint
         IShape _preview;
         string _selectedShapeName = "";
 
-        private readonly Dictionary<string, IShape> _prototypes =
+        private readonly Dictionary<string, IShape> _prototypes = new Dictionary<string, IShape>();
 
 
-   
-  
-  
-  
+
+
+
+
         Dictionary<int, string> textBoxContent = new Dictionary<int, string>();
 
 
-            new Dictionary<string, IShape>();
+           
 
         //Properties menu
         new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
@@ -129,7 +131,7 @@ namespace Paint
                         string content = t.Substring(idx + 1);
                         textBoxContent.Add(count, content);
                     }
-                }
+                }     
 
                 DrawCanvas.Children.Clear();
 
@@ -145,8 +147,8 @@ namespace Paint
                         textBlock.Foreground = new SolidColorBrush(Colors.Black);
                         textBlock.Background = new SolidColorBrush(Colors.Gray);
 
-                        Canvas.SetLeft(textBlock, shape._start.X);
-                        Canvas.SetTop(textBlock, shape._start.Y);
+                        Canvas.SetLeft(textBlock, shape.Start.X);
+                        Canvas.SetTop(textBlock, shape.Start.Y);
 
 
                         DrawCanvas.Children.Add(textBlock);
@@ -207,8 +209,8 @@ namespace Paint
                         textBlock.Foreground = new SolidColorBrush(Colors.Black);
                         textBlock.Background = new SolidColorBrush(Colors.Gray);
 
-                        Canvas.SetLeft(textBlock, shape._start.X);
-                        Canvas.SetTop(textBlock, shape._start.Y);
+                        Canvas.SetLeft(textBlock, shape.Start.X);
+                        Canvas.SetTop(textBlock, shape.Start.Y);
 
                         DrawCanvas.Children.Add(textBlock);
 
@@ -237,8 +239,8 @@ namespace Paint
                     textBox.BorderBrush = Brushes.White;
                     textBox.Background = new SolidColorBrush(Colors.Gray);
 
-                    Canvas.SetLeft(textBox, clonePreview._start.X);
-                    Canvas.SetTop(textBox, clonePreview._start.Y);
+                    Canvas.SetLeft(textBox, clonePreview.Start.X);
+                    Canvas.SetTop(textBox, clonePreview.Start.Y);
 
                     DrawCanvas.Children.Add(textBox);
                 }
