@@ -8,8 +8,8 @@ namespace Line2D
 {
     public class Line2D : IShape
     {
-        private Point2D _start = new Point2D();
-        private Point2D _end = new Point2D();
+        public Point2D _start { get; set; }
+        public Point2D _end { get; set; }
 
         public string Name => "Line";
 
