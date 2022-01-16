@@ -133,7 +133,7 @@ namespace Paint
         {
             _selectedShapeName = (sender as Fluent.ToggleButton).Tag as string;
 
-            _preview = _prototypes[_selectedShapeName];
+            _preview = _prototypes[_selectedShapeName].Clone();
 
             SelectButton.IsChecked = false;
         }
@@ -412,7 +412,6 @@ namespace Paint
                 }
 
             }
-            
             _selectedShapeIndex = null;
             ReDraw();
             PaintMainWindow.Title = _selectedShapeIndex.ToString();
