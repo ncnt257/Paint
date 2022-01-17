@@ -66,12 +66,21 @@ namespace Rectangle2D
                 Canvas.SetTop(rectangle, End.Y);
             }
 
+            rectangle.MouseMove += MoveShape;
             return rectangle;
         }
-        private void ShapeSelected(object sender,
+        public void ShapeSelected(object sender,
             MouseButtonEventArgs e)
         {
             IsSelected = true;
+        }
+
+        public void MoveShape(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && IsSelected)
+            {
+                DragDrop.DoDragDrop(sender as Rectangle, sender as Rectangle, DragDropEffects.Move);
+            }
         }
 
         public bool IsSelected { get; set; }

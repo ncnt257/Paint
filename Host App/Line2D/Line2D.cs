@@ -1,6 +1,7 @@
 using Contract;
 using System;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -42,7 +43,7 @@ namespace Line2D
                 StrokeDashArray = StrokeType,
                 Stroke = new SolidColorBrush(Color),
                 Fill = new SolidColorBrush(Color),
-                
+
             };
             if (IsSelected)
             {
@@ -55,10 +56,13 @@ namespace Line2D
             {
                 l.Cursor = Cursors.Hand;
                 l.MouseLeftButtonDown += ShapeSelected;
+                
             }
-            
+            l.MouseMove += MoveShape;
             return l;
         }
+
+        
 
         public Line2D()
         {
@@ -67,7 +71,15 @@ namespace Line2D
             Color = Colors.Transparent;
         }
 
-        private void ShapeSelected(object sender,
+        public void MoveShape(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && IsSelected)
+            {
+                DragDrop.DoDragDrop(sender as Line, sender as Line, DragDropEffects.Move);
+            }
+        }
+
+        public void ShapeSelected(object sender,
             MouseButtonEventArgs e)
         {
             IsSelected = true;

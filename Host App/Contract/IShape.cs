@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Contract
@@ -17,7 +18,13 @@ namespace Contract
 
         void HandleStart(double x, double y);
         void HandleEnd(double x, double y);
-        
+
+        void MoveShape(object sender, MouseEventArgs e);
+
+        void ShapeSelected(object sender,
+            MouseButtonEventArgs e);
+
+
         UIElement Draw(bool isSelectMode);
         IShape Clone();
 
