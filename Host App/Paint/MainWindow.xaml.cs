@@ -13,7 +13,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
+using Path = System.IO.Path;
 using Point = System.Windows.Point;
 
 
@@ -30,10 +32,11 @@ namespace Paint
         private bool _isDrawing = false;
         readonly List<IShape> _shapes = new List<IShape>();
         private int? _selectedShapeIndex;
+        private Point _moveDelta;
         private int? _cutSelectedShapeIndex;
         private IShape _copiedShape;
         IShape _preview;
-        string _selectedShapeName = "";
+        string _seletedPrototypeName = "";
 
         private readonly Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
@@ -121,7 +124,7 @@ namespace Paint
                 _shapes.Add(_preview);
 
                 // Sinh ra đối tượng mẫu kế
-                _preview = _prototypes[_selectedShapeName].Clone();
+                _preview = _prototypes[_seletedPrototypeName].Clone();
 
                 ReDraw();
             }
@@ -131,9 +134,9 @@ namespace Paint
 
         private void prototypeButton_Click(object sender, RoutedEventArgs e)
         {
-            _selectedShapeName = (sender as Fluent.ToggleButton).Tag as string;
+            _seletedPrototypeName = (sender as Fluent.ToggleButton).Tag as string;
 
-            _preview = _prototypes[_selectedShapeName].Clone();
+            _preview = _prototypes[_seletedPrototypeName].Clone();
 
             SelectButton.IsChecked = false;
         }
@@ -182,8 +185,8 @@ namespace Paint
 
             if (_prototypes.Count > 0)
             {
-                _selectedShapeName = _prototypes.First().Value.Name;
-                _preview = _prototypes[_selectedShapeName].Clone();
+                _seletedPrototypeName = _prototypes.First().Value.Name;
+                _preview = _prototypes[_seletedPrototypeName].Clone();
             }
         }
 
@@ -350,7 +353,7 @@ namespace Paint
         //    _shapes.Add(_preview);
 
         //    // Sinh ra đối tượng mẫu kế
-        //    _preview = _prototypes[_selectedShapeName].Clone();
+        //    _preview = _prototypes[_seletedPrototypeName].Clone();
 
         //    // Ve lai Xoa toan bo
         //    ReDraw();
@@ -396,27 +399,6 @@ namespace Paint
         }
 
 
-        private void SelectShape(object sender,
-            MouseButtonEventArgs e)
-        {
-            if (_selectedShapeIndex != null) _shapes[_selectedShapeIndex.Value].IsSelected = false;
-            for (int i = _shapes.Count - 1; i >= 0; i--)
-            {
-                if (_shapes[i].IsSelected)
-                {
-                    _selectedShapeIndex = i;
-
-                    
-                    ReDraw();
-                    return;
-                }
-
-            }
-            _selectedShapeIndex = null;
-            ReDraw();
-            
-
-        }
 
         private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
         {
@@ -429,8 +411,12 @@ namespace Paint
 
         private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
         {
-            _shapes[_selectedShapeIndex.Value].IsSelected = false;
-            _selectedShapeIndex = null;
+            if (_selectedShapeIndex != null)
+            {
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
+            }
+            
             
 
             DrawCanvas.MouseLeftButtonDown -= SelectShape;
@@ -481,8 +467,42 @@ namespace Paint
             }
         }
 
-        
 
-        
+
+
+        private void SelectShape(object sender,
+            MouseButtonEventArgs e)
+        {
+            if (_selectedShapeIndex != null) _shapes[_selectedShapeIndex.Value].IsSelected = false;
+            for (int i = _shapes.Count - 1; i >= 0; i--)
+            {
+                if (_shapes[i].IsSelected)
+                {
+                    _selectedShapeIndex = i;
+                    _moveDelta.X = _shapes[_selectedShapeIndex.Value].Start.X - e.GetPosition(DrawCanvas).X;
+                    _moveDelta.Y = _shapes[_selectedShapeIndex.Value].Start.Y - e.GetPosition(DrawCanvas).Y;
+
+                    
+                    ReDraw();
+                    return;
+                }
+
+            }
+            _selectedShapeIndex = null;
+            ReDraw();
+            
+
+        }
+        private void DrawCanvas_OnDragOver(object sender, DragEventArgs e)
+        {
+            Point dropPos = e.GetPosition(DrawCanvas);
+            double deltaX = _shapes[_selectedShapeIndex.Value].Start.X - dropPos.X;
+            double deltaY = _shapes[_selectedShapeIndex.Value].Start.Y - dropPos.Y;
+            _shapes[_selectedShapeIndex.Value].Start.X -= deltaX - _moveDelta.X;
+            _shapes[_selectedShapeIndex.Value].End.X -= deltaX - _moveDelta.X;
+            _shapes[_selectedShapeIndex.Value].Start.Y -= deltaY - _moveDelta.Y;
+            _shapes[_selectedShapeIndex.Value].End.Y -= deltaY - _moveDelta.Y;
+            ReDraw();
+        }
     }
 }

@@ -62,9 +62,17 @@ namespace Ellipse2D
                 Canvas.SetLeft(ellipse, End.X);
                 Canvas.SetTop(ellipse, End.Y);
             }
+            ellipse.MouseMove += MoveShape;
             return ellipse;
         }
-        private void ShapeSelected(object sender,
+        public void MoveShape(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && IsSelected)
+            {
+                DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move);
+            }
+        }
+        public void ShapeSelected(object sender,
             MouseButtonEventArgs e)
         {
             IsSelected = true;
