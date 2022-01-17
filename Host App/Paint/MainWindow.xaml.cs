@@ -406,7 +406,7 @@ namespace Paint
                 {
                     _selectedShapeIndex = i;
 
-                    PaintMainWindow.Title = _selectedShapeIndex.ToString();
+                    
                     ReDraw();
                     return;
                 }
@@ -414,7 +414,7 @@ namespace Paint
             }
             _selectedShapeIndex = null;
             ReDraw();
-            PaintMainWindow.Title = _selectedShapeIndex.ToString();
+            
 
         }
 
@@ -429,6 +429,10 @@ namespace Paint
 
         private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
         {
+            _shapes[_selectedShapeIndex.Value].IsSelected = false;
+            _selectedShapeIndex = null;
+            
+
             DrawCanvas.MouseLeftButtonDown -= SelectShape;
             DrawCanvas.MouseDown += Canvas_MouseDown;
             DrawCanvas.Cursor = Cursors.Cross;
@@ -463,7 +467,7 @@ namespace Paint
                     _cutSelectedShapeIndex = null;
                 }
                 _selectedShapeIndex = _shapes.Count - 1;
-                PaintMainWindow.Title = _selectedShapeIndex.ToString();
+                
                 ReDraw();
             }
         }
@@ -477,11 +481,8 @@ namespace Paint
             }
         }
 
-        private void Ribbon_OnMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            _copiedShape = null;
-            _selectedShapeIndex = null;
-            PaintMainWindow.Title = _selectedShapeIndex.ToString();
-        }
+        
+
+        
     }
 }
