@@ -35,10 +35,7 @@ namespace Rectangle2D
 
 
             };
-            if (IsSelected)
-            {
-                rectangle.Stroke = new SolidColorBrush(Colors.Blue);
-            }
+
 
             if (isSelectMode)
             {
@@ -66,7 +63,7 @@ namespace Rectangle2D
                 Canvas.SetTop(rectangle, End.Y);
             }
 
-            rectangle.MouseMove += MoveShape;
+
             return rectangle;
         }
         public void ShapeSelected(object sender,
@@ -75,13 +72,7 @@ namespace Rectangle2D
             IsSelected = true;
         }
 
-        public void MoveShape(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed && IsSelected)
-            {
-                DragDrop.DoDragDrop(sender as Rectangle, sender as Rectangle, DragDropEffects.Move);
-            }
-        }
+
 
         public bool IsSelected { get; set; }
         public void HandleStart(double x, double y)

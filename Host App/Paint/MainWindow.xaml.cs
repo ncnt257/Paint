@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -481,9 +482,19 @@ namespace Paint
                     _selectedShapeIndex = i;
                     _moveDelta.X = _shapes[_selectedShapeIndex.Value].Start.X - e.GetPosition(DrawCanvas).X;
                     _moveDelta.Y = _shapes[_selectedShapeIndex.Value].Start.Y - e.GetPosition(DrawCanvas).Y;
+                    int index = _selectedShapeIndex.Value;
+                    if (_shapes[index].Name!="Line")
+                    {
+                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[index])
+                            .Add(new ResizeShapeAdorner(DrawCanvas.Children[index], _shapes[index]));
+                    }
+                    else
+                    {
+                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[index])
+                            .Add(new ResizeLineAdorner(DrawCanvas.Children[index], _shapes[index]));
+                    }
 
-                    
-                    ReDraw();
+                    //ReDraw();
                     return;
                 }
 
@@ -493,16 +504,6 @@ namespace Paint
             
 
         }
-        private void DrawCanvas_OnDragOver(object sender, DragEventArgs e)
-        {
-            Point dropPos = e.GetPosition(DrawCanvas);
-            double deltaX = _shapes[_selectedShapeIndex.Value].Start.X - dropPos.X;
-            double deltaY = _shapes[_selectedShapeIndex.Value].Start.Y - dropPos.Y;
-            _shapes[_selectedShapeIndex.Value].Start.X -= deltaX - _moveDelta.X;
-            _shapes[_selectedShapeIndex.Value].End.X -= deltaX - _moveDelta.X;
-            _shapes[_selectedShapeIndex.Value].Start.Y -= deltaY - _moveDelta.Y;
-            _shapes[_selectedShapeIndex.Value].End.Y -= deltaY - _moveDelta.Y;
-            ReDraw();
-        }
+        
     }
 }

@@ -19,7 +19,6 @@ namespace Contract
         void HandleStart(double x, double y);
         void HandleEnd(double x, double y);
 
-        void MoveShape(object sender, MouseEventArgs e);
 
         void ShapeSelected(object sender,
             MouseButtonEventArgs e);
