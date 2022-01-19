@@ -33,7 +33,6 @@ namespace Paint
         private bool _isDrawing = false;
         readonly List<IShape> _shapes = new List<IShape>();
         private int? _selectedShapeIndex;
-        private Point _moveDelta;
         private int? _cutSelectedShapeIndex;
         private IShape _copiedShape;
         IShape _preview;
@@ -57,7 +56,12 @@ namespace Paint
             foreach (var shape in _shapes)
             {
                 UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
+                
                 DrawCanvas.Children.Add(element);
+                
+
+
+
             }
         }
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
@@ -440,6 +444,7 @@ namespace Paint
             if (_copiedShape != null)
             {
                 var cs = _copiedShape.Clone();
+                
                 cs.Start.X += 10;
                 cs.Start.Y += 10;
                 cs.End.X += 10;
@@ -454,8 +459,11 @@ namespace Paint
                     _cutSelectedShapeIndex = null;
                 }
                 _selectedShapeIndex = _shapes.Count - 1;
+                int i = _shapes.Count - 1;
                 
                 ReDraw();
+                
+
             }
         }
 
@@ -474,24 +482,37 @@ namespace Paint
         private void SelectShape(object sender,
             MouseButtonEventArgs e)
         {
-            if (_selectedShapeIndex != null) _shapes[_selectedShapeIndex.Value].IsSelected = false;
+            
+            if (_selectedShapeIndex != null)
+            {
+                int index = _selectedShapeIndex.Value;
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                Adorner[] toRemoveArray =
+                    AdornerLayer.GetAdornerLayer(DrawCanvas).GetAdorners(DrawCanvas.Children[index]);
+                if (toRemoveArray != null)
+                {
+                    for (int x = 0; x < toRemoveArray.Length; x++)
+                    {
+                        AdornerLayer.GetAdornerLayer(DrawCanvas).Remove(toRemoveArray[x]);
+                    }
+                }
+
+            };
             for (int i = _shapes.Count - 1; i >= 0; i--)
             {
                 if (_shapes[i].IsSelected)
                 {
                     _selectedShapeIndex = i;
-                    _moveDelta.X = _shapes[_selectedShapeIndex.Value].Start.X - e.GetPosition(DrawCanvas).X;
-                    _moveDelta.Y = _shapes[_selectedShapeIndex.Value].Start.Y - e.GetPosition(DrawCanvas).Y;
-                    int index = _selectedShapeIndex.Value;
-                    if (_shapes[index].Name!="Line")
+
+                    if (_shapes[i].Name!="Line")
                     {
-                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[index])
-                            .Add(new ResizeShapeAdorner(DrawCanvas.Children[index], _shapes[index]));
+                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
+                            .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
                     }
                     else
                     {
-                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[index])
-                            .Add(new ResizeLineAdorner(DrawCanvas.Children[index], _shapes[index]));
+                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
+                            .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
                     }
 
                     //ReDraw();
@@ -499,8 +520,10 @@ namespace Paint
                 }
 
             }
+
+            _copiedShape = null;
             _selectedShapeIndex = null;
-            ReDraw();
+            //ReDraw();
             
 
         }
