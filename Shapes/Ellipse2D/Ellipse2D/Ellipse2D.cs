@@ -17,6 +17,16 @@ namespace Ellipse2D
         public Color Color { get; set; }
         public Color Fill { get; set; }
         public DoubleCollection StrokeType { get; set; }
+        public bool IsSelected { get; set; }
+
+        public Ellipse2D()
+        {
+            Start = new Point2D();
+            End = new Point2D();
+            Fill = Colors.Transparent;
+        }
+
+
         public UIElement Draw(bool isSelectMode)
         {
             var width = End.X - Start.X;
@@ -31,12 +41,7 @@ namespace Ellipse2D
                 Fill = new SolidColorBrush(Fill),
 
             };
-            if (IsSelected)
-            {
 
-                ellipse.Stroke = new SolidColorBrush(Colors.Blue);
-
-            }
             if (isSelectMode)
             {
                 ellipse.Cursor = Cursors.Hand;
@@ -62,16 +67,10 @@ namespace Ellipse2D
                 Canvas.SetLeft(ellipse, End.X);
                 Canvas.SetTop(ellipse, End.Y);
             }
-            ellipse.MouseMove += MoveShape;
+
             return ellipse;
         }
-        public void MoveShape(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed && IsSelected)
-            {
-                DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move);
-            }
-        }
+
         public void ShapeSelected(object sender,
             MouseButtonEventArgs e)
         {
@@ -89,12 +88,7 @@ namespace Ellipse2D
             End.Y = y;
         }
         
-        public Ellipse2D()
-        {
-            Start = new Point2D();
-            End = new Point2D();
-            Fill = Colors.Transparent;
-        }
+
         public IShape Clone()
         {
             var ellipse = (Ellipse2D)MemberwiseClone();
@@ -108,7 +102,6 @@ namespace Ellipse2D
             return ellipse;
         }
 
-        public bool IsSelected { get; set; }
         
     }
 }

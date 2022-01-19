@@ -18,8 +18,15 @@ namespace Rectangle2D
         public int Thickness { get; set; }
         public Color Color { get; set; }
         public Color Fill { get; set; }
-
         public DoubleCollection StrokeType { get; set; }
+        public bool IsSelected { get; set; }
+
+        public Rectangle2D()
+        {
+            Start = new Point2D();
+            End = new Point2D();
+            Fill = Colors.Transparent;
+        }
         public UIElement Draw(bool isSelectMode)
         {
 
@@ -37,9 +44,6 @@ namespace Rectangle2D
 
 
             };
-            
-
-
             if (isSelectMode)
             {
                 rectangle.Cursor = Cursors.Hand;
@@ -74,10 +78,6 @@ namespace Rectangle2D
         {
             IsSelected = true;
         }
-
-
-
-        public bool IsSelected { get; set; }
         public void HandleStart(double x, double y)
         {
             Start.X = x;
@@ -88,12 +88,6 @@ namespace Rectangle2D
         {
             End.X = x;
             End.Y = y;
-        }
-        public Rectangle2D()
-        {
-            Start = new Point2D();
-            End = new Point2D();
-            Fill = Colors.Transparent;
         }
         public IShape Clone()
         {
