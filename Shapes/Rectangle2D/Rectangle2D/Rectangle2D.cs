@@ -1,5 +1,6 @@
 using Contract;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,6 +22,7 @@ namespace Rectangle2D
         public DoubleCollection StrokeType { get; set; }
         public UIElement Draw(bool isSelectMode)
         {
+
             var width = End.X - Start.X;
             var height = End.Y - Start.Y;
             var rectangle = new Rectangle()
@@ -35,6 +37,7 @@ namespace Rectangle2D
 
 
             };
+            
 
 
             if (isSelectMode)
@@ -95,6 +98,7 @@ namespace Rectangle2D
         public IShape Clone()
         {
             var rec = (Rectangle2D)MemberwiseClone();
+
             rec.IsSelected = false;
             if(Start is not null)
                 rec.Start = new Point2D(this.Start);
