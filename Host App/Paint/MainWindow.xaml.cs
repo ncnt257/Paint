@@ -463,7 +463,7 @@ namespace Paint
                 
                 ReDraw();
                 
-
+                //Không hiểu sao chỗ này shape trong canvas có width và height = 0, nên không add Adorner được
             }
         }
 

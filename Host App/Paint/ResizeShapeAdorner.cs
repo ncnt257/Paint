@@ -18,27 +18,15 @@ namespace Paint
     public class ResizeShapeAdorner : Adorner
     {
         const double THUMB_SIZE = 5;
+        //kích thước nhỏ nhất shape có thể resize
         const double MINIMAL_SIZE = 10;
         const double MOVE_OFFSET = 20;
         private IShape _shape;
 
-        //9 thumbs
-        /*                        moveAndRotateThumb
-         *                              *
-         *                              *
-         * topLeftThumb*************topMiddleThumb**************topRightThumb        
-         *      *                                                    *
-         *      *                                                    *
-         *      *                                                    *
-         * middleLeftThumb                                     middleRightThumb
-         *      *                                                    *
-         *      *                                                    *
-         *      *                                                    * 
-         * bottomLeftThumb*********bottomMiddleThumb**************bottomRightThumb
-         * 
-         * */
-        Thumb moveAndRotateThumb, topLeftThumb, middleLeftThumb, bottomLeftThumb, topMiddleThumb, topRightThumb, middleRightThumb, bottomRightThumb, bottomMiddleThumb;
+        //9 thump xung quanh shape
+        Thumb moveThumb, topLeftThumb, middleLeftThumb, bottomLeftThumb, topMiddleThumb, topRightThumb, middleRightThumb, bottomRightThumb, bottomMiddleThumb;
 
+        //Hình chữ nhật xung quanh shape
         Rectangle thumbRectangle;
 
         VisualCollection visualCollection;
@@ -47,25 +35,32 @@ namespace Paint
         {
             
 
-
+            //ngoài việc resize shape trên canvas, cần update start.x ,y và end.x, y của IShape để khi vẽ lại, shape cũng được cập nhật
             _shape = shape;
             visualCollection = new VisualCollection(this);
 
+            //thêm hcn xung quanh shape
             visualCollection.Add(thumbRectangle = GeteResizeRectangle());
 
+            //các thumb bên trái shape
             visualCollection.Add(topLeftThumb = GetResizeThumb(Cursors.SizeNWSE, HorizontalAlignment.Left, VerticalAlignment.Top));
             visualCollection.Add(middleLeftThumb = GetResizeThumb(Cursors.SizeWE, HorizontalAlignment.Left, VerticalAlignment.Center));
             visualCollection.Add(bottomLeftThumb = GetResizeThumb(Cursors.SizeNESW, HorizontalAlignment.Left, VerticalAlignment.Bottom));
 
+            //các thumb bên phải shape
             visualCollection.Add(topRightThumb = GetResizeThumb(Cursors.SizeNESW, HorizontalAlignment.Right, VerticalAlignment.Top));
             visualCollection.Add(middleRightThumb = GetResizeThumb(Cursors.SizeWE, HorizontalAlignment.Right, VerticalAlignment.Center));
             visualCollection.Add(bottomRightThumb = GetResizeThumb(Cursors.SizeNWSE, HorizontalAlignment.Right, VerticalAlignment.Bottom));
 
+            //2 thumb ở giữa shape
             visualCollection.Add(topMiddleThumb = GetResizeThumb(Cursors.SizeNS, HorizontalAlignment.Center, VerticalAlignment.Top));
             visualCollection.Add(bottomMiddleThumb = GetResizeThumb(Cursors.SizeNS, HorizontalAlignment.Center, VerticalAlignment.Bottom));
 
-            visualCollection.Add(moveAndRotateThumb = GetMoveAndRotateThumb());
+            //thumb ở trên shape để move
+            visualCollection.Add(moveThumb = GetMoveThumb());
         }
+
+        //hcn xung quanh shape
         private Rectangle GeteResizeRectangle()
         {
             var rectangle = new Rectangle()
@@ -80,6 +75,7 @@ namespace Paint
             return rectangle;
         }
 
+        //thumb xung quanh shape, ví dụ horizontal left, vertical top là thumb góc trái trên
         private Thumb GetResizeThumb(Cursor cur, HorizontalAlignment horizontal, VerticalAlignment vertical)
         {
             var thumb = new Thumb()
@@ -95,6 +91,7 @@ namespace Paint
                     VisualTree = GetThumbTemplate(new SolidColorBrush(Colors.White))
                 }
             };
+            //lamda expression, dùng lại thumb trong hàm
             thumb.DragDelta += (s, e) =>
             {
                 var element = AdornedElement as FrameworkElement;
@@ -161,7 +158,6 @@ namespace Paint
                 frameworkElement.Height = frameworkElement.RenderSize.Height;
         }
 
-        // get Thumb Temple
         private FrameworkElementFactory GetThumbTemplate(Brush back)
         {
             back.Opacity = 1;
@@ -172,7 +168,7 @@ namespace Paint
             return fef;
         }
 
-        private Thumb GetMoveAndRotateThumb()
+        private Thumb GetMoveThumb()
         {
             var thumb = new Thumb()
             {
@@ -184,6 +180,7 @@ namespace Paint
                     VisualTree = GetThumbTemplate(GetMoveEllipseBack())
                 }
             };
+            //lamda expression, dùng lại thumb trong hàm
             thumb.DragDelta += (s, e) =>
             {
                 var element = AdornedElement as FrameworkElement;
@@ -192,6 +189,7 @@ namespace Paint
 
                 Canvas.SetLeft(element, Canvas.GetLeft(element) + e.HorizontalChange);
                 Canvas.SetTop(element, Canvas.GetTop(element) + e.VerticalChange);
+
                 _shape.Start.X = Canvas.GetLeft(element);
                 _shape.Start.Y = Canvas.GetTop(element);
                 
@@ -229,7 +227,7 @@ namespace Paint
             middleLeftThumb.Arrange(new Rect(new Point(-offset, AdornedElement.RenderSize.Height / 2 - THUMB_SIZE / 2), sz));
             middleRightThumb.Arrange(new Rect(new Point(AdornedElement.RenderSize.Width - offset, AdornedElement.RenderSize.Height / 2 - THUMB_SIZE / 2), sz));
 
-            moveAndRotateThumb.Arrange(new Rect(new Point(AdornedElement.RenderSize.Width / 2 - THUMB_SIZE / 2, -MOVE_OFFSET), sz));
+            moveThumb.Arrange(new Rect(new Point(AdornedElement.RenderSize.Width / 2 - THUMB_SIZE / 2, -MOVE_OFFSET), sz));
 
             thumbRectangle.Arrange(new Rect(new Point(-offset, -offset), new Size(Width = AdornedElement.RenderSize.Width + THUMB_SIZE, Height = AdornedElement.RenderSize.Height + THUMB_SIZE)));
 
