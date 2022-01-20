@@ -40,7 +40,7 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Tool" >
                     <Fluent:Button  Header="Undo" Icon="Resource/Icon/Undo.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top"></Fluent:Button>
-                    <Fluent:Button  Header="Delete" Icon="Resource/Icon/60565.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Delete" Name="DeleteButton" Icon="Resource/Icon/60565.PNG" SizeDefinition="Middle,Small" Click="DeleteButton_OnClick"></Fluent:Button>
                     <Fluent:Button  Header="Text" Icon="Resource/Icon/Text.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                     <Fluent:Button  Header="Redo" Icon="Resource/Icon/Redo.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
 
@@ -48,7 +48,7 @@
 
 
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox x:Name="Shape" Header="Shape" MinWidth="50" HorizontalContentAlignment="Left">
+                <Fluent:RibbonGroupBox x:Name="ShapeGroupBox" Header="Shape" MinWidth="50" HorizontalContentAlignment="Left">
 
 
                 </Fluent:RibbonGroupBox>
