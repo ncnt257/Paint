@@ -27,7 +27,7 @@ namespace Paint
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : RibbonWindow
+    public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
     {
         public static string FilePath = "";
         public static string FileName = Path.GetFileName(FilePath);
@@ -40,6 +40,13 @@ namespace Paint
         IShape _preview;
         string _seletedPrototypeName = "";
 
+        //binding
+        Color _fillColor = Colors.Red;
+        public string test { get; set; }
+        public Color OutlineColor { get; set; }
+        public Color FillColor { get; set; }
+        public Color FontColor { get; set; }
+
         //zooming
         private float currentProportion = 100;
         private int startZooming = 0;
@@ -49,6 +56,9 @@ namespace Paint
 
         //Properties menu
         new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
+
+        public event PropertyChangedEventHandler? PropertyChanged = null;
+
         public MainWindow()
         {
 
@@ -87,10 +97,10 @@ namespace Paint
             _preview.HandleStart(pos.X, pos.Y);
 
             //Set stroke properties
-            _preview.Color = (Color)(buttonOutlineGallery.SelectedColor);
+            _preview.Color = OutlineColor;
             _preview.Thickness = (int)buttonStrokeSize.Value;
             _preview.StrokeType = StrokeTypes[buttonStrokeType.SelectedIndex];
-            _preview.Fill = (Color)(buttonOutlineGallery.SelectedColor);
+            _preview.Fill = FillColor;
         }
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -179,6 +189,14 @@ namespace Paint
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //Binding value
+            OutlineColor = Colors.Black;
+            FillColor = Colors.Black;
+            OutlineColor = Colors.Black;
+            FontColor = Colors.Black;
+            test = "oke";
+            this.DataContext = this;
+
             Line2D.Line2D linePrototype = new();
             _prototypes.Add(linePrototype.Name, linePrototype);
             var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
@@ -645,9 +663,10 @@ namespace Paint
         {
             if (SelectButton.IsChecked ?? false&&_selectedShapeIndex!=null)
             {
-                _shapes[_selectedShapeIndex.Value].Fill = (Color)buttonFillGallery.SelectedColor;
+                _shapes[_selectedShapeIndex.Value].Fill = FillColor;
                 ReDraw();
             }
+
         }
     }
 }

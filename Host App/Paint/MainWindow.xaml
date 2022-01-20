@@ -15,6 +15,7 @@
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                         Loaded="RibbonWindow_Loaded" Closing="MainWindow_OnClosing"
                      SizeChanged="PaintMainWindow_SizeChanged">
+
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top" Name="Ribbon">
             <Fluent:Ribbon.Menu>
@@ -60,12 +61,12 @@
                                 <Image Source="Resource/Icon/Outline.PNG"></Image>
                                 <Rectangle Width="35" Height="6" VerticalAlignment="Bottom">
                                     <Rectangle.Fill>
-                                        <SolidColorBrush Color="Black"></SolidColorBrush>
+                                        <SolidColorBrush Color="{Binding OutlineColor}"></SolidColorBrush>
                                     </Rectangle.Fill>
                                 </Rectangle>
                             </Grid>
                         </Fluent:DropDownButton.Icon>
-                        <Fluent:ColorGallery x:Name="buttonOutlineGallery" SelectedColor="Black">
+                        <Fluent:ColorGallery x:Name="buttonOutlineGallery" SelectedColor="{Binding OutlineColor, Mode=TwoWay}">
                         </Fluent:ColorGallery>
                     </Fluent:DropDownButton>
                     <Fluent:SplitButton x:Name="buttonFill" SizeDefinition="Medium" Header="Fill" Click="buttonFill_Click" >
@@ -74,12 +75,12 @@
                                 <Image Source="Resource/Icon/60420.PNG"></Image>
                                 <Rectangle Width="24" Height="6" VerticalAlignment="Bottom">
                                     <Rectangle.Fill>
-                                        <SolidColorBrush Color="Black"></SolidColorBrush>
+                                        <SolidColorBrush Color="{Binding FillColor}"></SolidColorBrush>
                                     </Rectangle.Fill>
                                 </Rectangle>
                             </Grid>
                         </Fluent:SplitButton.Icon>
-                        <Fluent:ColorGallery x:Name="buttonFillGallery" SelectedColor="Transparent">
+                        <Fluent:ColorGallery x:Name="buttonFillGallery" SelectedColor="{Binding FillColor, Mode=TwoWay}">
 
                         </Fluent:ColorGallery>
                     </Fluent:SplitButton>
@@ -123,7 +124,7 @@
 
                             </Fluent:RibbonToolBarLayoutDefinition>
                         </Fluent:RibbonToolBar.LayoutDefinitions>
-                        <Fluent:ComboBox x:Name="comboBoxFontName" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0" InputWidth="75">
+                        <Fluent:ComboBox x:Name="comboBoxFontName" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0" Text="{Binding test}" InputWidth="75">
                             <TextBlock Text="Arial"></TextBlock>
                             <TextBlock Text="Tahoma"></TextBlock>
                             <TextBlock Text="Arial1"></TextBlock>
@@ -150,12 +151,12 @@
                                     <Image Width="16" Height="16" Source="Resource/Icon/Text.png"></Image>
                                     <Rectangle Width="16" Height="3" VerticalAlignment="Bottom">
                                         <Rectangle.Fill>
-                                            <SolidColorBrush Color="Black"></SolidColorBrush>
+                                            <SolidColorBrush Color="{Binding FontColor}"></SolidColorBrush>
                                         </Rectangle.Fill>
                                     </Rectangle>
                                 </Grid>
                             </Fluent:DropDownButton.Icon>
-                            <Fluent:ColorGallery>
+                            <Fluent:ColorGallery SelectedColor="{Binding FontColor, Mode=TwoWay}">
 
                             </Fluent:ColorGallery>
                         </Fluent:DropDownButton>
