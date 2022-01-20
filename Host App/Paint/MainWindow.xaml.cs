@@ -90,7 +90,7 @@ namespace Paint
             _preview.Color = (Color)(buttonOutlineGallery.SelectedColor);
             _preview.Thickness = (int)buttonStrokeSize.Value;
             _preview.StrokeType = StrokeTypes[buttonStrokeType.SelectedIndex];
-            //_preview.Fill = (Color)(buttonOutlineGallery.SelectedColor);
+            _preview.Fill = (Color)(buttonOutlineGallery.SelectedColor);
         }
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -638,6 +638,15 @@ namespace Paint
                 //khỏi phải vẽ lại
                 DrawCanvas.Children.RemoveAt(_selectedShapeIndex.Value);
 
+            }
+        }
+
+        private void buttonFill_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectButton.IsChecked ?? false&&_selectedShapeIndex!=null)
+            {
+                _shapes[_selectedShapeIndex.Value].Fill = (Color)buttonFillGallery.SelectedColor;
+                ReDraw();
             }
         }
     }

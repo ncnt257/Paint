@@ -68,8 +68,8 @@
                         <Fluent:ColorGallery x:Name="buttonOutlineGallery" SelectedColor="Black">
                         </Fluent:ColorGallery>
                     </Fluent:DropDownButton>
-                    <Fluent:DropDownButton x:Name="buttonFill" SizeDefinition="Medium" Header="Fill">
-                        <Fluent:DropDownButton.Icon>
+                    <Fluent:SplitButton x:Name="buttonFill" SizeDefinition="Medium" Header="Fill" Click="buttonFill_Click" >
+                        <Fluent:SplitButton.Icon>
                             <Grid>
                                 <Image Source="Resource/Icon/60420.PNG"></Image>
                                 <Rectangle Width="24" Height="6" VerticalAlignment="Bottom">
@@ -78,11 +78,11 @@
                                     </Rectangle.Fill>
                                 </Rectangle>
                             </Grid>
-                        </Fluent:DropDownButton.Icon>
-                        <Fluent:ColorGallery>
+                        </Fluent:SplitButton.Icon>
+                        <Fluent:ColorGallery x:Name="buttonFillGallery" SelectedColor="Transparent">
 
                         </Fluent:ColorGallery>
-                    </Fluent:DropDownButton>
+                    </Fluent:SplitButton>
                     <Fluent:DropDownButton x:Name="buttonSize" SizeDefinition="Medium" Icon="Resource/Icon/Size.PNG" Header="Size11">
                         <Fluent:MenuItem Icon="Resource/Icon/Size1.PNG" ></Fluent:MenuItem>
                         <Fluent:MenuItem Icon="Resource/Icon/Size2.PNG" ></Fluent:MenuItem>
