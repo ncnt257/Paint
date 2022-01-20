@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
 using Path = System.IO.Path;
@@ -58,10 +59,10 @@ namespace Paint
                 UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
                 
                 DrawCanvas.Children.Add(element);
+
+                //update acutual width và height để dùng adorner 
+                DrawCanvas.UpdateLayout();
                 
-
-
-
             }
         }
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
@@ -126,12 +127,37 @@ namespace Paint
                 // Thêm đối tượng cuối cùng vào mảng quản lí
 
                 _preview.HandleEnd(pos.X, pos.Y);
+
+                double previewSize = Math.Sqrt(Math.Pow((_preview.End.X - _preview.Start.X), 2) +
+                                               Math.Pow((_preview.End.Y - _preview.Start.Y), 2));
+                if (previewSize < 1)
+                {
+                    ReDraw();
+                    return;
+                };
+
                 _shapes.Add(_preview);
 
                 // Sinh ra đối tượng mẫu kế
                 _preview = _prototypes[_seletedPrototypeName].Clone();
 
                 ReDraw();
+                int i = _shapes.Count - 1;
+                _selectedShapeIndex = i;
+                if (_shapes[i].Name != "Line")
+                {
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
+                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
+                }
+                else
+                {
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
+                        .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
+                }
+
+                
+                
+
             }
 
         }
@@ -400,6 +426,7 @@ namespace Paint
         {
             _hook.MouseMove -= Hook_MouseMove;
             _hook.MouseUp -= Hook_MouseUp;
+            
 
         }
 
@@ -412,6 +439,7 @@ namespace Paint
             DrawCanvas.MouseLeftButtonDown += SelectShape;
             DrawCanvas.Cursor = Cursors.Arrow;
             ReDraw();
+
         }
 
         private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
@@ -462,8 +490,18 @@ namespace Paint
                 int i = _shapes.Count - 1;
                 
                 ReDraw();
-                
-                //Không hiểu sao chỗ này shape trong canvas có width và height = 0, nên không add Adorner được
+
+                //paste xong được sửa shape
+                if (_shapes[i].Name != "Line")
+                {
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
+                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
+                }
+                else
+                {
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
+                        .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
+                }
             }
         }
 
@@ -482,11 +520,12 @@ namespace Paint
         private void SelectShape(object sender,
             MouseButtonEventArgs e)
         {
-            
             if (_selectedShapeIndex != null)
             {
                 int index = _selectedShapeIndex.Value;
                 _shapes[_selectedShapeIndex.Value].IsSelected = false;
+
+                //remove adorner của shape khác
                 Adorner[] toRemoveArray =
                     AdornerLayer.GetAdornerLayer(DrawCanvas).GetAdorners(DrawCanvas.Children[index]);
                 if (toRemoveArray != null)
