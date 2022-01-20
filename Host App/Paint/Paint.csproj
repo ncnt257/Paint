@@ -18,6 +18,9 @@
     <None Remove="Resource\Icon\Size3.png" />
     <None Remove="Resource\Icon\Size4.png" />
     <None Remove="Resource\Icon\Undo.png" />
+    <None Remove="Resource\Icon\zoom.png" />
+    <None Remove="Resource\Icon\ZoomIn.png" />
+    <None Remove="Resource\Icon\ZoomOut.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,9 +46,17 @@
     <Resource Include="Resource\Icon\Move.png" />
     <Resource Include="Resource\Icon\Outline.png" />
     <Resource Include="Resource\Icon\Redo.png" />
-    <Resource Include="Resource\Icon\Strikethrough.png" />
+    <Resource Include="Resource\Icon\Strikethrough.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resource\Icon\Underline.png" />
     <Resource Include="Resource\Icon\Undo.png" />
+    <Resource Include="Resource\Icon\ZoomIn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\Icon\ZoomOut.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resource\IMAGE\60337.png" />
     <Resource Include="Resource\IMAGE\60340.png" />
   </ItemGroup>

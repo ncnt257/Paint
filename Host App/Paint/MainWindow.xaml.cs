@@ -40,6 +40,10 @@ namespace Paint
         IShape _preview;
         string _seletedPrototypeName = "";
 
+        //zooming
+        private float currentProportion = 100;
+        private int startZooming = 0;
+
         private readonly Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
 
@@ -435,8 +439,6 @@ namespace Paint
 
         }
 
-
-
         private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
         {
             foreach (var b in ShapeGroupBox.Items)
@@ -526,6 +528,8 @@ namespace Paint
 
 
 
+
+
         private void SelectShape(object sender,
             MouseButtonEventArgs e)
         {
@@ -576,6 +580,56 @@ namespace Paint
 
         }
 
+        private void Zoom(float newProp)
+        {
+            var st = new ScaleTransform();
+            DrawCanvas.RenderTransform = st;
+            float prop = (newProp / 100);
+            st.ScaleX = prop;
+            st.ScaleY = prop;
+            DrawCanvas.Height = (this.ActualHeight - 170) * prop;
+            DrawCanvas.Width = this.ActualWidth * prop;
+            if (newProp == 50)
+            {
+                DrawCanvas.Height = this.ActualHeight - 170; 
+                DrawCanvas.Width = this.ActualWidth;
+            }
+        }
+
+        private void ZoomInBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ZoomingSlider.Value = ZoomingSlider.Value+50;
+        }
+        private void ZoomOutBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ZoomingSlider.Value = ZoomingSlider.Value - 50;
+        }
+        
+        private void ZoomingSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (startZooming<3)
+            {
+                startZooming++;
+                return;
+            }
+            var c = this.Height;
+            var currentValue = (float)ZoomingSlider.Value;
+            Zoom(currentValue);
+
+            currentProportion = currentValue;
+            Proportion.Text = $"{currentProportion}%";
+        }
+
+        private void PaintMainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (this.ActualHeight < 300 )
+            {
+                return;
+            }
+
+            DrawCanvas.Height = this.ActualHeight- 170;
+            DrawCanvas.Width = this.ActualWidth;
+        }
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (_selectedShapeIndex is not null)
