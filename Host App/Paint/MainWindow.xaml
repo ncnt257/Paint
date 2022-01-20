@@ -47,7 +47,7 @@
                   
 
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox x:Name="Shape" Header="Shape" MinWidth="50" HorizontalContentAlignment="Left">
+                <Fluent:RibbonGroupBox x:Name="ShapeGroupBox" Header="Shape" MinWidth="50" HorizontalContentAlignment="Left">
 
 
                 </Fluent:RibbonGroupBox>

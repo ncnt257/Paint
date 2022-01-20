@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
+using Line2D;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
 
@@ -174,12 +175,15 @@ namespace Paint
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Line2D.Line2D linePrototype = new();
+            _prototypes.Add(linePrototype.Name, linePrototype);
             var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
             var dlls = new DirectoryInfo(exeFolder).GetFiles("*.dll");
-
+           
             foreach (var dll in dlls)
             {
                 if (dll.Name == "ControlzEx.dll") continue;
+                if (dll.Name == "Line2D.dll") continue;
                 var assembly = Assembly.LoadFile(dll.FullName);
 
                 var types = assembly.GetTypes();
@@ -211,11 +215,12 @@ namespace Paint
 
                 };
                 button.Click += prototypeButton_Click;
-                Shape.Items.Add(button);
+                ShapeGroupBox.Items.Add(button);
             }
 
             if (_prototypes.Count > 0)
             {
+                (ShapeGroupBox.Items[0] as Fluent.ToggleButton).IsChecked = true;
                 _seletedPrototypeName = _prototypes.First().Value.Name;
                 _preview = _prototypes[_seletedPrototypeName].Clone();
             }
@@ -227,7 +232,7 @@ namespace Paint
             button.Icon = "Resource/IMAGE/60340.PNG";
             button.SizeDefinition = "Small";
             button.GroupName = "Shape";
-            Shape.Items.Add(button);
+            ShapeGroupBox.Items.Add(button);
 
         }
 
@@ -434,6 +439,10 @@ namespace Paint
 
         private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
         {
+            foreach (var b in ShapeGroupBox.Items)
+            {
+                (b as Fluent.ToggleButton).IsChecked = false;
+            }
             _isDrawing = false;
             DrawCanvas.MouseDown -= Canvas_MouseDown;
             DrawCanvas.MouseLeftButtonDown += SelectShape;
