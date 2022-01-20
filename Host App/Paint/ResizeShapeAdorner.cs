@@ -239,13 +239,6 @@ namespace Paint
             return visualCollection[index];
         }
 
-        protected override int VisualChildrenCount
-        {
-            get
-            {
-                return visualCollection.Count;
-            }
-        }
-
+        protected override int VisualChildrenCount => visualCollection.Count;
     }
 }

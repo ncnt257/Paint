@@ -575,6 +575,16 @@ namespace Paint
             
 
         }
-        
+
+        private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedShapeIndex is not null)
+            {
+                _shapes.RemoveAt(_selectedShapeIndex.Value);
+                //khỏi phải vẽ lại
+                DrawCanvas.Children.RemoveAt(_selectedShapeIndex.Value);
+
+            }
+        }
     }
 }
