@@ -55,13 +55,12 @@ namespace Paint
             new Dictionary<string, IShape>();
 
         //Properties menu
-        new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
+        List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
 
         public event PropertyChangedEventHandler? PropertyChanged = null;
 
         public MainWindow()
         {
-
             InitializeComponent();
         }
 
@@ -652,9 +651,11 @@ namespace Paint
         {
             if (_selectedShapeIndex is not null)
             {
+
                 _shapes.RemoveAt(_selectedShapeIndex.Value);
                 //khỏi phải vẽ lại
                 DrawCanvas.Children.RemoveAt(_selectedShapeIndex.Value);
+                _selectedShapeIndex = null;
 
             }
         }
