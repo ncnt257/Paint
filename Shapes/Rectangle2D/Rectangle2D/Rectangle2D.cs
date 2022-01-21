@@ -12,6 +12,7 @@ namespace Rectangle2D
 {
     class Rectangle2D : IShape
     {
+        public int isShift { get; set; }
         public string Name => "Rectangle";
         public Point2D Start { get; set; }
         public Point2D End { get; set; }
@@ -27,11 +28,27 @@ namespace Rectangle2D
             End = new Point2D();
             Fill = Colors.Transparent;
         }
-        public UIElement Draw(bool isSelectMode, bool isOnTopLayer)
-        {
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift)
 
-            var width = End.X - Start.X;
-            var height = End.Y - Start.Y;
+        {
+            double width = End.X - Start.X;
+            double height = End.Y - Start.Y;
+
+            if (isShift == 0)
+            {
+                isShift = shift;
+            }
+            if (isShift == 1)
+            {
+                if (width * height > 0)
+                {
+                    height = width;
+                }
+                else
+                {
+                    height = -1 * width;
+                }
+            }
             var rectangle = new Rectangle()
             {
                 Width = (int)Math.Abs(width),
@@ -41,8 +58,6 @@ namespace Rectangle2D
                 Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
                 Fill = new SolidColorBrush(Fill),
-
-
             };
             if (isSelectMode && isOnTopLayer)
             {

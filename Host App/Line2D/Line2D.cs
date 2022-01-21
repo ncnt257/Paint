@@ -13,6 +13,7 @@ namespace Line2D
 {
     public class Line2D : IShape
     {
+        public int isShift { get; set; }
         public string Name => "Line";
         public Point2D Start { get; set; }
         public Point2D End { get; set; }
@@ -32,7 +33,8 @@ namespace Line2D
             End = new Point2D() { X = x, Y = y };
         }
 
-        public UIElement Draw(bool isSelectMode, bool isOnTopLayer)
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer,int shift)
+
         {
             Line l = new Line()
             {
