@@ -81,19 +81,22 @@ namespace Paint
             layers[_currentLayer]._shapes = _shapes;
 
             //Duyệt xem layer nào được check thì vẽ
-            for (int i = 0; i < layers.Count(); i++)
+            bool isTopLayer = true;
+            for (int i = layers.Count() -1 ; i >= 0; i--)
             {
                 if (layers[i].isChecked)
                 {
                     foreach (var shape in layers[i]._shapes)
                     {
-                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
+                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false, isTopLayer);
 
                         DrawCanvas.Children.Add(element);
 
                         //update acutual width và height để dùng adorner 
                         DrawCanvas.UpdateLayout();
                     }
+
+                    isTopLayer = false;
                 }
                 
             }
@@ -145,7 +148,7 @@ namespace Paint
                 ReDraw();
 
                 // Vẽ hình preview đè lên
-                DrawCanvas.Children.Add(_preview.Draw(SelectButton.IsChecked ?? false));
+                DrawCanvas.Children.Add(_preview.Draw(SelectButton.IsChecked ?? false, true));
 
 
             }
@@ -709,6 +712,9 @@ namespace Paint
                 if (layers[i].isChecked) {
                     _currentLayer = i;
                     _shapes = layers[i]._shapes;
+                    _selectedShapeIndex = null;
+                    _cutSelectedShapeIndex = null;
+                    _copiedShape = null;
                     break;
                 }
             }

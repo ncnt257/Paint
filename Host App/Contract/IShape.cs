@@ -24,7 +24,7 @@ namespace Contract
             MouseButtonEventArgs e);
 
 
-        UIElement Draw(bool isSelectMode);
+        UIElement Draw(bool isSelectMode, bool isOnTopLayer);
         IShape Clone();
 
 
