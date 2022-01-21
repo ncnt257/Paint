@@ -106,7 +106,7 @@
 
                 
                 <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" Height="120">
-                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Width="100" Height="100" Canvas.Left="670" Canvas.Top="28" ScrollViewer.VerticalScrollBarVisibility="Visible" >
+                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="100" Canvas.Left="670" Canvas.Top="28" ScrollViewer.VerticalScrollBarVisibility="Visible" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="15">
