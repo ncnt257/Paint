@@ -54,6 +54,7 @@ namespace Paint
         //Layer
         BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0)};
         private int _currentLayer = -1;
+        private int lowerLayersShapesCount;
 
         //zooming
         private float currentProportion = 100;
@@ -157,13 +158,13 @@ namespace Paint
                 //paste xong được sửa shape
                 if (_shapes[i].Name != "Line")
                 {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                 }
                 else
                 {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                        .Add(new ResizeLineAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                 }
                 //DrawCanvas.MouseUp -= GetPoint_MouseUp;
                 //shortcutText.Clear();
@@ -303,13 +304,13 @@ namespace Paint
                 _selectedShapeIndex = i;
                 if (_shapes[i].Name != "Line")
                 {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                 }
                 else
                 {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                        .Add(new ResizeLineAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                 }
 
             }
@@ -671,13 +672,13 @@ namespace Paint
                 //paste xong được sửa shape
                 if (_shapes[i].Name != "Line")
                 {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                 }
                 else
                 {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
+                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                        .Add(new ResizeLineAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                 }
                 /*var cs = _copiedShape.Clone();
                 
@@ -733,7 +734,7 @@ namespace Paint
 
                 //remove adorner của shape khác
                 Adorner[] toRemoveArray =
-                    AdornerLayer.GetAdornerLayer(DrawCanvas).GetAdorners(DrawCanvas.Children[index]);
+                    AdornerLayer.GetAdornerLayer(DrawCanvas).GetAdorners(DrawCanvas.Children[lowerLayersShapesCount + index]);
                 if (toRemoveArray != null)
                 {
                     for (int x = 0; x < toRemoveArray.Length; x++)
@@ -743,11 +744,7 @@ namespace Paint
                 }
 
             };
-            int count = 0;
-            foreach (var shape in _shapes)
-            {
-                if (shape.IsSelected) count++;
-            }
+
             for (int i = _shapes.Count - 1; i >= 0; i--)
             {
                 if (_shapes[i].IsSelected)
@@ -756,13 +753,13 @@ namespace Paint
                     choosenShape = i;
                     if (_shapes[i].Name!="Line")
                     {
-                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                            .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
+                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                            .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                     }
                     else
                     {
-                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                            .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
+                        AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                            .Add(new ResizeLineAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
                     }
 
                     //ReDraw();
@@ -832,7 +829,7 @@ namespace Paint
 
                 _shapes.RemoveAt(_selectedShapeIndex.Value);
                 //khỏi phải vẽ lại
-                DrawCanvas.Children.RemoveAt(_selectedShapeIndex.Value);
+                DrawCanvas.Children.RemoveAt(lowerLayersShapesCount + _selectedShapeIndex.Value);
                 _selectedShapeIndex = null;
 
             }
@@ -874,6 +871,14 @@ namespace Paint
                     }
                     
                     _shapes = layers[i]._shapes;
+                    lowerLayersShapesCount = 0;
+                    for (int k = 0; k<i;k++)
+                    {
+                        lowerLayersShapesCount += layers[k]._shapes.Count;
+                    }
+                   
+
+
                     _cutSelectedShapeIndex = null;
                     _copiedShape = null;
                     break;
