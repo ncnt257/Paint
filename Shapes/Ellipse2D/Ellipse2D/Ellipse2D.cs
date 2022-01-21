@@ -28,7 +28,8 @@ namespace Ellipse2D
         }
 
 
-        public UIElement Draw(bool isSelectMode, int shift)
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift)
+
         {
             double width = End.X - Start.X;
             double height = End.Y - Start.Y;
@@ -60,7 +61,7 @@ namespace Ellipse2D
 
             };
 
-            if (isSelectMode)
+            if (isSelectMode && isOnTopLayer)
             {
                 ellipse.Cursor = Cursors.Hand;
                 ellipse.MouseLeftButtonDown += ShapeSelected;

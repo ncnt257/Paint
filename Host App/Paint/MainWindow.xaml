@@ -20,6 +20,32 @@
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                         Loaded="RibbonWindow_Loaded" Closing="MainWindow_OnClosing"
                      SizeChanged="PaintMainWindow_SizeChanged">
+    <Fluent:RibbonWindow.Resources>
+        <Style TargetType="{x:Type CheckBox}" x:Key="EyeCheckboxStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="checkboxImage" Source="../Resource/Icon/disable-eye.png" Width="32"/>
+                            <ContentPresenter/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkboxImage" Property="Source" Value="../Resource/Icon/eye.png"/>
+                            </Trigger>
+                            <!--<MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="checkboxImage" Property="Source" Value="../Resource/Icon/cross.png"/>
+                            </MultiTrigger>-->
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Fluent:RibbonWindow.Resources>
 
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top" Name="Ribbon">
@@ -33,7 +59,7 @@
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
 
-            <Fluent:RibbonTabItem Header="Home">
+            <Fluent:RibbonTabItem Header="Home" >
 
                 <Fluent:RibbonGroupBox Header="Clipboard">
                     <Fluent:SplitButton  Header="Paste" Name="PasteSplitButton" Click="PasteSplitButton_OnClick"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
@@ -60,8 +86,12 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Color">
 
-                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline">
-                        <Fluent:DropDownButton.Icon>
+
+
+
+                    <Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline" Click="buttonOutline_Click">
+                        <Fluent:SplitButton.Icon>
+
                             <Grid>
                                 <Image Source="Resource/Icon/Outline.PNG"></Image>
                                 <Rectangle Width="35" Height="6" VerticalAlignment="Bottom">
@@ -70,10 +100,10 @@
                                     </Rectangle.Fill>
                                 </Rectangle>
                             </Grid>
-                        </Fluent:DropDownButton.Icon>
+                        </Fluent:SplitButton.Icon>
                         <Fluent:ColorGallery x:Name="buttonOutlineGallery" SelectedColor="{Binding OutlineColor, Mode=TwoWay}">
                         </Fluent:ColorGallery>
-                    </Fluent:DropDownButton>
+                    </Fluent:SplitButton>
                     <Fluent:SplitButton x:Name="buttonFill" SizeDefinition="Medium" Header="Fill" Click="buttonFill_Click" >
                         <Fluent:SplitButton.Icon>
                             <Grid>
@@ -89,7 +119,7 @@
 
                         </Fluent:ColorGallery>
                     </Fluent:SplitButton>
-                    
+
                     <Fluent:Spinner x:Name="buttonStrokeSize" Format="0 px" Header="Size" Value="1" InputWidth="75"></Fluent:Spinner>
                     <Fluent:ComboBox x:Name="buttonStrokeType" Header="Stroke" SelectedIndex="0" InputWidth="75">
                         <ComboBoxItem Content="Solid"></ComboBoxItem>
@@ -99,7 +129,37 @@
 
                     </Fluent:ComboBox>
                 </Fluent:RibbonGroupBox>
+
                 
+                <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" Height="120">
+                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="100" Canvas.Left="670" Canvas.Top="28" ScrollViewer.VerticalScrollBarVisibility="Visible" >
+                        <ListView.Resources>
+                            <ContextMenu x:Key="ItemContextMenu">
+                                <MenuItem x:Name="DeleteLayerBtn" Header="Delete" Click="DeleteLayerBtn_Click"></MenuItem>
+                            </ContextMenu>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}" >
+                                <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Height="15">
+                                    <Fluent:CheckBox Height="15" Padding="0 0 0 0" Margin="0 0 0 0" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Style="{StaticResource EyeCheckboxStyle}">
+                                        
+                                    </Fluent:CheckBox>
+                                    <TextBlock Height="15">Layer_</TextBlock>
+                                    <TextBlock Height="15" Text="{Binding index}"></TextBlock>
+                                </StackPanel>
+                                
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Fluent:Button  Header="Add" Icon="Resource/Icon/Add.PNG" SizeDefinition="medium" Click="AddLayerBtn_Click"></Fluent:Button>
+                    <Fluent:Button  Header="Delete" Icon="Resource/Icon/delete.PNG" SizeDefinition="medium" Click="DeleteLayerBtn_Click"></Fluent:Button>
+
+                </Fluent:RibbonGroupBox>
 
             </Fluent:RibbonTabItem>
 
@@ -111,10 +171,11 @@
             </Grid.RowDefinitions>
             <ScrollViewer
                 x:Name="CanvasScroll"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" materialDesign:ScrollViewerAssist.CornerRectangleVisibility="Collapsed">
-            <Canvas Height="285" Width="8000"
+                <Canvas Height="285" Width="8000"
                     x:Name="DrawCanvas" Background="White" Margin="4,2,0,0"
                     ClipToBounds="True"  MouseDown="Canvas_MouseDown"  Cursor="Cross" Loaded="DrawCanvas_OnLoaded">
-            </Canvas>
+                    
+                </Canvas>
             </ScrollViewer>
             <Grid Grid.Row="1" Background="#f0f0f0">
                 <Grid.ColumnDefinitions>

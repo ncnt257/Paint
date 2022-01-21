@@ -28,7 +28,8 @@ namespace Rectangle2D
             End = new Point2D();
             Fill = Colors.Transparent;
         }
-        public UIElement Draw(bool isSelectMode, int shift)
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift)
+
         {
             double width = End.X - Start.X;
             double height = End.Y - Start.Y;
@@ -58,7 +59,7 @@ namespace Rectangle2D
                 StrokeDashArray = StrokeType,
                 Fill = new SolidColorBrush(Fill),
             };
-            if (isSelectMode)
+            if (isSelectMode && isOnTopLayer)
             {
                 rectangle.Cursor = Cursors.Hand;
                 rectangle.MouseLeftButtonDown += ShapeSelected;
