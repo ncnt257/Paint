@@ -9,8 +9,12 @@
   <ItemGroup>
     <None Remove="Resource\Icon\add.png" />
     <None Remove="Resource\Icon\cross.png" />
+
     <None Remove="Resource\Icon\disable-eye.png" />
     <None Remove="Resource\Icon\eye.png" />
+
+    <None Remove="Resource\Icon\delete.png" />
+
     <None Remove="Resource\Icon\Move.png" />
     <None Remove="Resource\Icon\Outline.png" />
     <None Remove="Resource\Icon\paint.ico" />
@@ -28,8 +32,12 @@
 
   <ItemGroup>
     <Resource Include="Resource\Icon\add.png" />
+
     <Resource Include="Resource\Icon\disable-eye.png" />
     <Resource Include="Resource\Icon\eye.png" />
+
+    <Resource Include="Resource\Icon\delete.png" />
+
     <Resource Include="Resource\Icon\Paint.ico" />
     <Resource Include="Resource\Icon\Size1.png" />
     <Resource Include="Resource\Icon\Size2.png" />

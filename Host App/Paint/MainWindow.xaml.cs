@@ -891,5 +891,47 @@ namespace Paint
         {
             layers.Add(new Layer(layers.Count));
         }
+
+        private void DeleteLayerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListViewLayers.SelectedItems.Count == 0)
+                return;
+            layers.RemoveAt(ListViewLayers.SelectedIndex);
+            _currentLayer = -1;
+
+            //Cập nhật lại tên layer
+            for(int i = 0; i < layers.Count(); i++)
+            {
+                layers[i].index = i;
+            }
+
+            //đây là hàm toggle layer ở trên
+            for (int i = layers.Count() - 1; i >= 0; i--)
+            {
+                if (layers[i].isChecked)
+                {
+                    _currentLayer = i;
+                    if (_selectedShapeIndex is not null)
+                    {
+                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                        _selectedShapeIndex = null;
+                    }
+
+                    _shapes = layers[i]._shapes;
+                    lowerLayersShapesCount = 0;
+                    for (int k = 0; k < i; k++)
+                    {
+                        if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+                    }
+
+
+
+                    _cutSelectedShapeIndex = null;
+                    _copiedShape = null;
+                    break;
+                }
+            }
+            ReDraw();
+        }
     }
 }
