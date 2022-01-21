@@ -31,6 +31,13 @@ namespace Ellipse2D
         {
             var width = End.X - Start.X;
             var height = End.Y - Start.Y;
+            /*if (shift)
+            {
+                if (height * width < 0)
+                    height = -width;
+                else
+                    height = width;
+            }*/
             var ellipse = new Ellipse()
             {
                 Width = (int)Math.Abs(width),

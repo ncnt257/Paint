@@ -9,21 +9,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
-using Line2D;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
-using System.Text;
-using System.Threading;
-using Application = System.Windows.Forms.Application;
-using ApplicationWindow = System.Windows.Application;
 
 namespace Paint
 {
@@ -63,7 +57,7 @@ namespace Paint
 
         //Properties menu
         List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
-        
+
         public event PropertyChangedEventHandler? PropertyChanged = null;
 
         public MainWindow()
@@ -71,7 +65,7 @@ namespace Paint
             InitializeComponent();
             var window = Window.GetWindow(this);
             window.KeyDown += HandleKeyPress;
-            
+
         }
 
         private void GetPoint_MouseUp(object sender, MouseEventArgs e)
@@ -122,13 +116,13 @@ namespace Paint
 
         private void ReDraw()//xóa và vẽ lại
         {
-           
+
             DrawCanvas.Children.Clear();
             foreach (var shape in _shapes)
             {
                 //bool shift = shortcutText.ToString().Contains("shift");
                 UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
-                
+
                 DrawCanvas.Children.Add(element);
 
                 //update acutual width và height để dùng adorner 
@@ -250,7 +244,7 @@ namespace Paint
             _prototypes.Add(linePrototype.Name, linePrototype);
             var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
             var dlls = new DirectoryInfo(exeFolder).GetFiles("*.dll");
-           
+
             foreach (var dll in dlls)
             {
                 if (dll.Name == "ControlzEx.dll") continue;
@@ -307,20 +301,7 @@ namespace Paint
 
         }
 
-        private void buttonSave_Click(object sender, RoutedEventArgs e)
-        {
-            if (FilePath == "")
-            {
-                buttonSaveAs_Click(sender, e);
-                return;
-            }
-            string ext = Path.GetExtension(FilePath);
-            Debug.Write(ext);
-            DrawCanvas.UpdateLayout();
-            CreateBitmapFromVisual(DrawCanvas, FilePath, ext);
-        }
-
-        private void buttonSaveAs_Click(object sender, RoutedEventArgs e)
+        private void SaveAs()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExt = "png";
@@ -349,6 +330,30 @@ namespace Paint
                         break;
                 }
             }
+        }
+
+        private void Save()
+        {
+            if (FilePath == "")
+            {
+                //buttonSaveAs_Click(sender, e);
+                SaveAs();
+                return;
+            }
+            string ext = Path.GetExtension(FilePath);
+            Debug.Write(ext);
+            DrawCanvas.UpdateLayout();
+            CreateBitmapFromVisual(DrawCanvas, FilePath, ext);
+        }
+
+        private void buttonSave_Click(object sender, RoutedEventArgs e)
+        {
+            Save();
+        }
+
+        private void buttonSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveAs();
         }
 
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
@@ -505,7 +510,7 @@ namespace Paint
         {
             _hook.MouseMove -= Hook_MouseMove;
             _hook.MouseUp -= Hook_MouseUp;
-            
+
 
         }
 
@@ -630,7 +635,7 @@ namespace Paint
                 if (_shapes[i].IsSelected)
                 {
                     _selectedShapeIndex = i;
-                    if (_shapes[i].Name!="Line")
+                    if (_shapes[i].Name != "Line")
                     {
                         AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
                             .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
@@ -661,23 +666,23 @@ namespace Paint
             DrawCanvas.Width = this.ActualWidth * prop;
             if (newProp == 50)
             {
-                DrawCanvas.Height = this.ActualHeight - 170; 
+                DrawCanvas.Height = this.ActualHeight - 170;
                 DrawCanvas.Width = this.ActualWidth;
             }
         }
 
         private void ZoomInBtn_Click(object sender, RoutedEventArgs e)
         {
-            ZoomingSlider.Value = ZoomingSlider.Value+50;
+            ZoomingSlider.Value = ZoomingSlider.Value + 50;
         }
         private void ZoomOutBtn_Click(object sender, RoutedEventArgs e)
         {
             ZoomingSlider.Value = ZoomingSlider.Value - 50;
         }
-        
+
         private void ZoomingSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (startZooming<3)
+            if (startZooming < 3)
             {
                 startZooming++;
                 return;
@@ -797,23 +802,27 @@ namespace Paint
                     _cutSelectedShapeIndex = _selectedShapeIndex;
                 }
             }
+            if (shortcutText.ToString() == "Ctrl+S")
+            {
+                Save();
+            }
 
             testblock.Text = shortcutText.ToString();
         }
 
         private void PaintMainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (this.ActualHeight < 300 )
+            if (this.ActualHeight < 300)
             {
                 return;
             }
 
-            DrawCanvas.Height = this.ActualHeight- 170;
+            DrawCanvas.Height = this.ActualHeight - 170;
             DrawCanvas.Width = this.ActualWidth;
         }
         private void buttonFill_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectButton.IsChecked ?? false&&_selectedShapeIndex!=null)
+            if (SelectButton.IsChecked ?? false && _selectedShapeIndex != null)
             {
                 _shapes[_selectedShapeIndex.Value].Fill = FillColor;
                 ReDraw();

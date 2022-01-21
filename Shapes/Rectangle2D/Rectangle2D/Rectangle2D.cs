@@ -32,6 +32,13 @@ namespace Rectangle2D
 
             var width = End.X - Start.X;
             var height = End.Y - Start.Y;
+            /*if (shift)
+            {
+                if (height * width < 0)
+                    height = -width;
+                else
+                    height = width;
+            }*/
             var rectangle = new Rectangle()
             {
                 Width = (int)Math.Abs(width),
@@ -41,8 +48,6 @@ namespace Rectangle2D
                 Stroke = new SolidColorBrush(Color),
                 StrokeDashArray = StrokeType,
                 Fill = new SolidColorBrush(Fill),
-
-
             };
             if (isSelectMode)
             {
