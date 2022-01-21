@@ -63,7 +63,7 @@ namespace Paint
 
         //Properties menu
         List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
-
+        
         public event PropertyChangedEventHandler? PropertyChanged = null;
 
         public MainWindow()
@@ -180,6 +180,7 @@ namespace Paint
 
         private void ReDraw()//xóa và vẽ lại
         {
+           
             DrawCanvas.Children.Clear();
             foreach (var shape in _shapes)
             {
