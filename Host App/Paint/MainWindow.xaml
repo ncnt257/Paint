@@ -194,7 +194,9 @@
                 </StackPanel>
                 <Border Grid.Column="1" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
-                <Label Grid.Column="1" Name="ShapeSize"></Label>
+                <Label Grid.Column="1" Name="ShapeSize">
+                    <TextBlock x:Name="testblock"></TextBlock>
+                </Label>
                 <Border Grid.Column="2" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
                 <Label Grid.Column="2" Width="250">
