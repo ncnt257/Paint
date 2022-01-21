@@ -20,6 +20,32 @@
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                         Loaded="RibbonWindow_Loaded" Closing="MainWindow_OnClosing"
                      SizeChanged="PaintMainWindow_SizeChanged">
+    <Fluent:RibbonWindow.Resources>
+        <Style TargetType="{x:Type CheckBox}" x:Key="EyeCheckboxStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="checkboxImage" Source="../Resource/Icon/disable-eye.png" Width="32"/>
+                            <ContentPresenter/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkboxImage" Property="Source" Value="../Resource/Icon/eye.png"/>
+                            </Trigger>
+                            <!--<MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="checkboxImage" Property="Source" Value="../Resource/Icon/cross.png"/>
+                            </MultiTrigger>-->
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Fluent:RibbonWindow.Resources>
 
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top" Name="Ribbon">
@@ -120,7 +146,9 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="15">
-                                    <Fluent:CheckBox Height="15" Padding="0 0 0 0" Margin="0 0 0 0" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click"></Fluent:CheckBox>
+                                    <Fluent:CheckBox Height="15" Padding="0 0 0 0" Margin="0 0 0 0" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Style="{StaticResource EyeCheckboxStyle}">
+                                        
+                                    </Fluent:CheckBox>
                                     <TextBlock Height="15">Layer_</TextBlock>
                                     <TextBlock Height="15" Text="{Binding index}"></TextBlock>
                                 </StackPanel>
