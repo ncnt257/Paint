@@ -50,7 +50,7 @@ namespace Paint
 
         //Layer
         BindingList<Layer> layers = new BindingList<Layer>() { new Layer(), new Layer(), new Layer() };
-        private int _currentLayer = 0;
+        private int _currentLayer = -1;
 
         //zooming
         private float currentProportion = 100;
@@ -73,8 +73,10 @@ namespace Paint
 
         private void ReDraw()//xóa và vẽ lại
         {
-
             DrawCanvas.Children.Clear();
+
+            if (_currentLayer == -1)
+                return;
 
             layers[_currentLayer]._shapes = _shapes;
 
@@ -106,17 +108,8 @@ namespace Paint
         private void Canvas_MouseDown(object sender,
             MouseButtonEventArgs e)
         {
-
-            //MessageBox.Show(ListViewLayers.SelectedItems.Count.ToString());
-            //MessageBox.Show(ListViewLayers.SelectedItems.Count.ToString());
-
-            ////Check xem nếu không có layer nào được chọn thì không cho vẽ
-            //if (ListViewLayers.SelectedItems.Count == 0)
-            //{
-            //    MessageBox.Show("Chưa có layer nào được chọn");
-            //    return;
-            //}
-
+            if (_currentLayer == -1)
+                return;
             _isDrawing = true;
 
             Point pos = e.GetPosition(DrawCanvas);
@@ -710,10 +703,7 @@ namespace Paint
 
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show(ListViewLayers.SelectedItems.Count.ToString());
-
-            //Xác định currentlayer
-            //TODO chưa tính trường hợp k có layer nào được chọn
+            _currentLayer = -1;
             for (int i = layers.Count()-1; i >=0; i--)
             {
                 if (layers[i].isChecked) {
