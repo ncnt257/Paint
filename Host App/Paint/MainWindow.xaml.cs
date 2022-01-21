@@ -138,7 +138,10 @@ namespace Paint
                 cs.End.Y += lengthY;
                 cs.IsSelected = true;
                 _shapes.Add(cs);
-                //_shapes[_selectedShapeIndex.Value].IsSelected = false;
+                if (_selectedShapeIndex is not null)
+                {
+                    _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                }
                 _copiedShape = cs;
                 if (_cutSelectedShapeIndex is not null)
                 {
@@ -647,7 +650,10 @@ namespace Paint
                 cs.End.Y += 10;
                 cs.IsSelected = true;
                 _shapes.Add(cs);
-                //_shapes[_selectedShapeIndex.Value].IsSelected = false;
+                if (_selectedShapeIndex is not null)
+                {
+                    _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                }
                 _copiedShape = cs;
                 if (_cutSelectedShapeIndex is not null)
                 {
@@ -716,6 +722,8 @@ namespace Paint
 
         private void SelectShape(object sender, MouseButtonEventArgs e)
         {
+            
+
             if (_selectedShapeIndex != null)
             {
                 int index = _selectedShapeIndex.Value;
@@ -733,6 +741,11 @@ namespace Paint
                 }
 
             };
+            int count = 0;
+            foreach (var shape in _shapes)
+            {
+                if (shape.IsSelected) count++;
+            }
             for (int i = _shapes.Count - 1; i >= 0; i--)
             {
                 if (_shapes[i].IsSelected)
@@ -852,8 +865,13 @@ namespace Paint
             {
                 if (layers[i].isChecked) {
                     _currentLayer = i;
+                    if (_selectedShapeIndex is not null)
+                    {
+                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                        _selectedShapeIndex = null;
+                    }
+                    
                     _shapes = layers[i]._shapes;
-                    _selectedShapeIndex = null;
                     _cutSelectedShapeIndex = null;
                     _copiedShape = null;
                     break;
