@@ -61,10 +61,9 @@
                 <Fluent:RibbonGroupBox Header="Color">
 
 
-                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline">
-                        <Fluent:DropDownButton.Icon>
+                    
 
-                    <Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1" Click="buttonOutline_Click">
+<Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1" Click="buttonOutline_Click">
                         <Fluent:SplitButton.Icon>
 
                             <Grid>
@@ -102,7 +101,7 @@
                         <ComboBoxItem Content="Dot"></ComboBoxItem>
                         <ComboBoxItem Content="Dash Dot"></ComboBoxItem>
 
-                    </Fluent:ComboBox>
+                            </Fluent:ComboBox>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox x:Name="Font" Header="Font">
@@ -173,10 +172,7 @@
                     <ListView Name="ListViewLayers" Margin="0 0 0 0" ScrollViewer.HorizontalScrollBarVisibility="Visible" Width="500">
                         <ListView.ItemTemplate >
                             <DataTemplate>
-                                <StackPanel>
-                                    <Fluent:ToggleButton SizeDefinition="small" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click"></Fluent:ToggleButton>
-                                    <TextBlock>1</TextBlock>
-                                </StackPanel>
+                                <Fluent:ToggleButton SizeDefinition="small" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Header="sad"> </Fluent:ToggleButton>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         
