@@ -52,8 +52,8 @@ namespace Paint
         public Color FontColor { get; set; }
 
         //Layer
-        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0)};
-        private int _currentLayer = -1;
+        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0,true)};
+        private int _currentLayer = 0;
         private int lowerLayersShapesCount;
 
         //zooming
@@ -228,7 +228,7 @@ namespace Paint
         {
             if (_currentLayer == -1)
             {
-                MessageBox.Show("Vui lòng chọn layer");
+                MessageBox.Show("Please choose atleast 1 layer");
                 return;
             }
             _isDrawing = true;

@@ -33,7 +33,7 @@
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
 
-            <Fluent:RibbonTabItem Header="Home">
+            <Fluent:RibbonTabItem Header="Home" >
 
                 <Fluent:RibbonGroupBox Header="Clipboard">
                     <Fluent:SplitButton  Header="Paste" Name="PasteSplitButton" Click="PasteSplitButton_OnClick"   Icon="Resource/Icon/60329.PNG" SizeDefinition="Large">
@@ -63,7 +63,7 @@
 
 
 
-                    <Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1" Click="buttonOutline_Click">
+                    <Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline" Click="buttonOutline_Click">
                         <Fluent:SplitButton.Icon>
 
                             <Grid>
@@ -104,88 +104,21 @@
                     </Fluent:ComboBox>
                 </Fluent:RibbonGroupBox>
 
-                <Fluent:RibbonGroupBox x:Name="Font" Header="Font">
-                    <Fluent:RibbonToolBar>
-                        <Fluent:RibbonToolBar.LayoutDefinitions>
-                            <Fluent:RibbonToolBarLayoutDefinition>
-                                <Fluent:RibbonToolBarRow>
-                                    <Fluent:RibbonToolBarControlDefinition Target="comboBoxFontName"></Fluent:RibbonToolBarControlDefinition>
-                                    <Fluent:RibbonToolBarControlDefinition Target="comboBoxFontSize"></Fluent:RibbonToolBarControlDefinition>
-                                </Fluent:RibbonToolBarRow>
-                                <Fluent:RibbonToolBarRow>
-                                    <Fluent:RibbonToolBarControlGroupDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonBold"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonItalic"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonUnderline"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonStrikeThrough"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonSubscript"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonSuperscript"></Fluent:RibbonToolBarControlDefinition>
-                                    </Fluent:RibbonToolBarControlGroupDefinition>
-                                    <Fluent:RibbonToolBarControlGroupDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonTextHightlightColor"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonFontColor"></Fluent:RibbonToolBarControlDefinition>
-                                    </Fluent:RibbonToolBarControlGroupDefinition>
-                                </Fluent:RibbonToolBarRow>
-
-                            </Fluent:RibbonToolBarLayoutDefinition>
-                        </Fluent:RibbonToolBar.LayoutDefinitions>
-                        <Fluent:ComboBox x:Name="comboBoxFontName" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0" Text="{Binding test}" InputWidth="75">
-                            <TextBlock Text="Arial"></TextBlock>
-                            <TextBlock Text="Tahoma"></TextBlock>
-                            <TextBlock Text="Arial1"></TextBlock>
-                            <TextBlock Text="Arial2"></TextBlock>
-                            <TextBlock Text="Arial3"></TextBlock>
-                        </Fluent:ComboBox>
-                        <Fluent:ComboBox x:Name="comboBoxFontSize" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0">
-                            <TextBlock Text="6"></TextBlock>
-                            <TextBlock Text="8"></TextBlock>
-                            <TextBlock Text="10"></TextBlock>
-                            <TextBlock Text="12"></TextBlock>
-                            <TextBlock Text="14"></TextBlock>
-                            <TextBlock Text="16"></TextBlock>
-                        </Fluent:ComboBox>
-                        <Fluent:ToggleButton x:Name="buttonBold" Icon="Resource/Icon/Bold.png" SizeDefinition="small"></Fluent:ToggleButton>
-                        <Fluent:ToggleButton x:Name="buttonItalic" Icon="Resource/Icon/Italic.png" SizeDefinition="small"></Fluent:ToggleButton>
-                        <Fluent:ToggleButton x:Name="buttonUnderline" Icon="Resource/Icon/Underline.png" SizeDefinition="small"></Fluent:ToggleButton>
-                        <Fluent:ToggleButton x:Name="buttonStrikeThrough" Icon="Resource/Icon/Strikethrough.png" SizeDefinition="small"></Fluent:ToggleButton>
-
-
-                        <Fluent:DropDownButton x:Name="buttonFontColor" SizeDefinition="small" >
-                            <Fluent:DropDownButton.Icon>
-                                <Grid>
-                                    <Image Width="16" Height="16" Source="Resource/Icon/Text.png"></Image>
-                                    <Rectangle Width="16" Height="3" VerticalAlignment="Bottom">
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="{Binding FontColor}"></SolidColorBrush>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                </Grid>
-                            </Fluent:DropDownButton.Icon>
-                            <Fluent:ColorGallery SelectedColor="{Binding FontColor, Mode=TwoWay}">
-
-                            </Fluent:ColorGallery>
-                        </Fluent:DropDownButton>
-
-                    </Fluent:RibbonToolBar>
-                </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" >
-                    <ListView Name="ListViewLayers" Margin="0 0 0 0" ScrollViewer.HorizontalScrollBarVisibility="Visible" Width="200" Canvas.Left="670" Canvas.Top="28">
+                
+                <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" Height="120">
+                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Width="100" Height="100" Canvas.Left="670" Canvas.Top="28" ScrollViewer.VerticalScrollBarVisibility="Visible" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Fluent:ToggleButton SizeDefinition="small" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click"></Fluent:ToggleButton>
-                                    <TextBlock Text="{Binding index}">layerrr</TextBlock>
+                                <StackPanel Orientation="Horizontal" Height="15">
+                                    <Fluent:CheckBox Height="15" Padding="0 0 0 0" Margin="0 0 0 0" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click"></Fluent:CheckBox>
+                                    <TextBlock Height="15">Layer_</TextBlock>
+                                    <TextBlock Height="15" Text="{Binding index}"></TextBlock>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
-
-                        <!--<ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>-->
                     </ListView>
-                    <Fluent:Button x:Name="AddLayerBtn" Header="Add layer" Click="AddLayerBtn_Click"></Fluent:Button>
+                    <Fluent:Button  Header="Add" Icon="Resource/Icon/Add.PNG" SizeDefinition="medium" Click="AddLayerBtn_Click"></Fluent:Button>
+
                 </Fluent:RibbonGroupBox>
 
             </Fluent:RibbonTabItem>
