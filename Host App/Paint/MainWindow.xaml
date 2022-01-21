@@ -55,8 +55,8 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Color">
 
-                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1">
-                        <Fluent:DropDownButton.Icon>
+                    <Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1" Click="buttonOutline_Click">
+                        <Fluent:SplitButton.Icon>
                             <Grid>
                                 <Image Source="Resource/Icon/Outline.PNG"></Image>
                                 <Rectangle Width="35" Height="6" VerticalAlignment="Bottom">
@@ -65,10 +65,10 @@
                                     </Rectangle.Fill>
                                 </Rectangle>
                             </Grid>
-                        </Fluent:DropDownButton.Icon>
+                        </Fluent:SplitButton.Icon>
                         <Fluent:ColorGallery x:Name="buttonOutlineGallery" SelectedColor="{Binding OutlineColor, Mode=TwoWay}">
                         </Fluent:ColorGallery>
-                    </Fluent:DropDownButton>
+                    </Fluent:SplitButton>
                     <Fluent:SplitButton x:Name="buttonFill" SizeDefinition="Medium" Header="Fill" Click="buttonFill_Click" >
                         <Fluent:SplitButton.Icon>
                             <Grid>
@@ -84,12 +84,6 @@
 
                         </Fluent:ColorGallery>
                     </Fluent:SplitButton>
-                    <Fluent:DropDownButton x:Name="buttonSize" SizeDefinition="Medium" Icon="Resource/Icon/Size.PNG" Header="Size11">
-                        <Fluent:MenuItem Icon="Resource/Icon/Size1.PNG" ></Fluent:MenuItem>
-                        <Fluent:MenuItem Icon="Resource/Icon/Size2.PNG" ></Fluent:MenuItem>
-                        <Fluent:MenuItem Icon="Resource/Icon/Size3.PNG"></Fluent:MenuItem>
-                        <Fluent:MenuItem Icon="Resource/Icon/Size4.PNG"  ></Fluent:MenuItem>
-                    </Fluent:DropDownButton>
                     <Fluent:Spinner x:Name="buttonStrokeSize" Format="0 px" Header="Size" Value="1" InputWidth="75"></Fluent:Spinner>
                     <Fluent:ComboBox x:Name="buttonStrokeType" Header="Stroke" SelectedIndex="0" InputWidth="75">
                         <ComboBoxItem Content="Solid"></ComboBoxItem>
@@ -163,7 +157,25 @@
 
                     </Fluent:RibbonToolBar>
                 </Fluent:RibbonGroupBox>
-
+                <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" >
+                    <ListView Name="ListViewLayers" Margin="0 0 0 0" ScrollViewer.HorizontalScrollBarVisibility="Visible" Width="500">
+                        <ListView.ItemTemplate >
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Fluent:ToggleButton SizeDefinition="small" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click"></Fluent:ToggleButton>
+                                    <TextBlock>1</TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                    <Fluent:Button x:Name="AddLayerBtn" Header="Add layer" Click="AddLayerBtn_Click"></Fluent:Button>
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
         </Fluent:Ribbon>

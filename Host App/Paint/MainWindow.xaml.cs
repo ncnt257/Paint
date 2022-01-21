@@ -33,7 +33,8 @@ namespace Paint
         public static string FileName = Path.GetFileName(FilePath);
         private readonly IMouseEvents _hook = Hook.GlobalEvents();
         private bool _isDrawing = false;
-        readonly List<IShape> _shapes = new List<IShape>();
+        //TODO tao bỏ readonly được k ???
+        List<IShape> _shapes = new List<IShape>();
         private int? _selectedShapeIndex;
         private int? _cutSelectedShapeIndex;
         private IShape _copiedShape;
@@ -47,6 +48,10 @@ namespace Paint
         public Color FillColor { get; set; }
         public Color FontColor { get; set; }
 
+        //Layer
+        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(), new Layer(), new Layer() };
+        private int _currentLayer = 0;
+
         //zooming
         private float currentProportion = 100;
         private int startZooming = 0;
@@ -55,7 +60,7 @@ namespace Paint
             new Dictionary<string, IShape>();
 
         //Properties menu
-        new List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
+        List<DoubleCollection> StrokeTypes = new List<DoubleCollection>() { new DoubleCollection() { 1, 0 }, new DoubleCollection() { 6, 1 }, new DoubleCollection() { 1 }, new DoubleCollection() { 6, 1, 1, 1 } };
 
         public event PropertyChangedEventHandler? PropertyChanged = null;
 
@@ -68,15 +73,26 @@ namespace Paint
 
         private void ReDraw()//xóa và vẽ lại
         {
-            DrawCanvas.Children.Clear();
-            foreach (var shape in _shapes)
-            {
-                UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
-                
-                DrawCanvas.Children.Add(element);
 
-                //update acutual width và height để dùng adorner 
-                DrawCanvas.UpdateLayout();
+            DrawCanvas.Children.Clear();
+
+            layers[_currentLayer]._shapes = _shapes;
+
+            //Duyệt xem layer nào được check thì vẽ
+            for (int i = 0; i < layers.Count(); i++)
+            {
+                if (layers[i].isChecked)
+                {
+                    foreach (var shape in layers[i]._shapes)
+                    {
+                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
+
+                        DrawCanvas.Children.Add(element);
+
+                        //update acutual width và height để dùng adorner 
+                        DrawCanvas.UpdateLayout();
+                    }
+                }
                 
             }
         }
@@ -90,6 +106,17 @@ namespace Paint
         private void Canvas_MouseDown(object sender,
             MouseButtonEventArgs e)
         {
+
+            //MessageBox.Show(ListViewLayers.SelectedItems.Count.ToString());
+            //MessageBox.Show(ListViewLayers.SelectedItems.Count.ToString());
+
+            ////Check xem nếu không có layer nào được chọn thì không cho vẽ
+            //if (ListViewLayers.SelectedItems.Count == 0)
+            //{
+            //    MessageBox.Show("Chưa có layer nào được chọn");
+            //    return;
+            //}
+
             _isDrawing = true;
 
             Point pos = e.GetPosition(DrawCanvas);
@@ -132,6 +159,7 @@ namespace Paint
         }
         private void Hook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+
             if (_isDrawing)
             {
                 _isDrawing = false;
@@ -170,9 +198,6 @@ namespace Paint
                         .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
                 }
 
-                
-                
-
             }
 
         }
@@ -189,13 +214,15 @@ namespace Paint
 
         private void RibbonWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //Binding value
+
             OutlineColor = Colors.Black;
-            FillColor = Colors.Black;
-            OutlineColor = Colors.Black;
+            FillColor = Colors.Transparent;
             FontColor = Colors.Black;
-            test = "oke";
+
+            //set datacontext cho binding
             this.DataContext = this;
+            ListViewLayers.ItemsSource = layers;
+
 
             Line2D.Line2D linePrototype = new();
             _prototypes.Add(linePrototype.Name, linePrototype);
@@ -667,6 +694,40 @@ namespace Paint
                 ReDraw();
             }
 
+        }
+        private void buttonOutline_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectButton.IsChecked ?? false && _selectedShapeIndex != null)
+            {
+                _shapes[_selectedShapeIndex.Value].Color = OutlineColor;
+                ReDraw();
+            }
+        }
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show(ListViewLayers.SelectedItems.Count.ToString());
+
+            //Xác định currentlayer
+            //TODO chưa tính trường hợp k có layer nào được chọn
+            for (int i = layers.Count()-1; i >=0; i--)
+            {
+                if (layers[i].isChecked) {
+                    _currentLayer = i;
+                    _shapes = layers[i]._shapes;
+                    break;
+                }
+            }
+            ReDraw();
+        }
+
+        private void AddLayerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            layers.Add(new Layer());
         }
     }
 }
