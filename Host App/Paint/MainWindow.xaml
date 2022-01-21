@@ -61,9 +61,9 @@
                 <Fluent:RibbonGroupBox Header="Color">
 
 
-                    
 
-<Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1" Click="buttonOutline_Click">
+
+                    <Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1" Click="buttonOutline_Click">
                         <Fluent:SplitButton.Icon>
 
                             <Grid>
@@ -101,7 +101,7 @@
                         <ComboBoxItem Content="Dot"></ComboBoxItem>
                         <ComboBoxItem Content="Dash Dot"></ComboBoxItem>
 
-                            </Fluent:ComboBox>
+                    </Fluent:ComboBox>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox x:Name="Font" Header="Font">
@@ -169,18 +169,21 @@
                     </Fluent:RibbonToolBar>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" >
-                    <ListView Name="ListViewLayers" Margin="0 0 0 0" ScrollViewer.HorizontalScrollBarVisibility="Visible" Width="500">
-                        <ListView.ItemTemplate >
+                    <ListView Name="ListViewLayers" Margin="0 0 0 0" ScrollViewer.HorizontalScrollBarVisibility="Visible" Width="200" Canvas.Left="670" Canvas.Top="28">
+                        <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Fluent:ToggleButton SizeDefinition="small" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Header="sad"> </Fluent:ToggleButton>
+                                <StackPanel Orientation="Horizontal">
+                                    <Fluent:ToggleButton SizeDefinition="small" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click"></Fluent:ToggleButton>
+                                    <TextBlock Text="{Binding index}">layerrr</TextBlock>
+                                </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
-                        
-                        <ListView.ItemsPanel>
+
+                        <!--<ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel/>
                             </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
+                        </ListView.ItemsPanel>-->
                     </ListView>
                     <Fluent:Button x:Name="AddLayerBtn" Header="Add layer" Click="AddLayerBtn_Click"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
@@ -195,10 +198,11 @@
             </Grid.RowDefinitions>
             <ScrollViewer
                 x:Name="CanvasScroll"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" materialDesign:ScrollViewerAssist.CornerRectangleVisibility="Collapsed">
-            <Canvas Height="285" Width="8000"
+                <Canvas Height="285" Width="8000"
                     x:Name="DrawCanvas" Background="White" Margin="4,2,0,0"
                     ClipToBounds="True"  MouseDown="Canvas_MouseDown"  Cursor="Cross" Loaded="DrawCanvas_OnLoaded">
-            </Canvas>
+                    
+                </Canvas>
             </ScrollViewer>
             <Grid Grid.Row="1" Background="#f0f0f0">
                 <Grid.ColumnDefinitions>

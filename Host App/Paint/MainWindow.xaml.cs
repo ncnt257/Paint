@@ -52,7 +52,7 @@ namespace Paint
         public Color FontColor { get; set; }
 
         //Layer
-        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(), new Layer(), new Layer() };
+        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0)};
         private int _currentLayer = -1;
 
         //zooming
@@ -197,22 +197,20 @@ namespace Paint
             layers[_currentLayer]._shapes = _shapes;
 
             //Duyệt xem layer nào được check thì vẽ
-            bool isTopLayer = true;
-            for (int i = layers.Count() -1 ; i >= 0; i--)
+            for (int i = 0; i<layers.Count() ; i++)
             {
                 if (layers[i].isChecked)
                 {
                     foreach (var shape in layers[i]._shapes)
                     {
-                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false, isTopLayer);
+                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false,i==_currentLayer);
 
                         DrawCanvas.Children.Add(element);
 
                         //update acutual width và height để dùng adorner 
                         DrawCanvas.UpdateLayout();
                     }
-
-                    isTopLayer = false;
+                    
                 }
                 
             }
@@ -228,7 +226,10 @@ namespace Paint
             MouseButtonEventArgs e)
         {
             if (_currentLayer == -1)
+            {
+                MessageBox.Show("Vui lòng chọn layer");
                 return;
+            }
             _isDrawing = true;
 
             Point pos = e.GetPosition(DrawCanvas);
@@ -883,7 +884,7 @@ namespace Paint
 
         private void AddLayerBtn_Click(object sender, RoutedEventArgs e)
         {
-            layers.Add(new Layer());
+            layers.Add(new Layer(layers.Count));
         }
     }
 }
