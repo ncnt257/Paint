@@ -147,6 +147,7 @@ namespace Paint
                 if (previewSize < 1)
                 {
                     ReDraw();
+                    _selectedShapeIndex = null;
                     return;
                 };
 
