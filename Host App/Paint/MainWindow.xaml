@@ -132,7 +132,7 @@
 
                 
                 <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" Height="120">
-                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="100" ScrollViewer.VerticalScrollBarVisibility="Visible" >
+                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="100" Canvas.Left="670" Canvas.Top="28" ScrollViewer.VerticalScrollBarVisibility="Visible" >
                         <ListView.Resources>
                             <ContextMenu x:Key="ItemContextMenu">
                                 <MenuItem x:Name="DeleteLayerBtn" Header="Delete" Click="DeleteLayerBtn_Click"></MenuItem>
@@ -141,13 +141,12 @@
                         <ListView.ItemContainerStyle>
                             <Style TargetType="{x:Type ListViewItem}" >
                                 <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-                 
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="15">
-                                    <Fluent:CheckBox Height="15" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Style="{StaticResource EyeCheckboxStyle}">
+                                    <Fluent:CheckBox Height="15" Padding="0 0 0 0" Margin="0 0 0 0" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Style="{StaticResource EyeCheckboxStyle}">
                                         
                                     </Fluent:CheckBox>
                                     <TextBlock Height="15">Layer_</TextBlock>
