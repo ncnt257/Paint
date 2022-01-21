@@ -7,10 +7,15 @@
         xmlns:local="clr-namespace:Paint"
         mc:Ignorable="d"
         
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+
         Name="PaintMainWindow"
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                         Loaded="RibbonWindow_Loaded" Closing="MainWindow_OnClosing"
@@ -55,8 +60,13 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Color">
 
+
+                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline">
+                        <Fluent:DropDownButton.Icon>
+
                     <Fluent:SplitButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1" Click="buttonOutline_Click">
                         <Fluent:SplitButton.Icon>
+
                             <Grid>
                                 <Image Source="Resource/Icon/Outline.PNG"></Image>
                                 <Rectangle Width="35" Height="6" VerticalAlignment="Bottom">
@@ -84,6 +94,7 @@
 
                         </Fluent:ColorGallery>
                     </Fluent:SplitButton>
+
                     <Fluent:Spinner x:Name="buttonStrokeSize" Format="0 px" Header="Size" Value="1" InputWidth="75"></Fluent:Spinner>
                     <Fluent:ComboBox x:Name="buttonStrokeType" Header="Stroke" SelectedIndex="0" InputWidth="75">
                         <ComboBoxItem Content="Solid"></ComboBoxItem>
@@ -93,6 +104,7 @@
 
                     </Fluent:ComboBox>
                 </Fluent:RibbonGroupBox>
+
                 <Fluent:RibbonGroupBox x:Name="Font" Header="Font">
                     <Fluent:RibbonToolBar>
                         <Fluent:RibbonToolBar.LayoutDefinitions>
@@ -176,6 +188,7 @@
                     </ListView>
                     <Fluent:Button x:Name="AddLayerBtn" Header="Add layer" Click="AddLayerBtn_Click"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
+
             </Fluent:RibbonTabItem>
 
         </Fluent:Ribbon>
@@ -185,18 +198,16 @@
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
             <ScrollViewer
-                x:Name="CanvasScroll"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                x:Name="CanvasScroll"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" materialDesign:ScrollViewerAssist.CornerRectangleVisibility="Collapsed">
             <Canvas Height="285" Width="8000"
-                    x:Name="DrawCanvas" Background="White" AllowDrop="True" Margin="4,2,0,0"
+                    x:Name="DrawCanvas" Background="White" Margin="4,2,0,0"
                     ClipToBounds="True"  MouseDown="Canvas_MouseDown"  Cursor="Cross" Loaded="DrawCanvas_OnLoaded">
-                
-                    
             </Canvas>
             </ScrollViewer>
             <Grid Grid.Row="1" Background="#f0f0f0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -212,25 +223,23 @@
                 <Border Grid.Column="2" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
                 <Label Grid.Column="2" Width="250">
-                    <Grid Width="250">
+                    <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="5*"/>
-                            <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Width="30" Text="100%"
-                                    Name="Proportion" Grid.ColumnSpan="2" Margin="0,0,45,0"/>
-                        <Button Grid.Column="1" Width="20"
+                        <TextBlock Grid.Column="0" Text="100%"
+                                    Name="Proportion"/>
+                        <!--<Button Grid.Column="1" Width="20"
                                 x:Name="ZoomOutBtn" Click="ZoomOutBtn_Click" Margin="0 0 5 0">
                             <Image Source="Resource/Icon/ZoomOut.PNG"/>
-                        </Button>
-                        <Slider x:Name="ZoomingSlider" Grid.Column="2" Value="100" ValueChanged="ZoomingSlider_ValueChanged"
-                                 Minimum="50"  Maximum="400" TickFrequency="50" IsSnapToTickEnabled="True" Width="110" />
-                        <Button Grid.Column="3" Width="20"
+                        </Button>-->
+                        <Slider x:Name="ZoomingSlider" Grid.Column="1"  ValueChanged="ZoomingSlider_ValueChanged"
+                                 Minimum="50"  Maximum="400" TickFrequency="50" materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="True" IsSnapToTickEnabled="True" Cursor="Hand" Style="{StaticResource ZoomSliderStyle}"  Foreground="SlateGray"/>
+                        <!--<Button Grid.Column="3" Width="20"
                                 x:Name="ZoomInBtn" Click="ZoomInBtn_Click" Margin="10 0 0 0">
                             <Image Source="Resource/Icon/ZoomIn.PNG"/>
-                        </Button>
+                        </Button>-->
                     </Grid>
                     <!--<StackPanel Orientation="Horizontal" Width="*" Height="15">
                     </StackPanel>-->
