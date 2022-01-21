@@ -57,6 +57,8 @@ namespace Paint
         //shortcut
         private Point mouseDownPoint;
         public StringBuilder shortcutText = new StringBuilder();
+        public int shift;
+
 
         private readonly Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
@@ -223,8 +225,7 @@ namespace Paint
             DrawCanvas.Children.Clear();
             foreach (var shape in _shapes)
             {
-                //bool shift = shortcutText.ToString().Contains("shift");
-                UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
+                UIElement element = shape.Draw(SelectButton.IsChecked ?? false, shift);
 
                 DrawCanvas.Children.Add(element);
 
@@ -255,6 +256,7 @@ namespace Paint
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+            
             var temp = e.Location;
             Point screenPos = new Point(temp.X, temp.Y);
             Point pos = DrawCanvas.PointFromScreen(screenPos);
@@ -269,6 +271,14 @@ namespace Paint
 
             if (_isDrawing)
             {
+                if (Keyboard.IsKeyDown(Key.LeftShift))
+                {
+                    shift = 1;
+                }
+                else
+                {
+                    shift = 2;
+                }
 
                 _preview.HandleEnd(pos.X, pos.Y);
                 // Xoá hết các hình vẽ cũ
@@ -276,9 +286,7 @@ namespace Paint
 
                 // Vẽ hình preview đè lên
                 //bool shift = shortcutText.ToString().Contains("shift");
-                DrawCanvas.Children.Add(_preview.Draw(SelectButton.IsChecked ?? false));
-
-
+                DrawCanvas.Children.Add(_preview.Draw(SelectButton.IsChecked ?? false, shift));
             }
         }
         private void Hook_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)

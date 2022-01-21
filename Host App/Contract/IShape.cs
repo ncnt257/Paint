@@ -7,6 +7,7 @@ namespace Contract
 {
     public interface IShape
     {
+        int isShift { get; set; }
         string Name { get; }
         bool IsSelected { get; set; }
         Point2D Start { get; set; }
@@ -24,7 +25,7 @@ namespace Contract
             MouseButtonEventArgs e);
 
 
-        UIElement Draw(bool isSelectMode);
+        UIElement Draw(bool isSelectMode, int shift);
         IShape Clone();
 
 
