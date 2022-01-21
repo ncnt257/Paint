@@ -32,7 +32,7 @@ namespace Line2D
             End = new Point2D() { X = x, Y = y };
         }
 
-        public UIElement Draw(bool isSelectMode)
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer)
         {
             Line l = new Line()
             {
@@ -48,7 +48,7 @@ namespace Line2D
             };
 
 
-            if (isSelectMode)
+            if (isSelectMode && isOnTopLayer)
             {
                 l.Cursor = Cursors.Hand;
                 l.MouseLeftButtonDown += ShapeSelected;
