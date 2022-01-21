@@ -7,10 +7,15 @@
         xmlns:local="clr-namespace:Paint"
         mc:Ignorable="d"
         
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+
         Name="PaintMainWindow"
         Title="Paint" Height="450" Width="800" Icon="Resource/Icon/Paint.ico"
                         Loaded="RibbonWindow_Loaded" Closing="MainWindow_OnClosing"
@@ -55,7 +60,7 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Color">
 
-                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline1">
+                    <Fluent:DropDownButton x:Name="buttonOutline" SizeDefinition="Medium" Header="Outline">
                         <Fluent:DropDownButton.Icon>
                             <Grid>
                                 <Image Source="Resource/Icon/Outline.PNG"></Image>
@@ -84,12 +89,7 @@
 
                         </Fluent:ColorGallery>
                     </Fluent:SplitButton>
-                    <Fluent:DropDownButton x:Name="buttonSize" SizeDefinition="Medium" Icon="Resource/Icon/Size.PNG" Header="Size11">
-                        <Fluent:MenuItem Icon="Resource/Icon/Size1.PNG" ></Fluent:MenuItem>
-                        <Fluent:MenuItem Icon="Resource/Icon/Size2.PNG" ></Fluent:MenuItem>
-                        <Fluent:MenuItem Icon="Resource/Icon/Size3.PNG"></Fluent:MenuItem>
-                        <Fluent:MenuItem Icon="Resource/Icon/Size4.PNG"  ></Fluent:MenuItem>
-                    </Fluent:DropDownButton>
+                    
                     <Fluent:Spinner x:Name="buttonStrokeSize" Format="0 px" Header="Size" Value="1" InputWidth="75"></Fluent:Spinner>
                     <Fluent:ComboBox x:Name="buttonStrokeType" Header="Stroke" SelectedIndex="0" InputWidth="75">
                         <ComboBoxItem Content="Solid"></ComboBoxItem>
@@ -99,70 +99,7 @@
 
                     </Fluent:ComboBox>
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox x:Name="Font" Header="Font">
-                    <Fluent:RibbonToolBar>
-                        <Fluent:RibbonToolBar.LayoutDefinitions>
-                            <Fluent:RibbonToolBarLayoutDefinition>
-                                <Fluent:RibbonToolBarRow>
-                                    <Fluent:RibbonToolBarControlDefinition Target="comboBoxFontName"></Fluent:RibbonToolBarControlDefinition>
-                                    <Fluent:RibbonToolBarControlDefinition Target="comboBoxFontSize"></Fluent:RibbonToolBarControlDefinition>
-                                </Fluent:RibbonToolBarRow>
-                                <Fluent:RibbonToolBarRow>
-                                    <Fluent:RibbonToolBarControlGroupDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonBold"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonItalic"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonUnderline"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonStrikeThrough"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonSubscript"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonSuperscript"></Fluent:RibbonToolBarControlDefinition>
-                                    </Fluent:RibbonToolBarControlGroupDefinition>
-                                    <Fluent:RibbonToolBarControlGroupDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonTextHightlightColor"></Fluent:RibbonToolBarControlDefinition>
-                                        <Fluent:RibbonToolBarControlDefinition Target="buttonFontColor"></Fluent:RibbonToolBarControlDefinition>
-                                    </Fluent:RibbonToolBarControlGroupDefinition>
-                                </Fluent:RibbonToolBarRow>
-
-                            </Fluent:RibbonToolBarLayoutDefinition>
-                        </Fluent:RibbonToolBar.LayoutDefinitions>
-                        <Fluent:ComboBox x:Name="comboBoxFontName" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0" Text="{Binding test}" InputWidth="75">
-                            <TextBlock Text="Arial"></TextBlock>
-                            <TextBlock Text="Tahoma"></TextBlock>
-                            <TextBlock Text="Arial1"></TextBlock>
-                            <TextBlock Text="Arial2"></TextBlock>
-                            <TextBlock Text="Arial3"></TextBlock>
-                        </Fluent:ComboBox>
-                        <Fluent:ComboBox x:Name="comboBoxFontSize" Height="22" MinWidth="40" SizeDefinition="small" SelectedIndex="0">
-                            <TextBlock Text="6"></TextBlock>
-                            <TextBlock Text="8"></TextBlock>
-                            <TextBlock Text="10"></TextBlock>
-                            <TextBlock Text="12"></TextBlock>
-                            <TextBlock Text="14"></TextBlock>
-                            <TextBlock Text="16"></TextBlock>
-                        </Fluent:ComboBox>
-                        <Fluent:ToggleButton x:Name="buttonBold" Icon="Resource/Icon/Bold.png" SizeDefinition="small"></Fluent:ToggleButton>
-                        <Fluent:ToggleButton x:Name="buttonItalic" Icon="Resource/Icon/Italic.png" SizeDefinition="small"></Fluent:ToggleButton>
-                        <Fluent:ToggleButton x:Name="buttonUnderline" Icon="Resource/Icon/Underline.png" SizeDefinition="small"></Fluent:ToggleButton>
-                        <Fluent:ToggleButton x:Name="buttonStrikeThrough" Icon="Resource/Icon/Strikethrough.png" SizeDefinition="small"></Fluent:ToggleButton>
-
-
-                        <Fluent:DropDownButton x:Name="buttonFontColor" SizeDefinition="small" >
-                            <Fluent:DropDownButton.Icon>
-                                <Grid>
-                                    <Image Width="16" Height="16" Source="Resource/Icon/Text.png"></Image>
-                                    <Rectangle Width="16" Height="3" VerticalAlignment="Bottom">
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="{Binding FontColor}"></SolidColorBrush>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                </Grid>
-                            </Fluent:DropDownButton.Icon>
-                            <Fluent:ColorGallery SelectedColor="{Binding FontColor, Mode=TwoWay}">
-
-                            </Fluent:ColorGallery>
-                        </Fluent:DropDownButton>
-
-                    </Fluent:RibbonToolBar>
-                </Fluent:RibbonGroupBox>
+                
 
             </Fluent:RibbonTabItem>
 
@@ -173,18 +110,16 @@
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
             <ScrollViewer
-                x:Name="CanvasScroll"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                x:Name="CanvasScroll"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" materialDesign:ScrollViewerAssist.CornerRectangleVisibility="Collapsed">
             <Canvas Height="285" Width="8000"
-                    x:Name="DrawCanvas" Background="White" AllowDrop="True" Margin="4,2,0,0"
+                    x:Name="DrawCanvas" Background="White" Margin="4,2,0,0"
                     ClipToBounds="True"  MouseDown="Canvas_MouseDown"  Cursor="Cross" Loaded="DrawCanvas_OnLoaded">
-                
-                    
             </Canvas>
             </ScrollViewer>
             <Grid Grid.Row="1" Background="#f0f0f0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -198,25 +133,23 @@
                 <Border Grid.Column="2" Grid.RowSpan="4" BorderBrush="#dbdbdb" 
                         BorderThickness="1,0,0,0" Background="{x:Null}" />
                 <Label Grid.Column="2" Width="250">
-                    <Grid Width="250">
+                    <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="5*"/>
-                            <ColumnDefinition Width="2*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Width="30" Text="100%"
-                                    Name="Proportion" Grid.ColumnSpan="2" Margin="0,0,45,0"/>
-                        <Button Grid.Column="1" Width="20"
+                        <TextBlock Grid.Column="0" Text="100%"
+                                    Name="Proportion"/>
+                        <!--<Button Grid.Column="1" Width="20"
                                 x:Name="ZoomOutBtn" Click="ZoomOutBtn_Click" Margin="0 0 5 0">
                             <Image Source="Resource/Icon/ZoomOut.PNG"/>
-                        </Button>
-                        <Slider x:Name="ZoomingSlider" Grid.Column="2" Value="100" ValueChanged="ZoomingSlider_ValueChanged"
-                                 Minimum="50"  Maximum="400" TickFrequency="50" IsSnapToTickEnabled="True" Width="110" />
-                        <Button Grid.Column="3" Width="20"
+                        </Button>-->
+                        <Slider x:Name="ZoomingSlider" Grid.Column="1"  ValueChanged="ZoomingSlider_ValueChanged"
+                                 Minimum="50"  Maximum="400" TickFrequency="50" materialDesign:SliderAssist.OnlyShowFocusVisualWhileDragging="True" IsSnapToTickEnabled="True" Cursor="Hand" Style="{StaticResource ZoomSliderStyle}"  Foreground="SlateGray"/>
+                        <!--<Button Grid.Column="3" Width="20"
                                 x:Name="ZoomInBtn" Click="ZoomInBtn_Click" Margin="10 0 0 0">
                             <Image Source="Resource/Icon/ZoomIn.PNG"/>
-                        </Button>
+                        </Button>-->
                     </Grid>
                     <!--<StackPanel Orientation="Horizontal" Width="*" Height="15">
                     </StackPanel>-->
