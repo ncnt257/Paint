@@ -874,7 +874,7 @@ namespace Paint
                     lowerLayersShapesCount = 0;
                     for (int k = 0; k<i;k++)
                     {
-                        lowerLayersShapesCount += layers[k]._shapes.Count;
+                        if(layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
                     }
                    
 
