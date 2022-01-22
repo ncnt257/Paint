@@ -23,7 +23,6 @@ using System.Threading;
 using Application = System.Windows.Forms.Application;
 using ApplicationWindow = System.Windows.Application;
 
-
 namespace Paint
 {
     /// <summary>
@@ -241,6 +240,7 @@ namespace Paint
             for (int i = 0; i<layers.Count() ; i++)
             {
 
+
                 if (layers[i].isChecked)
                 {
                     foreach (var shape in layers[i]._shapes)
@@ -254,7 +254,7 @@ namespace Paint
                     }
                     
                 }
-                
+
 
             }
         }
@@ -452,7 +452,7 @@ namespace Paint
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExt = "png";
-            saveFileDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            saveFileDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg|Binary Files (*.bin)|*.bin";
             if (saveFileDialog.ShowDialog() == true)
             {
                 FilePath = saveFileDialog.FileName;
@@ -471,6 +471,11 @@ namespace Paint
                     case 3:
                         {
                             CreateBitmapFromVisual(DrawCanvas, saveFileDialog.FileName, ".jpg");
+                            break;
+                        }
+                    case 4:
+                        {
+                            SaveNew();
                             break;
                         }
                     default:
@@ -506,7 +511,7 @@ namespace Paint
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog browseDialog = new OpenFileDialog();
-            browseDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            browseDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg|Binary Files (*.bin)|*.bin";
             browseDialog.FilterIndex = 1;
             browseDialog.Multiselect = false;
             if (browseDialog.ShowDialog() != true)
@@ -514,17 +519,30 @@ namespace Paint
                 return;
             }
             FilePath = browseDialog.FileName;
+            if (Path.GetExtension(FilePath) == ".bin")
+            {
+                using (var stream = File.OpenRead(FilePath))
+                {
+                    using var br = new BinaryReader(stream);
+                    while (br.PeekChar() > 0)
+                    {
+                        string temp = br.ReadString();
+                        _shapes.Add(_prototypes[temp].ReadBinary(br));
+                    }
+                }
+                ReDraw();
 
-            //need to fix right here
-            // ImageBrush ib = new ImageBrush();
-            // BitmapImage inputFile = new BitmapImage(new Uri(FilePath, UriKind.RelativeOrAbsolute));
-            // ib.ImageSource = inputFile;
-            // DrawCanvas.Background = ib;
-
+                return;
+            }
             MemoryStream ms = new MemoryStream();
             BitmapImage bi = new BitmapImage();
-            byte[] bytArray = File.ReadAllBytes(FilePath);
-            ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
+            if (FilePath != null)
+            {
+                byte[] bytArray = File.ReadAllBytes(FilePath);
+                ms.Write(bytArray, 0, bytArray.Length);
+            }
+
+            ms.Position = 0;
             bi.BeginInit();
             bi.StreamSource = ms;
             bi.EndInit();
@@ -584,7 +602,24 @@ namespace Paint
 
         }
 
+
         /*
+
+        public void SaveNew()
+        {
+            using (var stream = new FileStream(FilePath, FileMode.Append, FileAccess.Write, FileShare.None))
+
+            using (var bw = new BinaryWriter(stream))
+            {
+                foreach (var shape in _shapes)
+                {
+                    shape.WriteBinary(bw);
+                }
+            }
+        }
+
+
+
         //private void Canvas_MouseMove(object sender, MouseEventArgs e)
         //{
         //    Point pos = e.GetPosition(DrawCanvas);
@@ -683,6 +718,7 @@ namespace Paint
                 _shapes[_selectedShapeIndex.Value].IsSelected = false;
                 _selectedShapeIndex = null;
             }
+
 
             DrawCanvas.MouseLeftButtonDown -= SelectShape;
             DrawCanvas.MouseDown += Canvas_MouseDown;
@@ -791,6 +827,7 @@ namespace Paint
                     _selectedShapeIndex = i;
                     if (_shapes[i].Name != "Line")
 
+
                     {
                         AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
                             .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
@@ -808,6 +845,7 @@ namespace Paint
 
             _selectedShapeIndex = null;
             //ReDraw();
+
         }
 
         private void Zoom(float newProp)
@@ -1028,6 +1066,7 @@ namespace Paint
 
         private void DeleteLayerBtn_Click(object sender, RoutedEventArgs e)
         {
+
             if (ListViewLayers.SelectedItems.Count == 0)
                 return;
             layers.RemoveAt(ListViewLayers.SelectedIndex);
@@ -1035,6 +1074,7 @@ namespace Paint
 
             //Cập nhật lại tên layer
             for(int i = 0; i < layers.Count(); i++)
+
             {
                 layers[i].index = i;
             }
