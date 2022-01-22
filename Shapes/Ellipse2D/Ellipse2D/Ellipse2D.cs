@@ -10,6 +10,7 @@ namespace Ellipse2D
 {
     public class Ellipse2D : IShape
     {
+        public int isShift { get; set; }
         public string Name => "Ellipse";
         public Point2D Start { get; set; }
         public Point2D End { get; set; }
@@ -27,10 +28,28 @@ namespace Ellipse2D
         }
 
 
-        public UIElement Draw(bool isSelectMode)
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift)
+
         {
-            var width = End.X - Start.X;
-            var height = End.Y - Start.Y;
+            double width = End.X - Start.X;
+            double height = End.Y - Start.Y;
+
+            if (isShift == 0)
+            {
+                isShift = shift;
+            }
+            if (isShift == 1) 
+            {
+                if (width * height > 0)
+                {
+                    height = width;
+                }
+                else
+                {
+                    height = -1 * width;
+                }
+            }
+            
             var ellipse = new Ellipse()
             {
                 Width = (int)Math.Abs(width),
@@ -42,7 +61,7 @@ namespace Ellipse2D
 
             };
 
-            if (isSelectMode)
+            if (isSelectMode && isOnTopLayer)
             {
                 ellipse.Cursor = Cursors.Hand;
                 ellipse.MouseLeftButtonDown += ShapeSelected;

@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\Icon\add.png" />
     <None Remove="Resource\Icon\cross.png" />
+
+    <None Remove="Resource\Icon\disable-eye.png" />
+    <None Remove="Resource\Icon\eye.png" />
+
+    <None Remove="Resource\Icon\delete.png" />
+
     <None Remove="Resource\Icon\Move.png" />
     <None Remove="Resource\Icon\Outline.png" />
     <None Remove="Resource\Icon\paint.ico" />
@@ -24,6 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resource\Icon\add.png" />
+
+    <Resource Include="Resource\Icon\disable-eye.png" />
+    <Resource Include="Resource\Icon\eye.png" />
+
+    <Resource Include="Resource\Icon\delete.png" />
+
     <Resource Include="Resource\Icon\Paint.ico" />
     <Resource Include="Resource\Icon\Size1.png" />
     <Resource Include="Resource\Icon\Size2.png" />
@@ -64,7 +78,9 @@
   <ItemGroup>
     <PackageReference Include="ControlzEx" Version="5.0.1" />
     <PackageReference Include="fluent.ribbon" Version="9.0.1" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="MouseKeyHook" Version="5.6.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>

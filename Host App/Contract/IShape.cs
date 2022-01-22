@@ -7,6 +7,8 @@ namespace Contract
 {
     public interface IShape
     {
+        int isShift { get; set; }
+
         string Name { get; }
         bool IsSelected { get; set; }
         Point2D Start { get; set; }
@@ -23,9 +25,13 @@ namespace Contract
         void ShapeSelected(object sender,
             MouseButtonEventArgs e);
 
+
+
+
+        UIElement Draw(bool isSelectMode, bool isOnTopLayer,int shift);
         void WriteBinary(BinaryWriter bw);
         IShape ReadBinary(BinaryReader br);
-        UIElement Draw(bool isSelectMode);
+
         IShape Clone();
 
 
