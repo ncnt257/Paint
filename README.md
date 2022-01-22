@@ -47,7 +47,7 @@ This is a cover of paint app of Windows with some features customed by our team
 # Link demo app
 [Click here](https://www.youtube.com/watch?v=WZIALw4pGvo&feature=youtu.be)
 
-# Expect grade 10.0
+# Expected grade 10.0
 
 
 
