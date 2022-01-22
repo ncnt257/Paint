@@ -1058,8 +1058,6 @@ namespace Paint
                         if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
                     }
 
-
-
                     _cutSelectedShapeIndex = null;
                     _copiedShape = null;
                     break;
