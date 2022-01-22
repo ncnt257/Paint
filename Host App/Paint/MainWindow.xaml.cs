@@ -19,7 +19,6 @@ using Color = System.Windows.Media.Color;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
 
-using System.Text;
 using System.Threading;
 using Application = System.Windows.Forms.Application;
 using ApplicationWindow = System.Windows.Application;
@@ -38,6 +37,7 @@ namespace Paint
         private bool _isDrawing = false;
         //TODO tao bỏ readonly được k ???
         List<IShape> _shapes = new List<IShape>();
+
         private int? _selectedShapeIndex;
         private int? _cutSelectedShapeIndex;
         private IShape _copiedShape;
@@ -226,7 +226,6 @@ namespace Paint
             //DrawCanvas.MouseUp -= GetPoint_MouseUp;
             //shortcutText.Clear();
         }
-
 
         private void ReDraw()//xóa và vẽ lại
         {
@@ -978,7 +977,7 @@ namespace Paint
         }
         private void buttonFill_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectButton.IsChecked ?? false && _selectedShapeIndex != null)
+            if (_selectedShapeIndex != null)
             {
                 _shapes[_selectedShapeIndex.Value].Fill = FillColor;
                 ReDraw();
@@ -987,16 +986,13 @@ namespace Paint
         }
         private void buttonOutline_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectButton.IsChecked ?? false && _selectedShapeIndex != null)
+            if (_selectedShapeIndex != null)
             {
                 _shapes[_selectedShapeIndex.Value].Color = OutlineColor;
                 ReDraw();
             }
         }
-        private void ToggleButton_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
 
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -1017,9 +1013,6 @@ namespace Paint
                     {
                         if(layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
                     }
-                   
-
-
                     _cutSelectedShapeIndex = null;
                     _copiedShape = null;
                     break;

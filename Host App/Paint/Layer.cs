@@ -11,8 +11,10 @@ namespace Paint
     public class Layer : INotifyPropertyChanged
     {
         public bool isChecked { get; set; }
-        public List<IShape> _shapes { get; set; }
         public int index { get; set; }
+        public List<IShape> _shapes { get; set; }
+
+
         public Layer(int index,bool isChecked=false)
         {
             this.index = index;
