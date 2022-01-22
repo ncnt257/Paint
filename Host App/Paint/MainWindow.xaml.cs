@@ -14,14 +14,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
 using Color = System.Windows.Media.Color;
-using Line2D;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
-
-
 namespace Paint
 {
     /// <summary>
@@ -62,12 +57,12 @@ namespace Paint
             foreach (var shape in _shapes)
             {
                 UIElement element = shape.Draw(SelectButton.IsChecked ?? false);
-                
+
                 DrawCanvas.Children.Add(element);
 
                 //update acutual width và height để dùng adorner 
                 DrawCanvas.UpdateLayout();
-                
+
             }
         }
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
@@ -160,8 +155,8 @@ namespace Paint
                         .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
                 }
 
-                
-                
+
+
 
             }
 
@@ -183,7 +178,7 @@ namespace Paint
             _prototypes.Add(linePrototype.Name, linePrototype);
             var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
             var dlls = new DirectoryInfo(exeFolder).GetFiles("*.dll");
-           
+
             foreach (var dll in dlls)
             {
                 if (dll.Name == "ControlzEx.dll") continue;
@@ -257,7 +252,7 @@ namespace Paint
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExt = "png";
-            saveFileDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            saveFileDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg|Binary Files (*.bin)|*.bin";
             if (saveFileDialog.ShowDialog() == true)
             {
                 FilePath = saveFileDialog.FileName;
@@ -278,6 +273,11 @@ namespace Paint
                             CreateBitmapFromVisual(DrawCanvas, saveFileDialog.FileName, ".jpg");
                             break;
                         }
+                    case 4:
+                        {
+                            SaveNew();
+                            break;
+                        }
                     default:
                         break;
                 }
@@ -287,7 +287,7 @@ namespace Paint
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog browseDialog = new OpenFileDialog();
-            browseDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            browseDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg|Binary Files (*.bin)|*.bin";
             browseDialog.FilterIndex = 1;
             browseDialog.Multiselect = false;
             if (browseDialog.ShowDialog() != true)
@@ -295,17 +295,30 @@ namespace Paint
                 return;
             }
             FilePath = browseDialog.FileName;
+            if (Path.GetExtension(FilePath) == ".bin")
+            {
+                using (var stream = File.OpenRead(FilePath))
+                {
+                    using var br = new BinaryReader(stream);
+                    while (br.PeekChar() > 0)
+                    {
+                        string temp = br.ReadString();
+                        _shapes.Add(_prototypes[temp].ReadBinary(br));
+                    }
+                }
+                ReDraw();
 
-            //need to fix right here
-            // ImageBrush ib = new ImageBrush();
-            // BitmapImage inputFile = new BitmapImage(new Uri(FilePath, UriKind.RelativeOrAbsolute));
-            // ib.ImageSource = inputFile;
-            // DrawCanvas.Background = ib;
-
+                return;
+            }
             MemoryStream ms = new MemoryStream();
             BitmapImage bi = new BitmapImage();
-            byte[] bytArray = File.ReadAllBytes(FilePath);
-            ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
+            if (FilePath != null)
+            {
+                byte[] bytArray = File.ReadAllBytes(FilePath);
+                ms.Write(bytArray, 0, bytArray.Length);
+            }
+
+            ms.Position = 0;
             bi.BeginInit();
             bi.StreamSource = ms;
             bi.EndInit();
@@ -364,6 +377,21 @@ namespace Paint
             }
 
         }
+
+        public void SaveNew()
+        {
+            using (var stream = new FileStream(FilePath, FileMode.Append, FileAccess.Write, FileShare.None))
+
+            using (var bw = new BinaryWriter(stream))
+            {
+                foreach (var shape in _shapes)
+                {
+                    shape.WriteBinary(bw);
+                }
+            }
+        }
+
+
         //private void Canvas_MouseMove(object sender, MouseEventArgs e)
         //{
         //    Point pos = e.GetPosition(DrawCanvas);
@@ -435,7 +463,7 @@ namespace Paint
         {
             _hook.MouseMove -= Hook_MouseMove;
             _hook.MouseUp -= Hook_MouseUp;
-            
+
 
         }
 
@@ -460,8 +488,8 @@ namespace Paint
                 _shapes[_selectedShapeIndex.Value].IsSelected = false;
                 _selectedShapeIndex = null;
             }
-            
-            
+
+
 
             DrawCanvas.MouseLeftButtonDown -= SelectShape;
             DrawCanvas.MouseDown += Canvas_MouseDown;
@@ -483,7 +511,7 @@ namespace Paint
             if (_copiedShape != null)
             {
                 var cs = _copiedShape.Clone();
-                
+
                 cs.Start.X += 10;
                 cs.Start.Y += 10;
                 cs.End.X += 10;
@@ -499,7 +527,7 @@ namespace Paint
                 }
                 _selectedShapeIndex = _shapes.Count - 1;
                 int i = _shapes.Count - 1;
-                
+
                 ReDraw();
 
                 //paste xong được sửa shape
@@ -556,7 +584,7 @@ namespace Paint
                 {
                     _selectedShapeIndex = i;
 
-                    if (_shapes[i].Name!="Line")
+                    if (_shapes[i].Name != "Line")
                     {
                         AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
                             .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
@@ -576,7 +604,7 @@ namespace Paint
             _copiedShape = null;
             _selectedShapeIndex = null;
             //ReDraw();
-            
+
 
         }
 
@@ -591,23 +619,23 @@ namespace Paint
             DrawCanvas.Width = this.ActualWidth * prop;
             if (newProp == 50)
             {
-                DrawCanvas.Height = this.ActualHeight - 170; 
+                DrawCanvas.Height = this.ActualHeight - 170;
                 DrawCanvas.Width = this.ActualWidth;
             }
         }
 
         private void ZoomInBtn_Click(object sender, RoutedEventArgs e)
         {
-            ZoomingSlider.Value = ZoomingSlider.Value+50;
+            ZoomingSlider.Value = ZoomingSlider.Value + 50;
         }
         private void ZoomOutBtn_Click(object sender, RoutedEventArgs e)
         {
             ZoomingSlider.Value = ZoomingSlider.Value - 50;
         }
-        
+
         private void ZoomingSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (startZooming<3)
+            if (startZooming < 3)
             {
                 startZooming++;
                 return;
@@ -622,12 +650,12 @@ namespace Paint
 
         private void PaintMainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (this.ActualHeight < 300 )
+            if (this.ActualHeight < 300)
             {
                 return;
             }
 
-            DrawCanvas.Height = this.ActualHeight- 170;
+            DrawCanvas.Height = this.ActualHeight - 170;
             DrawCanvas.Width = this.ActualWidth;
         }
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
@@ -643,7 +671,7 @@ namespace Paint
 
         private void buttonFill_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectButton.IsChecked ?? false&&_selectedShapeIndex!=null)
+            if (SelectButton.IsChecked ?? false && _selectedShapeIndex != null)
             {
                 _shapes[_selectedShapeIndex.Value].Fill = (Color)buttonFillGallery.SelectedColor;
                 ReDraw();

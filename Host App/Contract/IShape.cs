@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -23,7 +23,8 @@ namespace Contract
         void ShapeSelected(object sender,
             MouseButtonEventArgs e);
 
-
+        void WriteBinary(BinaryWriter bw);
+        IShape ReadBinary(BinaryReader br);
         UIElement Draw(bool isSelectMode);
         IShape Clone();
 
