@@ -1,5 +1,6 @@
 using Contract;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -38,7 +39,7 @@ namespace Ellipse2D
             {
                 isShift = shift;
             }
-            if (isShift == 1) 
+            if (isShift == 1)
             {
                 if (width * height > 0)
                 {
@@ -49,7 +50,7 @@ namespace Ellipse2D
                     height = -1 * width;
                 }
             }
-            
+
             var ellipse = new Ellipse()
             {
                 Width = (int)Math.Abs(width),
@@ -90,6 +91,48 @@ namespace Ellipse2D
             return ellipse;
         }
 
+        public void WriteShapeBinary(BinaryWriter bw)
+        {
+            bw.Write(Name);
+            bw.Write(Start.X);
+            bw.Write(Start.Y);
+            bw.Write(End.X);
+            bw.Write(End.Y);
+            bw.Write(Thickness);
+            bw.Write(isShift);
+            bw.Write(IsSelected);
+            bw.Write(Color.ToString());
+            bw.Write(Fill.ToString());
+            bw.Write(StrokeType.Count);
+            foreach (var item in StrokeType)
+            {
+                bw.Write(item);
+            }
+        }
+
+        public IShape ReadShapeBinary(BinaryReader br)
+        {
+            var result = new Ellipse2D();
+            result.Start.X = br.ReadDouble();
+            result.Start.Y = br.ReadDouble();
+            result.End.X = br.ReadDouble();
+            result.End.Y = br.ReadDouble();
+            result.Thickness = br.ReadInt32();
+            result.isShift = br.ReadInt32();
+            result.IsSelected = br.ReadBoolean();
+            var tempColor = br.ReadString();
+            result.Color = (Color)ColorConverter.ConvertFromString(tempColor);
+            var tempFill = br.ReadString();
+            result.Fill = (Color)ColorConverter.ConvertFromString(tempFill);
+            var count = br.ReadInt32();
+            result.StrokeType = new DoubleCollection();
+            for (int i = 0; i < count; i++)
+            {
+                result.StrokeType.Add(br.ReadDouble());
+            }
+            return result;
+        }
+
         public void ShapeSelected(object sender,
             MouseButtonEventArgs e)
         {
@@ -106,7 +149,7 @@ namespace Ellipse2D
             End.X = x;
             End.Y = y;
         }
-        
+
 
         public IShape Clone()
         {
@@ -121,6 +164,6 @@ namespace Ellipse2D
             return ellipse;
         }
 
-        
+
     }
 }

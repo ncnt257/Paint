@@ -99,6 +99,7 @@ namespace Line2D
             bw.Write(End.Y);
             bw.Write(Thickness);
             bw.Write(isShift);
+            bw.Write(IsSelected);
             bw.Write(Color.ToString());
             bw.Write(Fill.ToString());
             bw.Write(StrokeType.Count);
@@ -117,6 +118,7 @@ namespace Line2D
             result.End.Y = br.ReadDouble();
             result.Thickness = br.ReadInt32();
             result.isShift = br.ReadInt32();
+            result.IsSelected = br.ReadBoolean();
             var tempColor = br.ReadString();
             result.Color = (Color)ColorConverter.ConvertFromString(tempColor);
             var tempFill = br.ReadString();

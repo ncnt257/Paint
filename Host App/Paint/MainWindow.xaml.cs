@@ -487,6 +487,11 @@ namespace Paint
             }
             string ext = Path.GetExtension(FilePath);
             DrawCanvas.UpdateLayout();
+            if (ext == ".bin")
+            {
+                SaveNew();
+                return;
+            }
             CreateBitmapFromVisual(DrawCanvas, FilePath, ext);
         }
 
@@ -528,8 +533,10 @@ namespace Paint
                 }
 
                 //Tính lại current layer và gán _shape = _shape của currentlayer
-                for(int i = layers.Count() - 1; i >= 0; i--){
-                    if (layers[i].isChecked){
+                for (int i = layers.Count() - 1; i >= 0; i--)
+                {
+                    if (layers[i].isChecked)
+                    {
                         _currentLayer = i;
                         _shapes = layers[_currentLayer]._shapes;
                         break;
@@ -613,7 +620,7 @@ namespace Paint
         public void SaveNew()
         {
             // layers[_currentLayer]._shapes = _shapes;
-            using (var stream = new FileStream(FilePath, FileMode.Append, FileAccess.Write, FileShare.None))
+            using (var stream = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None))
 
             using (var bw = new BinaryWriter(stream))
             {
