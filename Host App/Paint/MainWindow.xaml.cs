@@ -78,106 +78,10 @@ namespace Paint
             MouseEventArgs e)
         {
             mouseDownPoint = e.GetPosition(DrawCanvas);
+            
             return;
         }
 
-        /*private void HandleKeyPress(object sender, KeyEventArgs e)
-        {
-            // The text box grabs all input.
-            e.Handled = true;
-
-            // Fetch the actual shortcut key.
-            Key key = (e.Key == Key.System ? e.SystemKey : e.Key);
-
-            // Ignore modifier keys.
-            if (key == Key.LeftShift || key == Key.RightShift
-                || key == Key.LeftCtrl || key == Key.RightCtrl
-                || key == Key.LeftAlt || key == Key.RightAlt
-                || key == Key.LWin || key == Key.RWin)
-            {
-                return;
-            }
-
-            // Build the shortcut key name.
-            StringBuilder shortcutText = new StringBuilder();
-            if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
-            {
-                shortcutText.Append("Ctrl+");
-            }
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            {
-                shortcutText.Append("Shift+");
-            }
-            if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0)
-            {
-                shortcutText.Append("Alt+");
-            }
-            shortcutText.Append(key.ToString());
-
-
-            if (shortcutText.ToString()=="Ctrl+C"&& _selectedShapeIndex != null) 
-            {
-                DrawCanvas.MouseUp += GetPoint_MouseUp;
-                _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
-                shortcutText.Clear();
-            }
-            if (shortcutText.ToString() == "Ctrl+V" && _copiedShape != null)
-            {
-                var cs = _copiedShape.Clone();
-
-                double lengthX = mouseDownPoint.X - cs.Start.X;
-                double lengthY = mouseDownPoint.Y - cs.Start.Y;
-                cs.Start.X = mouseDownPoint.X;
-                cs.Start.Y = mouseDownPoint.Y;
-                cs.End.X += lengthX;
-                cs.End.Y += lengthY;
-                cs.IsSelected = true;
-                _shapes.Add(cs);
-                if (_selectedShapeIndex is not null)
-                {
-                    _shapes[_selectedShapeIndex.Value].IsSelected = false;
-                }
-                _copiedShape = cs;
-                if (_cutSelectedShapeIndex is not null)
-                {
-                    _shapes.RemoveAt(_cutSelectedShapeIndex.Value);
-                    _cutSelectedShapeIndex = null;
-                    _copiedShape = null;
-                }
-                _selectedShapeIndex = _shapes.Count - 1;
-                int i = _shapes.Count - 1;
-
-                ReDraw();
-
-                //paste xong được sửa shape
-                if (_shapes[i].Name != "Line")
-                {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
-                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
-                }
-                else
-                {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
-                        .Add(new ResizeLineAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
-                }
-                //DrawCanvas.MouseUp -= GetPoint_MouseUp;
-                //shortcutText.Clear();
-            }
-            if (shortcutText.ToString() == "Ctrl+X" && _selectedShapeIndex != null)
-            {
-                if (_selectedShapeIndex != null)
-                {
-                    DrawCanvas.MouseUp += GetPoint_MouseUp;
-                    _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
-                    _cutSelectedShapeIndex = _selectedShapeIndex;
-                   
-                    //shortcutText.Clear();
-                }
-            }
-
-            // Update the text box.
-            testblock.Text = shortcutText.ToString();
-        }*/
 
         private void PasteShape()
         {
@@ -185,13 +89,27 @@ namespace Paint
 
             double lengthX = mouseDownPoint.X - cs.Start.X;
             double lengthY = mouseDownPoint.Y - cs.Start.Y;
-            cs.Start.X = mouseDownPoint.X;
-            cs.Start.Y = mouseDownPoint.Y;
-            cs.End.X += lengthX;
-            cs.End.Y += lengthY;
+            if((mouseDownPoint.X == 0 && mouseDownPoint.Y == 0) || (mouseDownPoint.X==cs.Start.X&&mouseDownPoint.Y==cs.Start.Y))
+            {
+                cs.Start.X += 10;
+                cs.Start.Y += 10;
+                cs.End.X += 10;
+                cs.End.Y += 10;
+            }
+            else
+            {
+                cs.Start.X = mouseDownPoint.X;
+                cs.Start.Y = mouseDownPoint.Y;
+                cs.End.X += lengthX;
+                cs.End.Y += lengthY;
+            }
+            
             cs.IsSelected = true;
             _shapes.Add(cs);
-            //_shapes[_selectedShapeIndex.Value].IsSelected = false;
+            if (_selectedShapeIndex is not null)
+            {
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+            }
             _copiedShape = cs;
             if (_cutSelectedShapeIndex is not null)
             {
@@ -207,16 +125,14 @@ namespace Paint
             //paste xong được sửa shape
             if (_shapes[i].Name != "Line")
             {
-                AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                    .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
+                AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                    .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
             }
             else
             {
-                AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                    .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
+                AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
+                    .Add(new ResizeLineAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
             }
-            //DrawCanvas.MouseUp -= GetPoint_MouseUp;
-            //shortcutText.Clear();
         }
 
         private void ReDraw()//xóa và vẽ lại
@@ -259,9 +175,16 @@ namespace Paint
         private void Canvas_MouseDown(object sender,
             MouseButtonEventArgs e)
         {
+            //Kiểm tra chưa có layer nào được chọn
             if (_currentLayer == -1)
             {
                 MessageBox.Show("Please choose atleast 1 layer");
+                return;
+            }
+            //Kiểm tra chọn layer nhưng layer đang bị ẩn(icon closed eye)
+            else if (!layers[_currentLayer].isChecked)
+            {
+                MessageBox.Show("Please display selected layer for drawing");
                 return;
             }
             _isDrawing = true;
@@ -333,6 +256,23 @@ namespace Paint
                 if (previewSize < 1)
                 {
                     ReDraw();
+                    if (_selectedShapeIndex != null)
+                    {
+                        int index = _selectedShapeIndex.Value;
+                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
+
+                        //remove adorner của shape khác
+                        Adorner[] toRemoveArray =
+                            AdornerLayer.GetAdornerLayer(DrawCanvas).GetAdorners(DrawCanvas.Children[lowerLayersShapesCount + index]);
+                        if (toRemoveArray != null)
+                        {
+                            for (int x = 0; x < toRemoveArray.Length; x++)
+                            {
+                                AdornerLayer.GetAdornerLayer(DrawCanvas).Remove(toRemoveArray[x]);
+                            }
+                        }
+
+                    };
                     _selectedShapeIndex = null;
                     return;
                 };
@@ -697,15 +637,11 @@ namespace Paint
         //}
         */
 
-
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             _hook.MouseMove -= Hook_MouseMove;
             _hook.MouseUp -= Hook_MouseUp;
-
-
         }
-
 
         private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
         {
@@ -718,7 +654,6 @@ namespace Paint
             DrawCanvas.MouseLeftButtonDown += SelectShape;
             DrawCanvas.Cursor = Cursors.Arrow;
             ReDraw();
-
         }
 
         private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
@@ -761,45 +696,7 @@ namespace Paint
         {
             if (_copiedShape != null)
             {
-                var cs = _copiedShape.Clone();
-
-                double lengthX = mouseDownPoint.X - cs.Start.X;
-                double lengthY = mouseDownPoint.Y - cs.Start.Y;
-                cs.Start.X = mouseDownPoint.X;
-                cs.Start.Y = mouseDownPoint.Y;
-                cs.End.X += lengthX;
-                cs.End.Y += lengthY;
-                cs.IsSelected = true;
-                _shapes.Add(cs);
-                if (_selectedShapeIndex is not null)
-                {
-                    _shapes[_selectedShapeIndex.Value].IsSelected = false;
-                }
-                _copiedShape = cs;
-                if (_cutSelectedShapeIndex is not null)
-                {
-                    _shapes.RemoveAt(_cutSelectedShapeIndex.Value);
-                    _cutSelectedShapeIndex = null;
-                    _copiedShape = null;
-                }
-                _selectedShapeIndex = _shapes.Count - 1;
-                int i = _shapes.Count - 1;
-
-                ReDraw();
-
-                //paste xong được sửa shape
-                if (_shapes[i].Name != "Line")
-                {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
-                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
-                }
-                else
-                {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
-                        .Add(new ResizeLineAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
-                }
-                //DrawCanvas.MouseUp -= GetPoint_MouseUp;
-                //shortcutText.Clear();
+                PasteShape();
             }
         }
 
@@ -810,7 +707,6 @@ namespace Paint
 
         private void SelectShape(object sender, MouseButtonEventArgs e)
         {
-
 
             if (_selectedShapeIndex != null)
             {
@@ -937,10 +833,6 @@ namespace Paint
             {
                 shortcutText.Append("Ctrl+");
             }
-            /*if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            {
-                shortcutText.Append("Shift+");
-            }*/
             if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0)
             {
                 shortcutText.Append("Alt+");
@@ -951,50 +843,18 @@ namespace Paint
             {
                 DrawCanvas.MouseUp += GetPoint_MouseUp;
                 _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
-                shortcutText.Clear();
+                testblock.Text = shortcutText.ToString();
+                //shortcutText.Clear();
             }
             if (shortcutText.ToString() == "Delete")
             {
                 DeleteShape();
+                testblock.Text = shortcutText.ToString();
             }
             if (shortcutText.ToString() == "Ctrl+V" && _copiedShape != null)
             {
-                var cs = _copiedShape.Clone();
-
-                double lengthX = mouseDownPoint.X - cs.Start.X;
-                double lengthY = mouseDownPoint.Y - cs.Start.Y;
-                cs.Start.X = mouseDownPoint.X;
-                cs.Start.Y = mouseDownPoint.Y;
-                cs.End.X += lengthX;
-                cs.End.Y += lengthY;
-                cs.IsSelected = true;
-                _shapes.Add(cs);
-                //_shapes[_selectedShapeIndex.Value].IsSelected = false;
-                _copiedShape = cs;
-                if (_cutSelectedShapeIndex is not null)
-                {
-                    _shapes.RemoveAt(_cutSelectedShapeIndex.Value);
-                    _cutSelectedShapeIndex = null;
-                    _copiedShape = null;
-                }
-                _selectedShapeIndex = _shapes.Count - 1;
-                int i = _shapes.Count - 1;
-
-                ReDraw();
-
-                //paste xong được sửa shape
-                if (_shapes[i].Name != "Line")
-                {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeShapeAdorner(DrawCanvas.Children[i], _shapes[i]));
-                }
-                else
-                {
-                    AdornerLayer.GetAdornerLayer(DrawCanvas.Children[i])
-                        .Add(new ResizeLineAdorner(DrawCanvas.Children[i], _shapes[i]));
-                }
-                //DrawCanvas.MouseUp -= GetPoint_MouseUp;
-                //shortcutText.Clear();
+                PasteShape();
+                testblock.Text = shortcutText.ToString();
             }
             if (shortcutText.ToString() == "Ctrl+X" && _selectedShapeIndex != null)
             {
@@ -1004,13 +864,15 @@ namespace Paint
                     _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
                     _cutSelectedShapeIndex = _selectedShapeIndex;
                 }
+                testblock.Text = shortcutText.ToString();
             }
             if (shortcutText.ToString() == "Ctrl+S")
             {
                 Save();
+                testblock.Text = shortcutText.ToString();
             }
 
-            testblock.Text = shortcutText.ToString();
+            
         }
 
         private void PaintMainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -1044,6 +906,7 @@ namespace Paint
 
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
+
             _currentLayer = -1;
             for (int i = layers.Count() - 1; i >= 0; i--)
             {
@@ -1066,7 +929,10 @@ namespace Paint
                     _copiedShape = null;
                     break;
                 }
+
             }
+            _cutSelectedShapeIndex = null;
+            _copiedShape = null;
             ReDraw();
         }
 
@@ -1077,6 +943,12 @@ namespace Paint
 
         private void DeleteLayerBtn_Click(object sender, RoutedEventArgs e)
         {
+//Đảm bảo luôn có ít nhất 1 layer
+            if (layers.Count == 1)
+            {
+                MessageBox.Show("Can not delete this layer, you need to keep atleast 1 layer");
+                return;
+            }
 
             if (ListViewLayers.SelectedItems.Count == 0)
                 return;
@@ -1090,32 +962,46 @@ namespace Paint
                 layers[i].index = i;
             }
 
-            //đây là hàm toggle layer ở trên
-            for (int i = layers.Count() - 1; i >= 0; i--)
+            //đây là hàm ListViewLayers_SelectionChanged
+            //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
+            _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
+            if (_selectedShapeIndex is not null)
             {
-                if (layers[i].isChecked)
-                {
-                    _currentLayer = i;
-                    if (_selectedShapeIndex is not null)
-                    {
-                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
-                        _selectedShapeIndex = null;
-                    }
-
-                    _shapes = layers[i]._shapes;
-                    lowerLayersShapesCount = 0;
-                    for (int k = 0; k < i; k++)
-                    {
-                        if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
-                    }
-
-
-
-                    _cutSelectedShapeIndex = null;
-                    _copiedShape = null;
-                    break;
-                }
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
             }
+            _shapes = layers[_currentLayer]._shapes;
+
+            lowerLayersShapesCount = 0;
+            for (int k = 0; k < _currentLayer; k++)
+            {
+                if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+            }
+            _cutSelectedShapeIndex = null;
+            _copiedShape = null;
+
+            ReDraw();
+        }
+
+        private void ListViewLayers_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
+            _currentLayer = ListViewLayers.SelectedIndex==-1?0: ListViewLayers.SelectedIndex;
+            if (_selectedShapeIndex is not null)
+            {
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
+            }
+            _shapes = layers[_currentLayer]._shapes;    
+
+            lowerLayersShapesCount = 0;
+            for (int k = 0; k < _currentLayer; k++)
+            {
+                if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+            }
+            _cutSelectedShapeIndex = null;
+            _copiedShape = null;
+
             ReDraw();
         }
     }

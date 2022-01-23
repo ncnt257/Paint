@@ -71,8 +71,6 @@
     <Resource Include="Resource\Icon\ZoomOut.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resource\IMAGE\60337.png" />
-    <Resource Include="Resource\IMAGE\60340.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -86,12 +84,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Contract\Contract.csproj" />
     <ProjectReference Include="..\Line2D\Line2D.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Rectangle2D">
-      <HintPath>..\..\Shapes\Rectangle2D\Rectangle2D\bin\Release\net5.0-windows\Rectangle2D.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

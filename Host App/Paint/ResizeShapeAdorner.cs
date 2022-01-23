@@ -17,11 +17,11 @@ namespace Paint
 {
     public class ResizeShapeAdorner : Adorner
     {
+        private IShape _shape;
         const double THUMB_SIZE = 5;
         //kích thước nhỏ nhất shape có thể resize
         const double MINIMAL_SIZE = 10;
         const double MOVE_OFFSET = 20;
-        private IShape _shape;
 
         //9 thump xung quanh shape
         Thumb moveThumb, topLeftThumb, middleLeftThumb, bottomLeftThumb, topMiddleThumb, topRightThumb, middleRightThumb, bottomRightThumb, bottomMiddleThumb;
@@ -29,7 +29,7 @@ namespace Paint
         //Hình chữ nhật xung quanh shape
         Rectangle thumbRectangle;
 
-        VisualCollection visualCollection;
+        VisualCollection visualChildren;
 
         public ResizeShapeAdorner(UIElement adorned, IShape shape) : base(adorned)
         {
@@ -37,27 +37,27 @@ namespace Paint
 
             //ngoài việc resize shape trên canvas, cần update start.x ,y và end.x, y của IShape để khi vẽ lại, shape cũng được cập nhật
             _shape = shape;
-            visualCollection = new VisualCollection(this);
+            visualChildren = new VisualCollection(this);
 
             //thêm hcn xung quanh shape
-            visualCollection.Add(thumbRectangle = GeteResizeRectangle());
+            visualChildren.Add(thumbRectangle = GeteResizeRectangle());
 
             //các thumb bên trái shape
-            visualCollection.Add(topLeftThumb = GetResizeThumb(Cursors.SizeNWSE, HorizontalAlignment.Left, VerticalAlignment.Top));
-            visualCollection.Add(middleLeftThumb = GetResizeThumb(Cursors.SizeWE, HorizontalAlignment.Left, VerticalAlignment.Center));
-            visualCollection.Add(bottomLeftThumb = GetResizeThumb(Cursors.SizeNESW, HorizontalAlignment.Left, VerticalAlignment.Bottom));
+            visualChildren.Add(topLeftThumb = GetResizeThumb(Cursors.SizeNWSE, HorizontalAlignment.Left, VerticalAlignment.Top));
+            visualChildren.Add(middleLeftThumb = GetResizeThumb(Cursors.SizeWE, HorizontalAlignment.Left, VerticalAlignment.Center));
+            visualChildren.Add(bottomLeftThumb = GetResizeThumb(Cursors.SizeNESW, HorizontalAlignment.Left, VerticalAlignment.Bottom));
 
             //các thumb bên phải shape
-            visualCollection.Add(topRightThumb = GetResizeThumb(Cursors.SizeNESW, HorizontalAlignment.Right, VerticalAlignment.Top));
-            visualCollection.Add(middleRightThumb = GetResizeThumb(Cursors.SizeWE, HorizontalAlignment.Right, VerticalAlignment.Center));
-            visualCollection.Add(bottomRightThumb = GetResizeThumb(Cursors.SizeNWSE, HorizontalAlignment.Right, VerticalAlignment.Bottom));
+            visualChildren.Add(topRightThumb = GetResizeThumb(Cursors.SizeNESW, HorizontalAlignment.Right, VerticalAlignment.Top));
+            visualChildren.Add(middleRightThumb = GetResizeThumb(Cursors.SizeWE, HorizontalAlignment.Right, VerticalAlignment.Center));
+            visualChildren.Add(bottomRightThumb = GetResizeThumb(Cursors.SizeNWSE, HorizontalAlignment.Right, VerticalAlignment.Bottom));
 
             //2 thumb ở giữa shape
-            visualCollection.Add(topMiddleThumb = GetResizeThumb(Cursors.SizeNS, HorizontalAlignment.Center, VerticalAlignment.Top));
-            visualCollection.Add(bottomMiddleThumb = GetResizeThumb(Cursors.SizeNS, HorizontalAlignment.Center, VerticalAlignment.Bottom));
+            visualChildren.Add(topMiddleThumb = GetResizeThumb(Cursors.SizeNS, HorizontalAlignment.Center, VerticalAlignment.Top));
+            visualChildren.Add(bottomMiddleThumb = GetResizeThumb(Cursors.SizeNS, HorizontalAlignment.Center, VerticalAlignment.Bottom));
 
             //thumb ở trên shape để move
-            visualCollection.Add(moveThumb = GetMoveThumb());
+            visualChildren.Add(moveThumb = GetMoveThumb());
         }
 
         //hcn xung quanh shape
@@ -236,9 +236,9 @@ namespace Paint
 
         protected override Visual GetVisualChild(int index)
         {
-            return visualCollection[index];
+            return visualChildren[index];
         }
 
-        protected override int VisualChildrenCount => visualCollection.Count;
+        protected override int VisualChildrenCount => visualChildren.Count;
     }
 }
