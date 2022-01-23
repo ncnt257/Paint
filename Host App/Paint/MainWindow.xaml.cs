@@ -526,6 +526,15 @@ namespace Paint
                         // layers = new BindingList<Layer>(layerData);
                     }
                 }
+
+                //Tính lại current layer và gán _shape = _shape của currentlayer
+                for(int i = layers.Count() - 1; i >= 0; i--){
+                    if (layers[i].isChecked){
+                        _currentLayer = i;
+                        _shapes = layers[_currentLayer]._shapes;
+                        break;
+                    }
+                }
                 ReDraw();
 
                 return;
