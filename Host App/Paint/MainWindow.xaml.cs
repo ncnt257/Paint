@@ -5,7 +5,6 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,10 +18,6 @@ using Color = System.Windows.Media.Color;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
 
-using System.Threading;
-using Application = System.Windows.Forms.Application;
-using ApplicationWindow = System.Windows.Application;
-
 namespace Paint
 {
     /// <summary>
@@ -31,10 +26,8 @@ namespace Paint
     public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
     {
         public static string FilePath = "";
-        public static string FileName = Path.GetFileName(FilePath);
         private readonly IMouseEvents _hook = Hook.GlobalEvents();
         private bool _isDrawing = false;
-        //TODO tao bỏ readonly được k ???
         List<IShape> _shapes = new List<IShape>();
 
         private int? _selectedShapeIndex;
@@ -51,7 +44,7 @@ namespace Paint
         public Color FontColor { get; set; }
 
         //Layer
-        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0,true)};
+        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0, true) };
         private int _currentLayer = 0;
         private int lowerLayersShapesCount;
 
@@ -65,7 +58,7 @@ namespace Paint
         public int shift;
 
 
-        private readonly Dictionary<string, IShape> _prototypes =
+        public static Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
 
         //Properties menu
@@ -78,7 +71,7 @@ namespace Paint
             InitializeComponent();
             var window = Window.GetWindow(this);
             window.KeyDown += HandleKeyPress;
-            
+
         }
 
         private void GetPoint_MouseUp(object sender,
@@ -237,7 +230,7 @@ namespace Paint
             layers[_currentLayer]._shapes = _shapes;
 
             //Duyệt xem layer nào được check thì vẽ
-            for (int i = 0; i<layers.Count() ; i++)
+            for (int i = 0; i < layers.Count(); i++)
             {
 
 
@@ -245,14 +238,14 @@ namespace Paint
                 {
                     foreach (var shape in layers[i]._shapes)
                     {
-                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false,i==_currentLayer,shift);
+                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false, i == _currentLayer, shift);
 
                         DrawCanvas.Children.Add(element);
 
                         //update acutual width và height để dùng adorner 
                         DrawCanvas.UpdateLayout();
                     }
-                    
+
                 }
 
 
@@ -286,7 +279,7 @@ namespace Paint
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            
+
             var temp = e.Location;
             Point screenPos = new Point(temp.X, temp.Y);
             Point pos = DrawCanvas.PointFromScreen(screenPos);
@@ -493,7 +486,6 @@ namespace Paint
                 return;
             }
             string ext = Path.GetExtension(FilePath);
-            Debug.Write(ext);
             DrawCanvas.UpdateLayout();
             CreateBitmapFromVisual(DrawCanvas, FilePath, ext);
         }
@@ -523,11 +515,15 @@ namespace Paint
             {
                 using (var stream = File.OpenRead(FilePath))
                 {
-                    using var br = new BinaryReader(stream);
-                    while (br.PeekChar() > 0)
+                    using (var br = new BinaryReader(stream))
                     {
-                        string temp = br.ReadString();
-                        _shapes.Add(_prototypes[temp].ReadBinary(br));
+                        layers.Clear();
+                        var layerData = Paint.Layer.ReadLayerListBinary(br);
+                        foreach (var data in layerData)
+                        {
+                            layers.Add(data);
+                        }
+                        // layers = new BindingList<Layer>(layerData);
                     }
                 }
                 ReDraw();
@@ -603,23 +599,21 @@ namespace Paint
         }
 
 
-        /*
+
 
         public void SaveNew()
         {
+            // layers[_currentLayer]._shapes = _shapes;
             using (var stream = new FileStream(FilePath, FileMode.Append, FileAccess.Write, FileShare.None))
 
             using (var bw = new BinaryWriter(stream))
             {
-                foreach (var shape in _shapes)
-                {
-                    shape.WriteBinary(bw);
-                }
+                Paint.Layer.WriteLayerListBinary(bw, layers.ToList());
             }
         }
 
 
-
+        /*
         //private void Canvas_MouseMove(object sender, MouseEventArgs e)
         //{
         //    Point pos = e.GetPosition(DrawCanvas);
@@ -800,7 +794,7 @@ namespace Paint
 
         private void SelectShape(object sender, MouseButtonEventArgs e)
         {
-            
+
 
             if (_selectedShapeIndex != null)
             {
@@ -1035,21 +1029,22 @@ namespace Paint
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
             _currentLayer = -1;
-            for (int i = layers.Count()-1; i >=0; i--)
+            for (int i = layers.Count() - 1; i >= 0; i--)
             {
-                if (layers[i].isChecked) {
+                if (layers[i].isChecked)
+                {
                     _currentLayer = i;
                     if (_selectedShapeIndex is not null)
                     {
                         _shapes[_selectedShapeIndex.Value].IsSelected = false;
                         _selectedShapeIndex = null;
                     }
-                    
+
                     _shapes = layers[i]._shapes;
                     lowerLayersShapesCount = 0;
-                    for (int k = 0; k<i;k++)
+                    for (int k = 0; k < i; k++)
                     {
-                        if(layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+                        if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
                     }
                     _cutSelectedShapeIndex = null;
                     _copiedShape = null;
@@ -1073,7 +1068,7 @@ namespace Paint
             _currentLayer = -1;
 
             //Cập nhật lại tên layer
-            for(int i = 0; i < layers.Count(); i++)
+            for (int i = 0; i < layers.Count(); i++)
 
             {
                 layers[i].index = i;

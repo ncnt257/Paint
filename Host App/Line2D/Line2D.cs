@@ -1,6 +1,5 @@
 using Contract;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -33,7 +32,7 @@ namespace Line2D
             End = new Point2D() { X = x, Y = y };
         }
 
-        public UIElement Draw(bool isSelectMode, bool isOnTopLayer,int shift)
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift)
 
         {
             Line l = new Line()
@@ -91,7 +90,7 @@ namespace Line2D
         }
 
 
-        public void WriteBinary(BinaryWriter bw)
+        public void WriteShapeBinary(BinaryWriter bw)
         {
             bw.Write(Name);
             bw.Write(Start.X);
@@ -99,10 +98,9 @@ namespace Line2D
             bw.Write(End.X);
             bw.Write(End.Y);
             bw.Write(Thickness);
+            bw.Write(isShift);
             bw.Write(Color.ToString());
-            Debug.WriteLine(Color.ToString());
             bw.Write(Fill.ToString());
-            Debug.WriteLine(Fill.ToString());
             bw.Write(StrokeType.Count);
             foreach (var item in StrokeType)
             {
@@ -110,7 +108,7 @@ namespace Line2D
             }
         }
 
-        public IShape ReadBinary(BinaryReader br)
+        public IShape ReadShapeBinary(BinaryReader br)
         {
             var result = new Line2D();
             result.Start.X = br.ReadDouble();
@@ -118,10 +116,11 @@ namespace Line2D
             result.End.X = br.ReadDouble();
             result.End.Y = br.ReadDouble();
             result.Thickness = br.ReadInt32();
+            result.isShift = br.ReadInt32();
             var tempColor = br.ReadString();
-            result.Color = (Color)System.Windows.Media.ColorConverter.ConvertFromString(tempColor);
+            result.Color = (Color)ColorConverter.ConvertFromString(tempColor);
             var tempFill = br.ReadString();
-            result.Fill = (Color)System.Windows.Media.ColorConverter.ConvertFromString(tempFill);
+            result.Fill = (Color)ColorConverter.ConvertFromString(tempFill);
             var count = br.ReadInt32();
             result.StrokeType = new DoubleCollection();
             for (int i = 0; i < count; i++)

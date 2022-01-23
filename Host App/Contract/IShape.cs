@@ -28,9 +28,9 @@ namespace Contract
 
 
 
-        UIElement Draw(bool isSelectMode, bool isOnTopLayer,int shift);
-        void WriteBinary(BinaryWriter bw);
-        IShape ReadBinary(BinaryReader br);
+        UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift);
+        void WriteShapeBinary(BinaryWriter bw);
+        IShape ReadShapeBinary(BinaryReader br);
 
         IShape Clone();
 
