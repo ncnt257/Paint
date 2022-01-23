@@ -16,21 +16,35 @@ namespace Paint
 {
     public class ResizeLineAdorner : Adorner
     {
-        const double THUMB_SIZE = 5;
         private IShape _shape;
-        private Point start;
-        private Point end;
-        private Thumb startThumb;
-        private Thumb endThumb;
+        const double THUMB_SIZE = 5;
+        private Thumb startThumb, endThumb;
+
         private Line selectedLine;
+
         private VisualCollection visualChildren;
 
+        public ResizeLineAdorner(UIElement adornedElement, IShape shape) : base(adornedElement)
+        {
+            _shape = shape;
+            visualChildren = new VisualCollection(this);
+
+            startThumb = GetResizeThumb();
+            endThumb = GetResizeThumb();
+
+            startThumb.DragDelta += StartDragDelta;
+            endThumb.DragDelta += EndDragDelta;
+
+            visualChildren.Add(startThumb);
+            visualChildren.Add(endThumb);
+
+            selectedLine = AdornedElement as Line;
+        }
 
         private Thumb GetResizeThumb()
         {
             var thumb = new Thumb()
             {
-                //Background = Brushes.Red,
                 Width = THUMB_SIZE,
                 Height = THUMB_SIZE,
                 Cursor = Cursors.SizeAll,
@@ -51,25 +65,7 @@ namespace Paint
             return fef;
         }
 
-        // Constructor
-        public ResizeLineAdorner(UIElement adornedElement, IShape shape) : base(adornedElement)
-        {
-            _shape = shape;
-            visualChildren = new VisualCollection(this);
 
-            startThumb = GetResizeThumb();
-            endThumb = GetResizeThumb();
-
-            startThumb.DragDelta += StartDragDelta;
-            endThumb.DragDelta += EndDragDelta;
-
-            visualChildren.Add(startThumb);
-            visualChildren.Add(endThumb);
-
-            selectedLine = AdornedElement as Line;
-        }
-
-        // Event for the Thumb Start Point
         private void StartDragDelta(object sender, DragDeltaEventArgs e)
         {
             Point position = Mouse.GetPosition(this);
@@ -80,7 +76,6 @@ namespace Paint
             _shape.Start.Y = position.Y;
         }
 
-        // Event for the Thumb End Point
         private void EndDragDelta(object sender, DragDeltaEventArgs e)
         {
             Point position = Mouse.GetPosition(this);
@@ -90,11 +85,7 @@ namespace Paint
             _shape.End.X = position.X;
             _shape.End.Y = position.Y;
         }
-
-        protected override int VisualChildrenCount { get { return visualChildren.Count; } }
-        protected override Visual GetVisualChild(int index) { return visualChildren[index]; }
-
-
+        
         protected override Size ArrangeOverride(Size finalSize)
         {
             selectedLine = AdornedElement as Line;
@@ -109,6 +100,14 @@ namespace Paint
             endThumb.Arrange(endRect);
 
             return finalSize;
+        }
+
+        protected override int VisualChildrenCount => visualChildren.Count;
+
+        protected override Visual GetVisualChild(int index)
+        {
+            return visualChildren[index];
+
         }
     }
 }
