@@ -1,9 +1,7 @@
 using Contract;
 using System;
+using System.IO;
 using System.Windows;
-using System.Windows.Automation;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -11,6 +9,7 @@ using System.Windows.Shapes;
 
 namespace Line2D
 {
+    [Serializable]
     public class Line2D : IShape
     {
         public int isShift { get; set; }
@@ -33,7 +32,7 @@ namespace Line2D
             End = new Point2D() { X = x, Y = y };
         }
 
-        public UIElement Draw(bool isSelectMode, bool isOnTopLayer,int shift)
+        public UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift)
 
         {
             Line l = new Line()
@@ -54,12 +53,12 @@ namespace Line2D
             {
                 l.Cursor = Cursors.Hand;
                 l.MouseLeftButtonDown += ShapeSelected;
-                
+
             }
             return l;
         }
 
-        
+
 
         public Line2D()
         {
@@ -81,7 +80,7 @@ namespace Line2D
         {
             var line = (Line2D)MemberwiseClone();
             line.IsSelected = false;
-            if(Start is not null)
+            if (Start is not null)
                 line.Start = new Point2D(this.Start);
             if (End is not null)
                 line.End = new Point2D(this.End);
@@ -91,8 +90,47 @@ namespace Line2D
         }
 
 
+        public void WriteShapeBinary(BinaryWriter bw)
+        {
+            bw.Write(Name);
+            bw.Write(Start.X);
+            bw.Write(Start.Y);
+            bw.Write(End.X);
+            bw.Write(End.Y);
+            bw.Write(Thickness);
+            bw.Write(isShift);
+            bw.Write(IsSelected);
+            bw.Write(Color.ToString());
+            bw.Write(Fill.ToString());
+            bw.Write(StrokeType.Count);
+            foreach (var item in StrokeType)
+            {
+                bw.Write(item);
+            }
+        }
 
-
+        public IShape ReadShapeBinary(BinaryReader br)
+        {
+            var result = new Line2D();
+            result.Start.X = br.ReadDouble();
+            result.Start.Y = br.ReadDouble();
+            result.End.X = br.ReadDouble();
+            result.End.Y = br.ReadDouble();
+            result.Thickness = br.ReadInt32();
+            result.isShift = br.ReadInt32();
+            result.IsSelected = br.ReadBoolean();
+            var tempColor = br.ReadString();
+            result.Color = (Color)ColorConverter.ConvertFromString(tempColor);
+            var tempFill = br.ReadString();
+            result.Fill = (Color)ColorConverter.ConvertFromString(tempFill);
+            var count = br.ReadInt32();
+            result.StrokeType = new DoubleCollection();
+            for (int i = 0; i < count; i++)
+            {
+                result.StrokeType.Add(br.ReadDouble());
+            }
+            return result;
+        }
     }
 
 }
