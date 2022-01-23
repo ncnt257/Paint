@@ -86,6 +86,7 @@ namespace Paint
             MouseEventArgs e)
         {
             mouseDownPoint = e.GetPosition(DrawCanvas);
+            
             return;
         }
 
@@ -255,6 +256,23 @@ namespace Paint
                 if (previewSize < 1)
                 {
                     ReDraw();
+                    if (_selectedShapeIndex != null)
+                    {
+                        int index = _selectedShapeIndex.Value;
+                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
+
+                        //remove adorner của shape khác
+                        Adorner[] toRemoveArray =
+                            AdornerLayer.GetAdornerLayer(DrawCanvas).GetAdorners(DrawCanvas.Children[lowerLayersShapesCount + index]);
+                        if (toRemoveArray != null)
+                        {
+                            for (int x = 0; x < toRemoveArray.Length; x++)
+                            {
+                                AdornerLayer.GetAdornerLayer(DrawCanvas).Remove(toRemoveArray[x]);
+                            }
+                        }
+
+                    };
                     _selectedShapeIndex = null;
                     return;
                 };
@@ -567,15 +585,11 @@ namespace Paint
         //}
         */
 
-
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             _hook.MouseMove -= Hook_MouseMove;
             _hook.MouseUp -= Hook_MouseUp;
-
-
         }
-
 
         private void SelectButton_OnChecked(object sender, RoutedEventArgs e)
         {
@@ -588,7 +602,6 @@ namespace Paint
             DrawCanvas.MouseLeftButtonDown += SelectShape;
             DrawCanvas.Cursor = Cursors.Arrow;
             ReDraw();
-
         }
 
         private void SelectButton_OnUnchecked(object sender, RoutedEventArgs e)
@@ -642,7 +655,6 @@ namespace Paint
         private void SelectShape(object sender, MouseButtonEventArgs e)
         {
             
-
             if (_selectedShapeIndex != null)
             {
                 int index = _selectedShapeIndex.Value;
@@ -766,10 +778,6 @@ namespace Paint
             {
                 shortcutText.Append("Ctrl+");
             }
-            /*if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            {
-                shortcutText.Append("Shift+");
-            }*/
             if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0)
             {
                 shortcutText.Append("Alt+");
@@ -780,15 +788,18 @@ namespace Paint
             {
                 DrawCanvas.MouseUp += GetPoint_MouseUp;
                 _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
-                shortcutText.Clear();
+                testblock.Text = shortcutText.ToString();
+                //shortcutText.Clear();
             }
             if (shortcutText.ToString() == "Delete")
             {
                 DeleteShape();
+                testblock.Text = shortcutText.ToString();
             }
             if (shortcutText.ToString() == "Ctrl+V" && _copiedShape != null)
             {
                 PasteShape();
+                testblock.Text = shortcutText.ToString();
             }
             if (shortcutText.ToString() == "Ctrl+X" && _selectedShapeIndex != null)
             {
@@ -798,13 +809,15 @@ namespace Paint
                     _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
                     _cutSelectedShapeIndex = _selectedShapeIndex;
                 }
+                testblock.Text = shortcutText.ToString();
             }
             if (shortcutText.ToString() == "Ctrl+S")
             {
                 Save();
+                testblock.Text = shortcutText.ToString();
             }
 
-            testblock.Text = shortcutText.ToString();
+            
         }
 
         private void PaintMainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
