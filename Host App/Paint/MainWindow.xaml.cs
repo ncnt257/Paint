@@ -191,7 +191,7 @@ namespace Paint
             //Kiểm tra chọn layer nhưng layer đang bị ẩn(icon closed eye)
             else if (!layers[_currentLayer].isChecked)
             {
-                MessageBox.Show("Please display this layer");
+                MessageBox.Show("Please display selected layer for drawing");
                 return;
             }
             _isDrawing = true;
