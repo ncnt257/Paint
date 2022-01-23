@@ -71,8 +71,6 @@
     <Resource Include="Resource\Icon\ZoomOut.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resource\IMAGE\60337.png" />
-    <Resource Include="Resource\IMAGE\60340.png" />
   </ItemGroup>
 
   <ItemGroup>

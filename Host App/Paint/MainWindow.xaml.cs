@@ -182,9 +182,16 @@ namespace Paint
         private void Canvas_MouseDown(object sender,
             MouseButtonEventArgs e)
         {
+            //Kiểm tra chưa có layer nào được chọn
             if (_currentLayer == -1)
             {
                 MessageBox.Show("Please choose atleast 1 layer");
+                return;
+            }
+            //Kiểm tra chọn layer nhưng layer đang bị ẩn(icon closed eye)
+            else if (!layers[_currentLayer].isChecked)
+            {
+                MessageBox.Show("Please display this layer");
                 return;
             }
             _isDrawing = true;
@@ -851,28 +858,19 @@ namespace Paint
 
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
-            _currentLayer = -1;
-            for (int i = layers.Count()-1; i >=0; i--)
+            if (_selectedShapeIndex is not null)
             {
-                if (layers[i].isChecked) {
-                    _currentLayer = i;
-                    if (_selectedShapeIndex is not null)
-                    {
-                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
-                        _selectedShapeIndex = null;
-                    }
-                    
-                    _shapes = layers[i]._shapes;
-                    lowerLayersShapesCount = 0;
-                    for (int k = 0; k<i;k++)
-                    {
-                        if(layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
-                    }
-                    _cutSelectedShapeIndex = null;
-                    _copiedShape = null;
-                    break;
-                }
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
             }
+
+            lowerLayersShapesCount = 0;
+            for (int k = 0; k < _currentLayer; k++)
+            {
+                if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+            }
+            _cutSelectedShapeIndex = null;
+            _copiedShape = null;
             ReDraw();
         }
 
@@ -883,6 +881,13 @@ namespace Paint
 
         private void DeleteLayerBtn_Click(object sender, RoutedEventArgs e)
         {
+            //Đảm bảo luôn có ít nhất 1 layer
+            if (layers.Count == 1)
+            {
+                MessageBox.Show("Can not delete this layer, you need to keep atleast 1 layer");
+                return;
+            }
+
             if (ListViewLayers.SelectedItems.Count == 0)
                 return;
             layers.RemoveAt(ListViewLayers.SelectedIndex);
@@ -894,30 +899,46 @@ namespace Paint
                 layers[i].index = i;
             }
 
-            //đây là hàm toggle layer ở trên
-            for (int i = layers.Count() - 1; i >= 0; i--)
+            //đây là hàm ListViewLayers_SelectionChanged
+            //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
+            _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
+            if (_selectedShapeIndex is not null)
             {
-                if (layers[i].isChecked)
-                {
-                    _currentLayer = i;
-                    if (_selectedShapeIndex is not null)
-                    {
-                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
-                        _selectedShapeIndex = null;
-                    }
-
-                    _shapes = layers[i]._shapes;
-                    lowerLayersShapesCount = 0;
-                    for (int k = 0; k < i; k++)
-                    {
-                        if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
-                    }
-
-                    _cutSelectedShapeIndex = null;
-                    _copiedShape = null;
-                    break;
-                }
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
             }
+            _shapes = layers[_currentLayer]._shapes;
+
+            lowerLayersShapesCount = 0;
+            for (int k = 0; k < _currentLayer; k++)
+            {
+                if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+            }
+            _cutSelectedShapeIndex = null;
+            _copiedShape = null;
+
+            ReDraw();
+        }
+
+        private void ListViewLayers_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
+            _currentLayer = ListViewLayers.SelectedIndex==-1?0: ListViewLayers.SelectedIndex;
+            if (_selectedShapeIndex is not null)
+            {
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
+            }
+            _shapes = layers[_currentLayer]._shapes;    
+
+            lowerLayersShapesCount = 0;
+            for (int k = 0; k < _currentLayer; k++)
+            {
+                if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+            }
+            _cutSelectedShapeIndex = null;
+            _copiedShape = null;
+
             ReDraw();
         }
     }
