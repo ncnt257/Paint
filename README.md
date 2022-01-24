@@ -48,6 +48,6 @@ This is a cover of paint app of Windows with some features customed by our team
 
 
 # Link demo app
-[Click here](https://www.youtube.com/watch?v=WZIALw4pGvo&feature=youtu.be)
+[Click here](https://youtu.be/HvYpROih1Fk)
 
 # Expected grade 10.0
