@@ -67,8 +67,8 @@
                     <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small" Name="CopyButton" Click="CopyButton_OnClick"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Tool" >
-                    <Fluent:Button  Header="Undo" Icon="Resource/Icon/Undo.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top" Name="Undo" Click="Undo_OnClick"></Fluent:Button>
-                    <Fluent:Button  Header="Redo" Icon="Resource/Icon/Redo.PNG" SizeDefinition="Middle,Small" Name="Redo" Click="Redo_OnClick"></Fluent:Button>
+                    <Fluent:Button  Header="Undo" Icon="Resource/Icon/Undo.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top"></Fluent:Button>
+                    <Fluent:Button  Header="Redo" Icon="Resource/Icon/Redo.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
                     <Fluent:Button  Header="Delete" Name="DeleteButton" Icon="Resource/Icon/60565.PNG" SizeDefinition="Middle,Small" Click="DeleteButton_OnClick"></Fluent:Button>
 
                     <Fluent:ToggleButton  Header="Select" Icon="Resource/Icon/Move.PNG" SizeDefinition="Middle,Small" Name="SelectButton" Checked="SelectButton_OnChecked" Unchecked="SelectButton_OnUnchecked"></Fluent:ToggleButton>
@@ -127,28 +127,38 @@
 
                 
                 <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" Height="120">
-                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="100" Canvas.Left="670" Canvas.Top="28" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="ListViewLayers_SelectionChanged" SelectionMode="Single" SelectedIndex="0">
+                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="90" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="ListViewLayers_SelectionChanged" SelectionMode="Single" SelectedIndex="0">
                         <ListView.Resources>
                             <ContextMenu x:Key="ItemContextMenu">
                                 <MenuItem x:Name="DeleteLayerBtn" Header="Delete" Click="DeleteLayerBtn_Click"></MenuItem>
                             </ContextMenu>
                         </ListView.Resources>
                         <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}" >
+                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                                 <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=isChecked}" Value="False">
+                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#cce4f7"/>
+                                       
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
+
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="15">
                                     <Fluent:CheckBox Height="15" Padding="0 0 0 0" Margin="0 0 0 0" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Style="{StaticResource EyeCheckboxStyle}">
-                                        
                                     </Fluent:CheckBox>
                                     <TextBlock Height="15">Layer_</TextBlock>
-                                    <TextBlock Height="15" Text="{Binding index}"></TextBlock>
+                                    <TextBlock Height="15" Text="{Binding index}" Margin="0 0 10 0"></TextBlock>
                                 </StackPanel>
-                                
+
                             </DataTemplate>
+
                         </ListView.ItemTemplate>
                     </ListView>
                     <Fluent:Button  Header="Add" Icon="Resource/Icon/Add.PNG" SizeDefinition="medium" Click="AddLayerBtn_Click"></Fluent:Button>
