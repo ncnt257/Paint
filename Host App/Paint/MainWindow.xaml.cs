@@ -43,6 +43,9 @@ namespace Paint
         public Color FillColor { get; set; }
         public Color FontColor { get; set; }
 
+        //shape
+        private List<IShape> currentIShape = new List<IShape>();
+
         //Layer
         BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0, true) };
         private int _currentLayer = 0;
@@ -78,7 +81,7 @@ namespace Paint
             MouseEventArgs e)
         {
             mouseDownPoint = e.GetPosition(DrawCanvas);
-            
+
             return;
         }
 
@@ -89,7 +92,7 @@ namespace Paint
 
             double lengthX = mouseDownPoint.X - cs.Start.X;
             double lengthY = mouseDownPoint.Y - cs.Start.Y;
-            if((mouseDownPoint.X == 0 && mouseDownPoint.Y == 0) || (mouseDownPoint.X==cs.Start.X&&mouseDownPoint.Y==cs.Start.Y))
+            if ((mouseDownPoint.X == 0 && mouseDownPoint.Y == 0) || (mouseDownPoint.X == cs.Start.X && mouseDownPoint.Y == cs.Start.Y))
             {
                 cs.Start.X += 10;
                 cs.Start.Y += 10;
@@ -103,7 +106,7 @@ namespace Paint
                 cs.End.X += lengthX;
                 cs.End.Y += lengthY;
             }
-            
+
             cs.IsSelected = true;
             _shapes.Add(cs);
             if (_selectedShapeIndex is not null)
@@ -803,7 +806,6 @@ namespace Paint
                 //khỏi phải vẽ lại
                 DrawCanvas.Children.RemoveAt(lowerLayersShapesCount + _selectedShapeIndex.Value);
                 _selectedShapeIndex = null;
-
             }
         }
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
@@ -871,7 +873,7 @@ namespace Paint
                 testblock.Text = shortcutText.ToString();
             }
 
-            
+
         }
 
         private void PaintMainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -929,7 +931,7 @@ namespace Paint
 
         private void DeleteLayerBtn_Click(object sender, RoutedEventArgs e)
         {
-//Đảm bảo luôn có ít nhất 1 layer
+            //Đảm bảo luôn có ít nhất 1 layer
             if (layers.Count == 1)
             {
                 MessageBox.Show("Can not delete this layer, you need to keep atleast 1 layer");
@@ -991,6 +993,35 @@ namespace Paint
             _copiedShape = null;
 
             ReDraw();
+        }
+
+        private void UndoModule()
+        {
+            if (_shapes.Count == 0) return;
+            if (_selectedShapeIndex is not null)
+            {
+                currentIShape.Add(_shapes[_shapes.Count - 1]);
+                _shapes.RemoveAt(_shapes.Count - 1);
+                //khỏi phải vẽ lại
+                ReDraw();
+            }
+        }
+
+        private void RedoModule()
+        {
+            if (currentIShape.Count == 0) return;
+            _shapes.Add(currentIShape[currentIShape.Count - 1]);
+            currentIShape.RemoveAt(currentIShape.Count - 1);
+            ReDraw();
+        }
+        private void Undo_OnClick(object sender, RoutedEventArgs e)
+        {
+            UndoModule();
+        }
+
+        private void Redo_OnClick(object sender, RoutedEventArgs e)
+        {
+            RedoModule();
         }
     }
 }
