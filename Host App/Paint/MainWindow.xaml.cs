@@ -473,14 +473,13 @@ namespace Paint
                 }
 
                 //Tính lại current layer và gán _shape = _shape của currentlayer
-                for (int i = layers.Count() - 1; i >= 0; i--)
+                _currentLayer = 0;
+                ListViewLayers.SelectedIndex = _currentLayer;
+                _shapes = layers[_currentLayer]._shapes;
+                lowerLayersShapesCount = 0;
+                for (int k = 0; k < _currentLayer; k++)
                 {
-                    if (layers[i].isChecked)
-                    {
-                        _currentLayer = i;
-                        _shapes = layers[_currentLayer]._shapes;
-                        break;
-                    }
+                    if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
                 }
                 ReDraw();
 
@@ -907,29 +906,16 @@ namespace Paint
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
 
-            _currentLayer = -1;
-            for (int i = layers.Count() - 1; i >= 0; i--)
+            if (_selectedShapeIndex is not null)
             {
-                if (layers[i].isChecked)
-                {
-                    _currentLayer = i;
-                    if (_selectedShapeIndex is not null)
-                    {
-                        _shapes[_selectedShapeIndex.Value].IsSelected = false;
-                        _selectedShapeIndex = null;
-                    }
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
+            }
 
-                    _shapes = layers[i]._shapes;
-                    lowerLayersShapesCount = 0;
-                    for (int k = 0; k < i; k++)
-                    {
-                        if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
-                    }
-                    _cutSelectedShapeIndex = null;
-                    _copiedShape = null;
-                    break;
-                }
-
+            lowerLayersShapesCount = 0;
+            for (int k = 0; k < _currentLayer; k++)
+            {
+                if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
             }
             _cutSelectedShapeIndex = null;
             _copiedShape = null;
@@ -987,13 +973,14 @@ namespace Paint
         {
             //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
             if (layers.Count() == 0) return;
-            _currentLayer = ListViewLayers.SelectedIndex==-1?0: ListViewLayers.SelectedIndex;
+            _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
             if (_selectedShapeIndex is not null)
             {
                 _shapes[_selectedShapeIndex.Value].IsSelected = false;
                 _selectedShapeIndex = null;
             }
-            _shapes = layers[_currentLayer]._shapes;    
+
+            _shapes = layers[_currentLayer]._shapes;
 
             lowerLayersShapesCount = 0;
             for (int k = 0; k < _currentLayer; k++)
