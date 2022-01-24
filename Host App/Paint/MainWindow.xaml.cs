@@ -986,6 +986,7 @@ namespace Paint
         private void ListViewLayers_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
+            if (layers.Count() == 0) return;
             _currentLayer = ListViewLayers.SelectedIndex==-1?0: ListViewLayers.SelectedIndex;
             if (_selectedShapeIndex is not null)
             {
