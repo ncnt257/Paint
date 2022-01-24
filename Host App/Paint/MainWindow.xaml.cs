@@ -138,6 +138,7 @@ namespace Paint
 
             if (_isDrawing)
             {
+                if (DrawCanvas is null) return;
                 if (Keyboard.IsKeyDown(Key.LeftShift))
                 {
                     shift = 1;

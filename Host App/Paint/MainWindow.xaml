@@ -127,15 +127,24 @@
 
                 
                 <Fluent:RibbonGroupBox x:Name="Layer" Header="Layer" Height="120">
-                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="100" Canvas.Left="670" Canvas.Top="28" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="ListViewLayers_SelectionChanged" SelectionMode="Single" SelectedIndex="0">
+                    <ListView Name="ListViewLayers" Padding="0 0 0 0" Margin="0 0 0 0" Height="90" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="ListViewLayers_SelectionChanged" SelectionMode="Single" SelectedIndex="0">
                         <ListView.Resources>
                             <ContextMenu x:Key="ItemContextMenu">
                                 <MenuItem x:Name="DeleteLayerBtn" Header="Delete" Click="DeleteLayerBtn_Click"></MenuItem>
                             </ContextMenu>
                         </ListView.Resources>
                         <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}" >
+                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                                 <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=isChecked}" Value="False">
+                                        <Setter Property="Foreground" Value="DarkGray"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#cce4f7"/>
+
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
@@ -145,7 +154,7 @@
                                         
                                     </Fluent:CheckBox>
                                     <TextBlock Height="15">Layer_</TextBlock>
-                                    <TextBlock Height="15" Text="{Binding index}"></TextBlock>
+                                    <TextBlock Height="15" Text="{Binding index}" Margin="0 0 10 0"></TextBlock>
                                 </StackPanel>
                                 
                             </DataTemplate>
