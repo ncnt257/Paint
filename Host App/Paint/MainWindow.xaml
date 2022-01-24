@@ -142,7 +142,6 @@
                                     </DataTrigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="#cce4f7"/>
-                                       
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
