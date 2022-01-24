@@ -31,10 +31,10 @@ This is a cover of paint app of Windows with some features customed by our team
 1. Allow the user to change the color, pen width, stroke type (dash, dot, dash dot dot...)
 2. Using Hook to draw shapes even when the user drag the cursor away from the app's boundary
 3. Adding Layers support
-4. Select a single element for editing again
-    Transforming horizontally and vertically
-    Drag & Drop
-    Filling color for shapes
+4. Select a single element for editing again:
+    Transforming horizontally and vertically,
+    Drag & Drop,
+    Filling color for shapes,
     Changind stroke type
 5. Zooming
 6. Cut / Copy / Paste
