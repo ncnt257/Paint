@@ -6,6 +6,8 @@
 
 # How to run app
 - Click execute file in folder [Release]()
+- External shape .dll files are already there 
+- If the execute file does not work, please rebuild the app by source code, you can reuse 2 other external shapes in "Source Code/Builded Shapes DLL" folder
 - Then enjoy the result of our effort
 
 # About the project
@@ -42,7 +44,7 @@ This is a cover of paint app of Windows with some features customed by our team
     Example:
     + Drawing Ellipse + Holding shift  => Circle
     + Drawing Rectangle + Holding shift => Square
-8. Using shortcut to manipulate app (Ctrl C, Ctrl V, Delete, Ctrl S)
+8. Using shortcut to manipulate app (Ctrl C, Ctrl V, Delete, Ctrl S,...)
 9. Undo, redo 
 10. Having nice User Interface using [Design Material](http://materialdesigninxaml.net/) and [Fluent Ribbon](https://fluentribbon.github.io/)
 
