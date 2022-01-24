@@ -148,11 +148,12 @@ namespace Paint
                 }
 
                 _preview.HandleEnd(pos.X, pos.Y);
-
                 // Xoá hết các hình vẽ cũ
                 ReDraw();
 
                 // Vẽ hình preview đè lên
+
+                //bool shift = shortcutText.ToString().Contains("shift");
                 DrawCanvas.Children.Add(_preview.Draw(SelectButton.IsChecked ?? false, true, shift));
 
             }
@@ -660,14 +661,6 @@ namespace Paint
             {
                 Save();
                 testblock.Text = shortcutText.ToString();
-            }
-            if (shortcutText.ToString() == "Ctrl+Z")
-            {
-                UndoModule();
-            }
-            if (shortcutText.ToString() == "Ctrl+Y")
-            {
-                RedoModule();
             }
 
 
