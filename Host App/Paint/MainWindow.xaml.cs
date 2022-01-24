@@ -38,7 +38,6 @@ namespace Paint
 
         //binding
         Color _fillColor = Colors.Red;
-        public string test { get; set; }
         public Color OutlineColor { get; set; }
         public Color FillColor { get; set; }
         public Color FontColor { get; set; }
