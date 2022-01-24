@@ -518,6 +518,7 @@ namespace Paint
 
         private void CopyShape()
         {
+            _cutSelectedShapeIndex = null;
             if (_selectedShapeIndex != null)
             {
                 _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
