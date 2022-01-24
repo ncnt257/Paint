@@ -137,7 +137,7 @@ namespace Paint
 
         private void ReDraw()//xóa và vẽ lại
         {
-
+            if (DrawCanvas is null) return;
             DrawCanvas.Children.Clear();
 
             if (_currentLayer == -1)
