@@ -32,14 +32,11 @@ namespace Paint
         string _seletedPrototypeName = "";
         IShape _preview;
 
-        //current shape use for undo and redo
-        private List<IShape> currentIShape = new List<IShape>();
-
         //select, cut, copy, paste
         private int? _selectedShapeIndex;
         private int? _cutSelectedShapeIndex;
         private IShape _copiedShape;
-
+        
         //UI binding
         Color _fillColor = Colors.Red;
         public string test { get; set; }
@@ -82,14 +79,14 @@ namespace Paint
         {
             mouseDownPoint = e.GetPosition(DrawCanvas);
 
-
+            
         }
 
-
+        
         private void DrawCanvas_OnLoaded(object sender, RoutedEventArgs e)
         {
             _hook.MouseMove += Hook_MouseMove;
-            _hook.MouseUp += Hook_MouseUp;
+            _hook.MouseUp += Hook_MouseUp; 
 
         }
         private void Canvas_MouseDown(object sender,
@@ -117,7 +114,7 @@ namespace Paint
             _preview.Color = OutlineColor;
             _preview.Thickness = (int)buttonStrokeSize.Value;
             _preview.StrokeType = StrokeTypes[buttonStrokeType.SelectedIndex];
-            _preview.Fill = FillColor;
+            _preview.Fill = FillColor; 
 
         }
 
@@ -157,7 +154,7 @@ namespace Paint
                 DrawCanvas.Children.Add(_preview.Draw(SelectButton.IsChecked ?? false, true, shift));
 
             }
-
+            
 
         }
         //hàm này cần update selected shape
@@ -220,7 +217,7 @@ namespace Paint
                 }
 
             }
-
+            
 
 
         }
@@ -232,7 +229,7 @@ namespace Paint
 
             _preview = _prototypes[_seletedPrototypeName].Clone();
 
-            SelectButton.IsChecked = false;
+            SelectButton.IsChecked = false; 
 
         }
 
@@ -297,7 +294,7 @@ namespace Paint
                 _seletedPrototypeName = _prototypes.First().Value.Name;
                 _preview = _prototypes[_seletedPrototypeName].Clone();
             }
-
+            
 
         }
 
@@ -354,13 +351,13 @@ namespace Paint
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            Save(); 
 
         }
 
         private void buttonSaveAs_Click(object sender, RoutedEventArgs e)
         {
-            SaveAs();
+            SaveAs(); 
 
         }
 
@@ -414,7 +411,7 @@ namespace Paint
             bi.EndInit();
             ImageBrush ib = new ImageBrush();
             ib.ImageSource = bi;
-            DrawCanvas.Background = ib;
+            DrawCanvas.Background = ib; 
 
         }
 
@@ -477,14 +474,14 @@ namespace Paint
             {
                 Paint.Layer.WriteLayerListBinary(bw, layers.ToList());
             }
-
+            
 
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             _hook.MouseMove -= Hook_MouseMove;
-            _hook.MouseUp -= Hook_MouseUp;
+            _hook.MouseUp -= Hook_MouseUp; 
 
         }
 
@@ -498,7 +495,7 @@ namespace Paint
             DrawCanvas.MouseDown -= Canvas_MouseDown;
             DrawCanvas.MouseLeftButtonDown += SelectShape;
             DrawCanvas.Cursor = Cursors.Arrow;
-            ReDraw();
+            ReDraw(); 
 
         }
 
@@ -523,7 +520,7 @@ namespace Paint
             {
                 _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
             }
-
+            
 
         }
 
@@ -534,12 +531,12 @@ namespace Paint
                 _copiedShape = _shapes[_selectedShapeIndex.Value].Clone();
                 _cutSelectedShapeIndex = _selectedShapeIndex;
             }
-
+            
 
         }
         private void CopyButton_OnClick(object sender, RoutedEventArgs e)
         {
-            CopyShape();
+            CopyShape(); 
 
         }
 
@@ -549,13 +546,13 @@ namespace Paint
             {
                 PasteShape();
             }
-
+            
 
         }
 
         private void CutButton_OnClick(object sender, RoutedEventArgs e)
         {
-            CutShape();
+            CutShape(); 
 
         }
 
@@ -575,7 +572,7 @@ namespace Paint
                 DrawCanvas.Height = this.ActualHeight - 170;
                 DrawCanvas.Width = this.ActualWidth;
             }
-
+            
 
         }
 
@@ -591,7 +588,7 @@ namespace Paint
             Zoom(currentValue);
 
             currentProportion = currentValue;
-            Proportion.Text = $"{currentProportion}%";
+            Proportion.Text = $"{currentProportion}%"; 
 
         }
 
@@ -599,7 +596,7 @@ namespace Paint
 
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
-            DeleteShape();
+            DeleteShape(); 
 
         }
 
@@ -662,7 +659,7 @@ namespace Paint
                 Save();
                 testblock.Text = shortcutText.ToString();
             }
-
+            
 
 
         }
@@ -675,7 +672,7 @@ namespace Paint
             }
 
             DrawCanvas.Height = this.ActualHeight - 170;
-            DrawCanvas.Width = this.ActualWidth;
+            DrawCanvas.Width = this.ActualWidth; 
 
         }
         private void buttonFill_Click(object sender, RoutedEventArgs e)
@@ -685,7 +682,7 @@ namespace Paint
                 _shapes[_selectedShapeIndex.Value].Fill = FillColor;
                 ReDraw();
             }
-
+            
 
         }
         private void buttonOutline_Click(object sender, RoutedEventArgs e)
@@ -695,26 +692,26 @@ namespace Paint
                 _shapes[_selectedShapeIndex.Value].Color = OutlineColor;
                 ReDraw();
             }
-
+            
 
         }
 
 
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
-            OnLayersUpdated();
+            OnLayersUpdated(); 
 
         }
 
         private void AddLayerBtn_Click(object sender, RoutedEventArgs e)
         {
-            layers.Add(new Layer(layers.Count));
+            layers.Add(new Layer(layers.Count)); 
 
         }
 
         private void DeleteLayerBtn_Click(object sender, RoutedEventArgs e)
         {
-            //Đảm bảo luôn có ít nhất 1 layer
+//Đảm bảo luôn có ít nhất 1 layer
             if (layers.Count == 1)
             {
                 MessageBox.Show("Can not delete this layer, you need to keep atleast 1 layer");
@@ -738,7 +735,7 @@ namespace Paint
             _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
             _shapes = layers[_currentLayer]._shapes;
 
-            OnLayersUpdated();
+            OnLayersUpdated(); 
 
         }
 
@@ -749,40 +746,9 @@ namespace Paint
             _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
             _shapes = layers[_currentLayer]._shapes;
 
-            OnLayersUpdated();
+            OnLayersUpdated(); 
 
         }
-
-        //TẠO HÀM CHO CÁC CHỨC NĂNG UNDO REDO
-        private void UndoModule()
-        {
-            if (_shapes.Count == 0) return;
-            if (_selectedShapeIndex is not null)
-            {
-                currentIShape.Add(_shapes[_shapes.Count - 1]);
-                _shapes.RemoveAt(_shapes.Count - 1);
-                //khỏi phải vẽ lại
-                ReDraw();
-            }
-        }
-
-        private void RedoModule()
-        {
-            if (currentIShape.Count == 0) return;
-            _shapes.Add(currentIShape[currentIShape.Count - 1]);
-            currentIShape.RemoveAt(currentIShape.Count - 1);
-            ReDraw();
-        }
-        private void Undo_OnClick(object sender, RoutedEventArgs e)
-        {
-            UndoModule();
-        }
-
-        private void Redo_OnClick(object sender, RoutedEventArgs e)
-        {
-            RedoModule();
-        }
-
 
         //TẠO HÀM CHO CÁC ĐOẠN CODE BỊ LẶP
 
@@ -799,8 +765,8 @@ namespace Paint
             }
             _cutSelectedShapeIndex = null;
             _copiedShape = null;
-            currentIShape.Clear();
-            ReDraw();
+            ReDraw(); 
+
         }
 
         //hàm này cần update selected shape
@@ -941,13 +907,12 @@ namespace Paint
                     }
 
                     _shapes[i].IsSelected = false;
-
+                    
                     return;
                 }
 
             }
             _selectedShapeIndex = null;
         }
-
     }
 }
