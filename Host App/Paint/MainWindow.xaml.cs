@@ -5,7 +5,6 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,11 +18,6 @@ using Color = System.Windows.Media.Color;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
 
-using System.Threading;
-using Application = System.Windows.Forms.Application;
-using ApplicationWindow = System.Windows.Application;
-
-
 namespace Paint
 {
     /// <summary>
@@ -32,10 +26,8 @@ namespace Paint
     public partial class MainWindow : RibbonWindow, INotifyPropertyChanged
     {
         public static string FilePath = "";
-        public static string FileName = Path.GetFileName(FilePath);
         private readonly IMouseEvents _hook = Hook.GlobalEvents();
         private bool _isDrawing = false;
-        //TODO tao bỏ readonly được k ???
         List<IShape> _shapes = new List<IShape>();
 
         private int? _selectedShapeIndex;
@@ -52,7 +44,7 @@ namespace Paint
         public Color FontColor { get; set; }
 
         //Layer
-        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0,true)};
+        BindingList<Layer> layers = new BindingList<Layer>() { new Layer(0, true) };
         private int _currentLayer = 0;
         private int lowerLayersShapesCount;
 
@@ -66,7 +58,7 @@ namespace Paint
         public int shift;
 
 
-        private readonly Dictionary<string, IShape> _prototypes =
+        public static Dictionary<string, IShape> _prototypes =
             new Dictionary<string, IShape>();
 
         //Properties menu
@@ -79,7 +71,7 @@ namespace Paint
             InitializeComponent();
             var window = Window.GetWindow(this);
             window.KeyDown += HandleKeyPress;
-            
+
         }
 
         private void GetPoint_MouseUp(object sender,
@@ -154,23 +146,24 @@ namespace Paint
             layers[_currentLayer]._shapes = _shapes;
 
             //Duyệt xem layer nào được check thì vẽ
-            for (int i = 0; i<layers.Count() ; i++)
+            for (int i = 0; i < layers.Count(); i++)
             {
+
 
                 if (layers[i].isChecked)
                 {
                     foreach (var shape in layers[i]._shapes)
                     {
-                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false,i==_currentLayer,shift);
+                        UIElement element = shape.Draw(SelectButton.IsChecked ?? false, i == _currentLayer, shift);
 
                         DrawCanvas.Children.Add(element);
 
                         //update acutual width và height để dùng adorner 
                         DrawCanvas.UpdateLayout();
                     }
-                    
+
                 }
-                
+
 
             }
         }
@@ -209,7 +202,7 @@ namespace Paint
 
         private void Hook_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            
+
             var temp = e.Location;
             Point screenPos = new Point(temp.X, temp.Y);
             Point pos = DrawCanvas.PointFromScreen(screenPos);
@@ -392,7 +385,7 @@ namespace Paint
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExt = "png";
-            saveFileDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            saveFileDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg|Binary Files (*.bin)|*.bin";
             if (saveFileDialog.ShowDialog() == true)
             {
                 FilePath = saveFileDialog.FileName;
@@ -413,6 +406,11 @@ namespace Paint
                             CreateBitmapFromVisual(DrawCanvas, saveFileDialog.FileName, ".jpg");
                             break;
                         }
+                    case 4:
+                        {
+                            SaveNew();
+                            break;
+                        }
                     default:
                         break;
                 }
@@ -428,8 +426,12 @@ namespace Paint
                 return;
             }
             string ext = Path.GetExtension(FilePath);
-            Debug.Write(ext);
             DrawCanvas.UpdateLayout();
+            if (ext == ".bin")
+            {
+                SaveNew();
+                return;
+            }
             CreateBitmapFromVisual(DrawCanvas, FilePath, ext);
         }
 
@@ -446,7 +448,7 @@ namespace Paint
         private void buttonOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog browseDialog = new OpenFileDialog();
-            browseDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg";
+            browseDialog.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|JPG Files (*.jpg)|*.jpg|Binary Files (*.bin)|*.bin";
             browseDialog.FilterIndex = 1;
             browseDialog.Multiselect = false;
             if (browseDialog.ShowDialog() != true)
@@ -454,17 +456,44 @@ namespace Paint
                 return;
             }
             FilePath = browseDialog.FileName;
+            if (Path.GetExtension(FilePath) == ".bin")
+            {
+                using (var stream = File.OpenRead(FilePath))
+                {
+                    using (var br = new BinaryReader(stream))
+                    {
+                        layers.Clear();
+                        var layerData = Paint.Layer.ReadLayerListBinary(br);
+                        foreach (var data in layerData)
+                        {
+                            layers.Add(data);
+                        }
+                        // layers = new BindingList<Layer>(layerData);
+                    }
+                }
 
-            //need to fix right here
-            // ImageBrush ib = new ImageBrush();
-            // BitmapImage inputFile = new BitmapImage(new Uri(FilePath, UriKind.RelativeOrAbsolute));
-            // ib.ImageSource = inputFile;
-            // DrawCanvas.Background = ib;
+                //Tính lại current layer và gán _shape = _shape của currentlayer
+                _currentLayer = 0;
+                ListViewLayers.SelectedIndex = _currentLayer;
+                _shapes = layers[_currentLayer]._shapes;
+                lowerLayersShapesCount = 0;
+                for (int k = 0; k < _currentLayer; k++)
+                {
+                    if (layers[k].isChecked) lowerLayersShapesCount += layers[k]._shapes.Count;
+                }
+                ReDraw();
 
+                return;
+            }
             MemoryStream ms = new MemoryStream();
             BitmapImage bi = new BitmapImage();
-            byte[] bytArray = File.ReadAllBytes(FilePath);
-            ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
+            if (FilePath != null)
+            {
+                byte[] bytArray = File.ReadAllBytes(FilePath);
+                ms.Write(bytArray, 0, bytArray.Length);
+            }
+
+            ms.Position = 0;
             bi.BeginInit();
             bi.StreamSource = ms;
             bi.EndInit();
@@ -523,6 +552,21 @@ namespace Paint
             }
 
         }
+
+
+
+
+        public void SaveNew()
+        {
+            // layers[_currentLayer]._shapes = _shapes;
+            using (var stream = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+
+            using (var bw = new BinaryWriter(stream))
+            {
+                Paint.Layer.WriteLayerListBinary(bw, layers.ToList());
+            }
+        }
+
 
         /*
         //private void Canvas_MouseMove(object sender, MouseEventArgs e)
@@ -619,6 +663,7 @@ namespace Paint
                 _selectedShapeIndex = null;
             }
 
+
             DrawCanvas.MouseLeftButtonDown -= SelectShape;
             DrawCanvas.MouseDown += Canvas_MouseDown;
             DrawCanvas.Cursor = Cursors.Cross;
@@ -661,7 +706,7 @@ namespace Paint
 
         private void SelectShape(object sender, MouseButtonEventArgs e)
         {
-            
+
             if (_selectedShapeIndex != null)
             {
                 int index = _selectedShapeIndex.Value;
@@ -687,6 +732,7 @@ namespace Paint
                     _selectedShapeIndex = i;
                     if (_shapes[i].Name != "Line")
 
+
                     {
                         AdornerLayer.GetAdornerLayer(DrawCanvas.Children[lowerLayersShapesCount + i])
                             .Add(new ResizeShapeAdorner(DrawCanvas.Children[lowerLayersShapesCount + i], _shapes[i]));
@@ -704,6 +750,7 @@ namespace Paint
 
             _selectedShapeIndex = null;
             //ReDraw();
+
         }
 
         private void Zoom(float newProp)
@@ -858,6 +905,7 @@ namespace Paint
 
         private void LayerToggleBtn_Click(object sender, RoutedEventArgs e)
         {
+
             if (_selectedShapeIndex is not null)
             {
                 _shapes[_selectedShapeIndex.Value].IsSelected = false;
@@ -881,7 +929,7 @@ namespace Paint
 
         private void DeleteLayerBtn_Click(object sender, RoutedEventArgs e)
         {
-            //Đảm bảo luôn có ít nhất 1 layer
+//Đảm bảo luôn có ít nhất 1 layer
             if (layers.Count == 1)
             {
                 MessageBox.Show("Can not delete this layer, you need to keep atleast 1 layer");
@@ -894,7 +942,8 @@ namespace Paint
             _currentLayer = -1;
 
             //Cập nhật lại tên layer
-            for(int i = 0; i < layers.Count(); i++)
+            for (int i = 0; i < layers.Count(); i++)
+
             {
                 layers[i].index = i;
             }
@@ -923,13 +972,15 @@ namespace Paint
         private void ListViewLayers_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
-            _currentLayer = ListViewLayers.SelectedIndex==-1?0: ListViewLayers.SelectedIndex;
+            if (layers.Count() == 0) return;
+            _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
             if (_selectedShapeIndex is not null)
             {
                 _shapes[_selectedShapeIndex.Value].IsSelected = false;
                 _selectedShapeIndex = null;
             }
-            _shapes = layers[_currentLayer]._shapes;    
+
+            _shapes = layers[_currentLayer]._shapes;
 
             lowerLayersShapesCount = 0;
             for (int k = 0; k < _currentLayer; k++)

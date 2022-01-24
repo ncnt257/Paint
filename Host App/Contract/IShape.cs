@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,7 +27,10 @@ namespace Contract
 
 
 
-        UIElement Draw(bool isSelectMode, bool isOnTopLayer,int shift);
+
+        UIElement Draw(bool isSelectMode, bool isOnTopLayer, int shift);
+        void WriteShapeBinary(BinaryWriter bw);
+        IShape ReadShapeBinary(BinaryReader br);
 
         IShape Clone();
 
