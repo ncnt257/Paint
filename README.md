@@ -34,6 +34,8 @@ This is a cover of paint app of Windows with some features customed by our team
 4. Select a single element for editing again
     Transforming horizontally and vertically
     Drag & Drop
+    Filling color for shapes
+    Changind stroke type
 5. Zooming
 6. Cut / Copy / Paste
 7. Holding Shift while drawing to create balance shapes. 
@@ -41,9 +43,8 @@ This is a cover of paint app of Windows with some features customed by our team
     + Drawing Ellipse + Holding shift  => Circle
     + Drawing Rectangle + Holding shift => Square
 8. Using shortcut to manipulate app (Ctrl C, Ctrl V, Delete, Ctrl S)
-9. Filling color for shapes
-10. Undo, redo 
-11. Having nice User Interface using [Design Material](http://materialdesigninxaml.net/) and [Fluent Ribbon](https://fluentribbon.github.io/)
+9. Undo, redo 
+10. Having nice User Interface using [Design Material](http://materialdesigninxaml.net/) and [Fluent Ribbon](https://fluentribbon.github.io/)
 
 
 # Link demo app
