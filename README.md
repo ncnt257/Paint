@@ -42,7 +42,8 @@ This is a cover of paint app of Windows with some features customed by our team
     + Drawing Rectangle + Holding shift => Square
 8. Using shortcut to manipulate app (Ctrl C, Ctrl V, Delete, Ctrl S)
 9. Filling color for shapes
-10. Having nice User Interface using [Design Material](http://materialdesigninxaml.net/) and [Fluent Ribbon](https://fluentribbon.github.io/)
+10. Undo, redo 
+11. Having nice User Interface using [Design Material](http://materialdesigninxaml.net/) and [Fluent Ribbon](https://fluentribbon.github.io/)
 
 
 # Link demo app
