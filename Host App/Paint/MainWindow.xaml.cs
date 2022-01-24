@@ -42,7 +42,6 @@ namespace Paint
 
         //UI binding
         Color _fillColor = Colors.Red;
-        public string test { get; set; }
         public Color OutlineColor { get; set; }
         public Color FillColor { get; set; }
 
@@ -764,19 +763,26 @@ namespace Paint
         //TẠO HÀM CHO CÁC CHỨC NĂNG UNDO REDO
         private void UndoModule()
         {
-            if (_shapes.Count == 0) return;
-            if (_selectedShapeIndex is not null)
+            if (_selectedShapeIndex != null)
             {
-                currentIShape.Add(_shapes[_shapes.Count - 1]);
-                _shapes.RemoveAt(_shapes.Count - 1);
-                //khỏi phải vẽ lại
-                ReDraw();
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
             }
+            if (_shapes.Count == 0) return;
+            currentIShape.Add(_shapes[_shapes.Count - 1]);
+            _shapes.RemoveAt(_shapes.Count - 1);
+            //khỏi phải vẽ lại
+            ReDraw();
         }
 
         private void RedoModule()
         {
             if (currentIShape.Count == 0) return;
+            if (_selectedShapeIndex != null)
+            {
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
+            };
             _shapes.Add(currentIShape[currentIShape.Count - 1]);
             currentIShape.RemoveAt(currentIShape.Count - 1);
             ReDraw();
