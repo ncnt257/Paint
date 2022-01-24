@@ -950,6 +950,68 @@ namespace Paint
             //đây là hàm ListViewLayers_SelectionChanged
             //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
             _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
+
+            _shapes = layers[_currentLayer]._shapes;
+
+            OnLayersUpdated();
+
+        }
+
+        private void ListViewLayers_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            //Check lúc xóa thì không có layer nào được chọn nên ListViewLayers.SelectedIndex=-1
+            if (!layers.Any()) return;
+            _currentLayer = ListViewLayers.SelectedIndex == -1 ? 0 : ListViewLayers.SelectedIndex;
+            _shapes = layers[_currentLayer]._shapes;
+
+            OnLayersUpdated();
+
+        }
+
+        //TẠO HÀM CHO CÁC CHỨC NĂNG UNDO REDO
+        private void UndoModule()
+        {
+            if (_selectedShapeIndex != null)
+            {
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
+            }
+            if (_shapes.Count == 0) return;
+            currentIShape.Add(_shapes[_shapes.Count - 1]);
+            _shapes.RemoveAt(_shapes.Count - 1);
+            //khỏi phải vẽ lại
+            ReDraw();
+        }
+
+        private void RedoModule()
+        {
+            
+            if (currentIShape.Count == 0) return;
+            if (_selectedShapeIndex != null)
+            {
+                _shapes[_selectedShapeIndex.Value].IsSelected = false;
+                _selectedShapeIndex = null;
+            };
+            _shapes.Add(currentIShape[currentIShape.Count - 1]);
+            currentIShape.RemoveAt(currentIShape.Count - 1);
+            ReDraw();
+        }
+        private void Undo_OnClick(object sender, RoutedEventArgs e)
+        {
+            UndoModule();
+        }
+
+        private void Redo_OnClick(object sender, RoutedEventArgs e)
+        {
+            RedoModule();
+        }
+
+
+        //TẠO HÀM CHO CÁC ĐOẠN CODE BỊ LẶP
+
+        private void OnLayersUpdated()
+        {
+
             if (_selectedShapeIndex is not null)
             {
                 _shapes[_selectedShapeIndex.Value].IsSelected = false;
