@@ -67,8 +67,8 @@
                     <Fluent:Button  Header="Copy" Icon="Resource/Icon/60341.PNG" SizeDefinition="Middle,Small" Name="CopyButton" Click="CopyButton_OnClick"></Fluent:Button>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Tool" >
-                    <Fluent:Button  Header="Undo" Icon="Resource/Icon/Undo.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top"></Fluent:Button>
-                    <Fluent:Button  Header="Redo" Icon="Resource/Icon/Redo.PNG" SizeDefinition="Middle,Small"></Fluent:Button>
+                    <Fluent:Button  Header="Undo" Icon="Resource/Icon/Undo.PNG" SizeDefinition="Middle,Small" Height="22" VerticalAlignment="Top" Name="Undo" Click="Undo_OnClick"></Fluent:Button>
+                    <Fluent:Button  Header="Redo" Icon="Resource/Icon/Redo.PNG" SizeDefinition="Middle,Small" Name="Redo" Click="Redo_OnClick"></Fluent:Button>
                     <Fluent:Button  Header="Delete" Name="DeleteButton" Icon="Resource/Icon/60565.PNG" SizeDefinition="Middle,Small" Click="DeleteButton_OnClick"></Fluent:Button>
 
                     <Fluent:ToggleButton  Header="Select" Icon="Resource/Icon/Move.PNG" SizeDefinition="Middle,Small" Name="SelectButton" Checked="SelectButton_OnChecked" Unchecked="SelectButton_OnUnchecked"></Fluent:ToggleButton>
@@ -142,22 +142,22 @@
                                     </DataTrigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="#cce4f7"/>
+
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
-
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="15">
                                     <Fluent:CheckBox Height="15" Padding="0 0 0 0" Margin="0 0 0 0" IsChecked="{Binding isChecked}" Click="LayerToggleBtn_Click" Style="{StaticResource EyeCheckboxStyle}">
+                                        
                                     </Fluent:CheckBox>
                                     <TextBlock Height="15">Layer_</TextBlock>
                                     <TextBlock Height="15" Text="{Binding index}" Margin="0 0 10 0"></TextBlock>
                                 </StackPanel>
-
+                                
                             </DataTemplate>
-
                         </ListView.ItemTemplate>
                     </ListView>
                     <Fluent:Button  Header="Add" Icon="Resource/Icon/Add.PNG" SizeDefinition="medium" Click="AddLayerBtn_Click"></Fluent:Button>
