@@ -35,7 +35,7 @@ This is a cover of paint app of Windows with some features customed by our team
     Transforming horizontally and vertically;
     Drag & Drop;
     Filling color for shapes;
-    Changind stroke type
+    Changing stroke type
 5. Zooming
 6. Cut / Copy / Paste
 7. Holding Shift while drawing to create balance shapes. 
